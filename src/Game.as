@@ -12,6 +12,7 @@ package
 		private var assets:AssetManager;
 		private var menu_screen:Menu;
 		private var help_screen:Help;
+		private var level:Level;
 		
 		public function Game() 
 		{
@@ -56,7 +57,8 @@ package
 			Game_State = State.MENU_SCREEN;
 			
 			help_screen = new Help();
-			
+			level = new Level();
+			addChild(level);
 		}
 		
 		public function Update():void
@@ -68,14 +70,14 @@ package
 					break;
 					
 				case State.MENU_SCREEN:
-					//ph.visible = false;
+					level.visible = false;
 					menu_screen.visible = true;
 					addChild(menu_screen);
 					//first_level.visible = false;
 					break;
 					
 				case State.HELP_SCREEN:
-					//ph.visible = false;
+					level.visible = false;
 					help_screen.visible = true;
 					menu_screen.visible = false;
 					addChild(help_screen);
@@ -83,8 +85,9 @@ package
 					break;
 					
 				case State.IN_GAME:
-					//ph.visible = false;
+					level.visible = true;
 					menu_screen.visible = false;
+					level.Update();
 					//first_level.visible = true;
 					
 					// Make sure first_level is updated every frame
