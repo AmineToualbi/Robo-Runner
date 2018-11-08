@@ -12,8 +12,8 @@ package
 	
 	public class Obstacle extends Sprite
 	{
-		private var bottom:Image;
-		private var top:Image;
+		private var left:Image;
+		private var right:Image;
 		
 		public function Obstacle() 
 		{
@@ -21,22 +21,22 @@ package
 			var assets:AssetManager = Main.Assets;
 			var stage:starling.display.Stage = Starling.current.stage;
 			// Initialize the images
-			bottom = new Image(assets.getTexture("rBlock"));
-			top = new Image(assets.getTexture("bBlock"));
+			left = new Image(assets.getTexture("rBlock"));
+			right = new Image(assets.getTexture("bBlock"));
 			
 			// Initialize to a random position
-			top.y = Math.random()*(Starling.current.stage.stageHeight/2-top.height);
-			bottom.y = Starling.current.stage.stageHeight / 2 + Math.random() * (Starling.current.stage.stageHeight - bottom.height); 
+			left.x = Math.random() * (Starling.current.stage.stageWidth/2-left.width);
+			right.x = Starling.current.stage.stageWidth/2 + Math.random() * (Starling.current.stage.stageWidth/2-right.width); 
 			
 			// Add the obstacles to the display
-			addChild(bottom);
-			addChild(top);
+			addChild(left);
+			addChild(right);
 		}
 		// Reset the obstacle to a randomized position
 		public function Regenerate():void
 		{
-			top.y = Math.random()*(Starling.current.stage.stageHeight/2-top.height);
-			bottom.y = Starling.current.stage.stageHeight / 2 + Math.random() * (Starling.current.stage.stageHeight - bottom.height);
+			left.x = Math.random() * (Starling.current.stage.stageWidth/2-left.width);
+			right.x = Starling.current.stage.stageWidth/2 + Math.random() * (Starling.current.stage.stageWidth/2-right.width); 
 		}
 	}
 
