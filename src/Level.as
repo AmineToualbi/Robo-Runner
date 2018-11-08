@@ -19,7 +19,7 @@ package
 		//private var flap_button:Button;
 		//private var flap_button_texture:Texture;
 		
-		//private var obstacle:Obstacle;
+		private var obstacle:Obstacle;
 		private var map:Map;
 		private const Stage_Width:int = 1024;
 		private const Stage_Height:int = 1024;
@@ -30,10 +30,11 @@ package
 			
 			map = new Map();
 			hero = new Hero();
-			//obstacle = new Obstacle();
+			obstacle = new Obstacle();
+
 			
 			// Set the obstacle's initial position
-			//obstacle.x = stage.stageWidth; // screen width
+			obstacle.y = 0; // screen width
 			
 			// Initialize the button texture
 			//flap_button_texture = MAIN.Assets.getTexture("flapWingsButton");
@@ -49,6 +50,8 @@ package
 			//addChild(flap_button);
 			addChild(map);
 			addChild(hero);
+			addChild(obstacle);
+
 			// Add keyboard listeners
 			// Keyboard Events aren't sent to sprites, 
 			// so we have to grab the current stage 
@@ -62,7 +65,42 @@ package
 		public function Update():void
 		{
 			hero.Update();
-			//Move_Obstacles();
+			Move_Obstacles();
+		}
+		
+		private function Move_Obstacles():void
+		{
+			obstacle.y += 5;
+			if (obstacle.y > 1080+obstacle.height)
+			{
+				obstacle.y =  - obstacle.height;
+				obstacle.Regenerate();
+			}
+		}
+		
+		private function On_Key_Down(event:KeyboardEvent):void
+		{
+			if(event.keyCode == Keyboard.A)
+			{
+				hero.x -= 5;
+			}
+			if (event.keyCode == Keyboard.D)
+			{
+				hero.x += 5;
+			}
+		}
+		
+		private function On_Key_Up(event:KeyboardEvent):void
+		{
+			// reset now that we've released space
+			if(event.keyCode == Keyboard.D)
+			{
+				
+			}
+			if (event.keyCode == Keyboard.A)
+			{
+				
+			}
 		}
 		
 		private function On_Key_Down(event:KeyboardEvent):void
