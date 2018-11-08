@@ -24,10 +24,10 @@ package
 	
 	public class Map extends Sprite
 	{
-		private var map_json:Object;
-		private var map_data:DragonBonesData;
-		private var map_atlas_data:TextureAtlasData;
-		private var map_atlas:TextureData;
+		private var placeholder_json:Object;
+		private var placeholder_data:DragonBonesData;
+		private var placeholder_atlas_data:TextureAtlasData;
+		private var placeholder_atlas:TextureData;
 		private var animation_name:String;
 		private var hk_armature:StarlingArmatureDisplay;
 		private var objects_armature:StarlingArmatureDisplay;
@@ -35,25 +35,26 @@ package
 			
 		private const factory:StarlingFactory = new StarlingFactory();
 		
-		private const Stage_Width:int = 1920;
-		private const Stage_Height:int = 1080;
+		private const Stage_Width:int = 1024;
+		private const Stage_Height:int = 1024;
 		
 		public function Map()
 		{
-			map_json = Main.Assets.getObject("Runner_ske");
-			animation_name = "animtion0";
+			placeholder_json = Main.Assets.getObject("Runner_ske");
+			//animation_name = "animtion0";
 			var tex_obj:Object = Main.Assets.getObject("Runner_tex");
 			var tex:Texture = Main.Assets.getTexture("Runner_tex");
 			
-			map_atlas_data = factory.parseTextureAtlasData(tex_obj,tex);
+			placeholder_atlas_data = factory.parseTextureAtlasData(tex_obj,tex);
 			
-			map_data = factory.parseDragonBonesData(map_json);
+			placeholder_data = factory.parseDragonBonesData(placeholder_json);
 			
-			hk_armature = factory.buildArmatureDisplay(map_data.armatureNames[0]);
-			objects_armature = factory.buildArmatureDisplay(map_data.armatureNames[1]);
-			bg_armature = factory.buildArmatureDisplay(map_data.armatureNames[2]);
+			hk_armature = factory.buildArmatureDisplay(placeholder_data.armatureNames[0]);
+			objects_armature = factory.buildArmatureDisplay(placeholder_data.armatureNames[1]);
+			bg_armature = factory.buildArmatureDisplay(placeholder_data.armatureNames[2]);
 			bg_armature.x = Stage_Width / 2;
 			bg_armature.y = Stage_Height / 2;
+			bg_armature.rotation = 3 * Math.PI / 2;
 			bg_armature.animation.gotoAndPlayByProgress("animtion0", 0, -1);
 			bg_armature.visible = true;
 			
