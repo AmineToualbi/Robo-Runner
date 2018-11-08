@@ -57,6 +57,7 @@ package
 			Game_State = State.MENU_SCREEN;
 			
 			help_screen = new Help();
+			addChild(help_screen);
 			level = new Level();
 			addChild(level);
 		}
@@ -73,7 +74,6 @@ package
 					level.visible = false;
 					menu_screen.visible = true;
 					addChild(menu_screen);
-					//first_level.visible = false;
 					break;
 					
 				case State.HELP_SCREEN:
@@ -81,17 +81,16 @@ package
 					help_screen.visible = true;
 					menu_screen.visible = false;
 					addChild(help_screen);
-					//first_level.visible = false;
 					break;
 					
 				case State.IN_GAME:
 					level.visible = true;
 					menu_screen.visible = false;
 					level.Update();
-					//first_level.visible = true;
-					
+					level.visible = true;
+					removeChild(help_screen);
 					// Make sure first_level is updated every frame
-					//first_level.Update();
+					level.Update();
 					break;
 					
 				case State.GAME_OVER:
