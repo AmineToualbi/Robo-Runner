@@ -31,6 +31,7 @@ package
 			map = new Map();
 			hero = new Hero();
 			obstacle = new Obstacle();
+
 			
 			// Set the obstacle's initial position
 			obstacle.y = 0; // screen width
@@ -50,6 +51,7 @@ package
 			addChild(map);
 			addChild(hero);
 			addChild(obstacle);
+
 			// Add keyboard listeners
 			// Keyboard Events aren't sent to sprites, 
 			// so we have to grab the current stage 
@@ -73,6 +75,31 @@ package
 			{
 				obstacle.y =  - obstacle.height;
 				obstacle.Regenerate();
+			}
+		}
+		
+		private function On_Key_Down(event:KeyboardEvent):void
+		{
+			if(event.keyCode == Keyboard.A)
+			{
+				hero.x -= 5;
+			}
+			if (event.keyCode == Keyboard.D)
+			{
+				hero.x += 5;
+			}
+		}
+		
+		private function On_Key_Up(event:KeyboardEvent):void
+		{
+			// reset now that we've released space
+			if(event.keyCode == Keyboard.D)
+			{
+				
+			}
+			if (event.keyCode == Keyboard.A)
+			{
+				
 			}
 		}
 		

@@ -58,6 +58,7 @@ package
 		private var right_button_texture:Texture;
 		private var shoot_button:Button;
 		private var shoot_button_texture:Texture;
+
 		
 		public function Map()
 		{
