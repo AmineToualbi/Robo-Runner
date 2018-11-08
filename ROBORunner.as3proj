@@ -17,6 +17,8 @@
   <classpaths>
     <class path="src" />
     <class path="..\..\..\Starling 2.4\starling\src" />
+    <class path="DragonBones\Starling\Starling_2.x\src" />
+    <class path="DragonBones\DragonBones\src" />
   </classpaths>
   <!-- Build options -->
   <build>

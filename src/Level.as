@@ -103,30 +103,7 @@ package
 			}
 		}
 		
-		private function On_Key_Down(event:KeyboardEvent):void
-		{
-			if(event.keyCode == Keyboard.A)
-			{
-				hero.x -= 5;
-			}
-			if (event.keyCode == Keyboard.D)
-			{
-				hero.x += 5;
-			}
-		}
-		
-		private function On_Key_Up(event:KeyboardEvent):void
-		{
-			// reset now that we've released space
-			if(event.keyCode == Keyboard.D)
-			{
-				
-			}
-			if (event.keyCode == Keyboard.A)
-			{
-				
-			}
-		}
+
 	}
 	
 }

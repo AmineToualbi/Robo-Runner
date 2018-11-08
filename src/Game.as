@@ -27,10 +27,12 @@ package
 			
 			// Start loading the assets and setup the event handlers
 			assets.loadQueue(On_Assets_Loaded, On_Assets_Load_Error, On_Assets_Load_Progress);
+			//At every frame (= every time), run Update(). 
 			addEventListener(Event.ENTER_FRAME, Update);
 			addEventListener(Menu.PLAY_BUTTON_PRESSED, Play_Button_Pressed_Handler);
 			addEventListener(Menu.HELP_BUTTON_PRESSED, Help_Button_Pressed_Handler);
 			addEventListener(Help.BACK_BUTTON_PRESSED, Back_Button_Pressed_Handler);
+			addEventListener(GameOver.EXIT_BUTTON_PRESSED, Exit_Button_Pressed_Handler);
 		}
 		
 		public function On_Assets_Load_Error(error:String):void 
@@ -49,17 +51,18 @@ package
 		{
 			trace("Everything is loaded");
 			
+			//Create the menu objects & add child to the scene. 
 			menu_screen = new Menu();
 			help_screen = new Help();
+			level = new Level();
 			addChild(menu_screen);
+			addChild(help_screen);
+			addChild(level);
 			
-			// Last, set the state to display the menu
+			// Last, set the state to display the menu.
 			Game_State = State.MENU_SCREEN;
 			
-			help_screen = new Help();
-			addChild(help_screen);
-			level = new Level();
-			addChild(level);
+			
 		}
 		
 		public function Update():void
@@ -80,15 +83,15 @@ package
 					level.visible = false;
 					help_screen.visible = true;
 					menu_screen.visible = false;
-					addChild(help_screen);
+					//addChild(help_screen);
 					break;
 					
 				case State.IN_GAME:
-					level.visible = true;
+					//level.visible = true;
 					menu_screen.visible = false;
 					level.Update();
 					level.visible = true;
-					removeChild(help_screen);
+					removeChild(help_screen);		//removeChild bc help_screen won't be displayed after game starts.
 					// Make sure first_level is updated every frame
 					level.Update();
 					break;
@@ -117,6 +120,11 @@ package
 		private function Back_Button_Pressed_Handler():void
 		{
 			Game_State = State.MENU_SCREEN;
+		}
+		
+		private function Exit_Button_Pressed_Handler():void 
+		{
+			Game_State = State.GAME_OVER;
 		}
 		
 	}
