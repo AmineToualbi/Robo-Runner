@@ -55,10 +55,12 @@ package
 			bg_armature = factory.buildArmatureDisplay(placeholder_data.armatureNames[2]);
 			
 			//hk_armature = factory.buildArmatureDisplay(placeholder_data.armatureNames[0]);
-			hk_armature.x = 500;
-			hk_armature.y = 800;
+			hk_armature.x = 100;
+			hk_armature.y = 100;
 			hk_armature.animation.gotoAndPlayByProgress("Idle_Shoot", 0, -1);
 			hk_armature.visible = true;
+			hk_armature.rotation = 3 * Math.PI / 2;
+
 			
 			this.addChild(hk_armature);
 			
