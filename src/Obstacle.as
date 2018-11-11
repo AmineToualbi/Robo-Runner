@@ -10,7 +10,7 @@ package
 	import starling.display.Sprite;
 	import starling.core.Starling;
 	
-	public class Obstacle extends Sprite
+	public class Obstacle extends MovableObject
 	{
 		private var left:Image;
 		private var right:Image;
@@ -32,6 +32,7 @@ package
 			addChild(left);
 			addChild(right);
 		}
+		
 		// Reset the obstacle to a randomized position
 		public function Regenerate():void
 		{

@@ -20,6 +20,8 @@ package
 	import starling.text.TextFormat;
 	import starling.textures.Texture;
 	import flash.ui.Keyboard;
+	import flash.events.Event;
+
 
 	public class Projectile extends Sprite
 	{
@@ -47,8 +49,8 @@ package
 			projectile_data = factory.parseDragonBonesData(projectile_json);
 			
 			objects_armature = factory.buildArmatureDisplay(projectile_data.armatureNames[1]);
-			objects_armature.x = 600;
-			objects_armature.y = 600;
+			objects_armature.x = 300;
+			objects_armature.y = 300;
 			objects_armature.visible = true;
 			objects_armature.armature.getSlot("HK_Laser").displayController = "0";
 			objects_armature.armature.getSlot("Cannon_Bullet_Glow").displayController = "1";
@@ -61,8 +63,26 @@ package
 			objects_armature.armature.getSlot("Cannon_Glow").displayController = "8";
 			objects_armature.armature.getSlot("Cannon_Bullet").displayController = "9";
 			objects_armature.animation.fadeIn( "Flash_Long", -1, -1, 0, "" + 9);
+			
+			addEventListener(Event.ENTER_FRAME, ProjectileMovement);
+
 			addChild(objects_armature);
 			
+		}
+		
+		function Move(xPos:int, yPos:int) {
+			objects_armature.x = xPos + 101;
+			objects_armature.y = yPos; 
+			
+			while (objects_armature.y <= 0) {
+				ProjectileMovement(); 
+			}
+			
+			
+		}
+		
+		function ProjectileMovement() {
+			objects_armature.y -= 5;
 		}
 			
 		
