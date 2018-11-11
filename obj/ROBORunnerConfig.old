@@ -16,7 +16,7 @@
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'11/1/2018'</value>
+      <value>'11/10/2018'</value>
     </define>
     <define append="true">
       <name>CONFIG::air</name>
@@ -33,7 +33,9 @@
     <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">
       <path-element>C:\Users\amtou\OneDrive\Documents\JUNIOR YEAR\CSIS 2450\ROBO_Runner\src</path-element>
-      <path-element>C:\Users\amtou\OneDrive\Documents\AS3 Workspace\FlappyBirdDemo\Starling 2.4</path-element>
+      <path-element>C:\Users\amtou\OneDrive\Documents\Starling 2.4\starling\src</path-element>
+      <path-element>C:\Users\amtou\OneDrive\Documents\JUNIOR YEAR\CSIS 2450\ROBO_Runner\DragonBones\Starling\Starling_2.x\src</path-element>
+      <path-element>C:\Users\amtou\OneDrive\Documents\JUNIOR YEAR\CSIS 2450\ROBO_Runner\DragonBones\DragonBones\src</path-element>
       <path-element>C:\Program Files (x86)\FlashDevelop\Library\AS3\classes</path-element>
     </source-path>
   </compiler>
