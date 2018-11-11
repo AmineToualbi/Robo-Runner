@@ -22,7 +22,7 @@ package
 	import starling.textures.Texture;
 	import flash.ui.Keyboard;
 	
-	public class Hero extends Sprite
+	public class Hero extends MovableObject
 	{
 		private var placeholder_json:Object;
 		private var placeholder_data:DragonBonesData;
@@ -57,9 +57,13 @@ package
 			//hk_armature = factory.buildArmatureDisplay(placeholder_data.armatureNames[0]);
 			hk_armature.x = 100;
 			hk_armature.y = 100;
+			//xPos = hk_armature.x; USELESS LINES.
+			//yPos = hk_armature.y;
 			hk_armature.animation.gotoAndPlayByProgress("Idle_Shoot", 0, -1);
 			hk_armature.visible = true;
 			hk_armature.rotation = 3 * Math.PI / 2;
+			
+			speed = 5; 
 
 			
 			this.addChild(hk_armature);
@@ -75,6 +79,23 @@ package
 			
 			
 		}
+		
+		override public function Move(input:String):void {
+			if (input == "s" && !(this.y + speed > Stage_Height)) {
+				this.y += speed; 
+			}
+			if (input == "a" && !(this.x + speed <= 0)) {
+				this.x -= speed; 
+			}
+			if (input == "d" && !(this.x + speed > Stage_Width)) {
+				this.x += speed; 
+			}
+			if (input == "w" && !(this.y - speed <= 0)) {
+				this.y -= speed;
+			}
+		
+		}
+		
 		
 	}
 	

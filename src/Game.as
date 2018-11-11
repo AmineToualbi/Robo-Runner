@@ -12,6 +12,7 @@ package
 		private var assets:AssetManager;
 		private var menu_screen:Menu;
 		private var help_screen:Help;
+		private var gameOver_screen:GameOver;
 		private var level:Level;
 		
 		public function Game() 
@@ -28,7 +29,7 @@ package
 			// Start loading the assets and setup the event handlers
 			assets.loadQueue(On_Assets_Loaded, On_Assets_Load_Error, On_Assets_Load_Progress);
 			//At every frame (= every time), run Update(). 
-			addEventListener(Event.ENTER_FRAME, Update);
+			addEventListener(Event.ENTER_FRAME, UpdateGameState);
 			addEventListener(Menu.PLAY_BUTTON_PRESSED, Play_Button_Pressed_Handler);
 			addEventListener(Menu.HELP_BUTTON_PRESSED, Help_Button_Pressed_Handler);
 			addEventListener(Help.BACK_BUTTON_PRESSED, Back_Button_Pressed_Handler);
@@ -65,7 +66,7 @@ package
 			
 		}
 		
-		public function Update():void
+		public function UpdateGameState():void
 		{
 			switch(Game_State)
 			{
@@ -89,11 +90,11 @@ package
 				case State.IN_GAME:
 					//level.visible = true;
 					menu_screen.visible = false;
-					level.Update();
+					level.UpdateUI();
 					level.visible = true;
 					removeChild(help_screen);		//removeChild bc help_screen won't be displayed after game starts.
-					// Make sure first_level is updated every frame
-					level.Update();
+					// Make sure first level is updated every frame
+					level.UpdateUI();
 					break;
 					
 				case State.GAME_OVER:
