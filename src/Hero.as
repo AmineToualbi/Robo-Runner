@@ -55,10 +55,10 @@ package
 			bg_armature = factory.buildArmatureDisplay(placeholder_data.armatureNames[2]);
 			
 			//hk_armature = factory.buildArmatureDisplay(placeholder_data.armatureNames[0]);
-			hk_armature.x = 100;
-			hk_armature.y = 100;
-			//xPos = hk_armature.x; USELESS LINES.
-			//yPos = hk_armature.y;
+			hk_armature.x = 600;
+			hk_armature.y = 600;
+			xPos = hk_armature.x;  
+			yPos = hk_armature.y;
 			hk_armature.animation.gotoAndPlayByProgress("Idle_Shoot", 0, -1);
 			hk_armature.visible = true;
 			hk_armature.rotation = 3 * Math.PI / 2;
@@ -81,18 +81,21 @@ package
 		}
 		
 		override public function Move(input:String):void {
-			if (input == "s" && !(this.y + speed > Stage_Height)) {
-				this.y += speed; 
+			if (input == "s" && (hk_armature.y + speed + 0.5 * hk_armature.height > Stage_Height)) {
+				hk_armature.y += speed; 
 			}
-			if (input == "a" && !(this.x + speed <= 0)) {
-				this.x -= speed; 
+			if (input == "a" && !(hk_armature.x - speed - 0.5 * hk_armature.width <= 0)) {
+				hk_armature.x -= speed; 
 			}
-			if (input == "d" && !(this.x + speed > Stage_Width)) {
-				this.x += speed; 
+			if (input == "d" && !(hk_armature.x + speed + 0.5 * hk_armature.width > Stage_Width)) {
+				hk_armature.x += speed; 
 			}
-			if (input == "w" && !(this.y - speed <= 0)) {
-				this.y -= speed;
+			if (input == "w" && !(hk_armature.y - speed - 0.5 * hk_armature.height <= 0)) {
+				hk_armature.y -= speed;
 			}
+			
+			xPos = hk_armature.x;
+			yPos = hk_armature.y; 
 		
 		}
 		

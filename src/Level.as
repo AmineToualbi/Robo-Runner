@@ -6,6 +6,8 @@
 
 package 
 {
+
+	import flash.geom.Rectangle;
 	import starling.core.Starling;
 	import starling.display.Button;
 	import starling.display.Sprite;
@@ -16,6 +18,9 @@ package
 	import starling.assets.AssetManager;
 	import starling.display.Image;
 	import flash.display.MovieClip;
+	import starling.text.TextField;
+	import starling.text.TextFormat;
+	import flash.text.TextFieldAutoSize;
 	
 	public class Level extends Sprite
 	{
@@ -33,6 +38,10 @@ package
 		private var n:int = 0;
 		private var start_background:Image;
 		private var userInput:String; 
+		private var Score:int;
+		
+		private var ScoreLabel:TextField;
+		
 		
 		public function Level() 
 		{
@@ -43,6 +52,8 @@ package
 			hero = new Hero();
 			obstacle = new Obstacle();
 			projectile = new Projectile();
+			
+			Score = 0; 
 			
 			// Set the obstacle's initial position
 			obstacle.y = 0; // screen width
@@ -66,7 +77,14 @@ package
 			//addChild(projectile);
 			
 			addChild(obstacle);
+			Score = 1000000;
 			
+			ScoreLabel = new TextField(100, 50, "Score: " + Score);
+			ScoreLabel.format.font = "Arial";
+			ScoreLabel.format.color = 0xffffff;
+			ScoreLabel.format.size = 30;
+
+			addChild(ScoreLabel);
 			
 			// Add keyboard listeners
 			// Keyboard Events aren't sent to sprites, 
@@ -100,11 +118,11 @@ package
 		
 		private function Move_Projectile():void
 		{
-			for(var i:int = 0; i < bullets.length; i++) 
-				{
-					addChild(bullets[i]);
-					bullets[i].y -= 3; 
-				}
+			///(var i:int = 0; i < bullets.length; i++) 
+			//	{
+				//	addChild(bullets[i]);
+				//	bullets[i].y -= 3; 
+			//	}
 			/*
 			
 			if(bullets.length != 0) 
@@ -130,13 +148,14 @@ package
 		
 		private function Collision_Obstacle():void
 		{
-			/*
-			if (hero.hitTestObject(obstacle))
-			{
-				
-				addChild(start_background);
+			//consider them as rectangles
+			var bounds1:Rectangle = hero.bounds;
+			var bounds2:Rectangle = obstacle.bounds;
+			if (bounds1.intersects(bounds2))
+			{	//test
+				trace("collisions!");
+				ScoreLabel.text = "Collision";
 			}
-			*/
 		}
 		
 		private function On_Key_Down(event:KeyboardEvent):void
@@ -161,7 +180,7 @@ package
 			{
 				var projectile = new Projectile(); 
 				addChild(projectile);
-				projectile.Move(hero.x, hero.y); 	//"x" as placeholder to have the same function with same parameter.
+				projectile.Move(hero.xPos, hero.yPos); 	//"x" as placeholder to have the same function with same parameter.
 				userInput = "";
 			}
 			
