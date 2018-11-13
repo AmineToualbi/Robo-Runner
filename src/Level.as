@@ -60,6 +60,7 @@ package
 			
 			addChild(hero);
 			
+
 			addChild(projectile);
 			
 			addChild(obstacle);
