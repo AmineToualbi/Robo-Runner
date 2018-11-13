@@ -32,7 +32,7 @@ package
 		private var obstacle:Obstacle;
 		private var map:Map;
 		private var projectile:Projectile;
-		private var pre_projectile:Projectile;
+		private var enemy:Enemy;
 		private const Stage_Width:int = 1024;
 		private const Stage_Height:int = 1024;
 		private var n:int = 0;
@@ -68,11 +68,14 @@ package
 			
 			// Add the obstacle and player to the display
 			
+			enemy = new Enemy(); 
 			
 			//addChild(flap_button);
 			addChild(map);
 			
 			addChild(hero);
+			
+			addChild(enemy);
 			
 			//addChild(projectile);
 			
@@ -104,6 +107,16 @@ package
 			Move_Obstacles();
 			Move_Projectile();
 			Collision_Obstacle();
+			Move_Enemy(); 
+		}
+		
+		private function Move_Enemy() {
+			enemy.y += 5;
+			if (enemy.y > 1024 + obstacle.height)
+			{
+				enemy.y =  - enemy.height;
+				enemy.Regenerate();
+			}
 		}
 		
 		private function Move_Obstacles():void
