@@ -82,7 +82,13 @@ package
 		}
 		
 		function ProjectileMovement() {
-			objects_armature.y -= 5;
+
+				objects_armature.y -= 5;
+			
+		}
+		
+		function DeleteProjectile() {
+			removeChild(objects_armature);
 		}
 			
 		

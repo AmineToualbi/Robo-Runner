@@ -7,6 +7,7 @@
 package 
 {
 
+	import flash.display3D.textures.RectangleTexture;
 	import flash.geom.Rectangle;
 	import starling.core.Starling;
 	import starling.display.Button;
@@ -49,6 +50,8 @@ package
 		public static const GAME_OVER:String = "GAME OVER";
 		
 		public static var Over: Boolean = false; 
+		
+		private var HitNbr:int; //Testing purposes.
 
 		
 		
@@ -91,7 +94,7 @@ package
 			addChild(obstacle);
 			Score = 1000000;
 			
-			ScoreLabel = new TextField(100, 50, "Score: " + Score);
+			ScoreLabel = new TextField(200, 50, "Score: " + Score);
 			ScoreLabel.format.font = "Arial";
 			ScoreLabel.format.color = 0xffffff;
 			ScoreLabel.format.size = 30;
@@ -107,6 +110,8 @@ package
 			
 			// Add button listener
 			// flap_button.addEventListener(Event.TRIGGERED, Flap_Wings_Button_Handler);
+			
+			HitNbr = 0;
 		}
 		
 		//This function is called every frame by Game.as. 
@@ -117,10 +122,13 @@ package
 			//Move_Projectile();
 			Collision_Obstacle();
 			//Move_Enemy(); 
-			hero.Move(userInput);
-			enemy.Move(userInput);
+			hero.Move(userInput)
+			if(enemy != null) { 
+				enemy.Move(userInput);
+			}
 			obstacle.Move(userInput);
 			userInput = "";
+			Check_Projectile_Hit();
 			}
 		}
 		
@@ -141,6 +149,23 @@ package
 				//dispatchEventWith(GAME_OVER, true);	
 			}
 		}
+		
+		private function Check_Projectile_Hit():void {
+			
+			if(projectile != null && enemy != null) { 
+				var projectileBounds:Rectangle = projectile.bounds; 
+				var enemyBounds:Rectangle = enemy.bounds;
+			
+				if (projectileBounds.intersects(enemyBounds)){
+					ScoreLabel.text = HitNbr + ""; 
+					HitNbr++;
+					enemy.Regenerate();
+					projectile.DeleteProjectile();
+				}
+			}
+			
+		}
+		
 		
 		private function On_Key_Down(event:KeyboardEvent):void
 		{
