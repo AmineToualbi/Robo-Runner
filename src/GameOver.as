@@ -27,7 +27,7 @@ package
 			
 			// Initialize the button texture
 			//ADD TEXTURE TO ASSETS
-			exit_button_texture = assets.getTexture("exitButton");
+			exit_button_texture = assets.getTexture("backButton");
 		    exit_button = new Button(exit_button_texture);
 			
 			// Add an event listener for when the button is pressed
@@ -37,7 +37,7 @@ package
 			exit_button.x = 380;
 			exit_button.y = 430;
 			
-			addChild(exit_button);
+			addChild(exit_button);	
 			
 		}
 		
@@ -46,6 +46,8 @@ package
 		{
 			dispatchEventWith(EXIT_BUTTON_PRESSED, true);
 		}
+		
+		
 		
 	}
 
