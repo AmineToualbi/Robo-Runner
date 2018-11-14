@@ -52,6 +52,8 @@ package
 		public static var Over: Boolean = false; 
 		
 		private var HitNbr:int; //Testing purposes.
+		private var CollisionNbr:int; //Testing purposes.
+
 
 		
 		
@@ -112,6 +114,7 @@ package
 			// flap_button.addEventListener(Event.TRIGGERED, Flap_Wings_Button_Handler);
 			
 			HitNbr = 0;
+			CollisionNbr = 0;
 		}
 		
 		//This function is called every frame by Game.as. 
@@ -139,15 +142,38 @@ package
 			//consider them as rectangles
 			var bounds1:Rectangle = hero.bounds;
 			var bounds2:Rectangle = obstacle.bounds;
-			if (bounds1.intersects(bounds2))
-			{	//test
-				trace("collisions!");
-				ScoreLabel.text = "Collision";
-				setTimeout(GameIsOver, 3000);		//Wait for 3000 seconds before displaying screen. 
-				Over = true;
+			//if (bounds1.intersects(bounds2))
+			//{	//test
+			//	trace("collisions!");
+			//	ScoreLabel.text = "Collision";
+			//	setTimeout(GameIsOver, 3000);		//Wait for 3000 seconds before displaying screen. 
+			//	Over = true;
 				
 				//dispatchEventWith(GAME_OVER, true);	
+			//}
+			
+			var leftObstacleX:int = obstacle.xPos - 0.5 * obstacle.width; 
+			var rightObstacleX:int = obstacle.xPos + 0.5 * obstacle.width;  
+			
+			if (obstacle.yPos >= hero.yPos - 0.5 * hero.height) {
+				if (rightObstacleX >= hero.xPos - 0.5 * hero.width && rightObstacleX <= hero.xPos + 0.5 * hero.width) {
+					ScoreLabel.text = CollisionNbr + ""; 
+					CollisionNbr++;
+				}
+				if (leftObstacleX >= hero.xPos - 0.5 * hero.width && leftObstacleX <= hero.xPos + 0.5 * hero.width) {
+					ScoreLabel.text = CollisionNbr + "";
+					CollisionNbr++; 
+				}
 			}
+			
+			//if (rightObstacleX<= hero.xPos + 0.5 * hero.width && obstacle.xPos >= hero.xPos - 0.5 * hero.width) {
+			//	if (obstacle.yPos <= hero.yPos + 0.5 * hero.height && obstacle.yPos >= hero.yPos - 0.5 * hero.height) {
+			//		ScoreLabel.text = CollisionNbr + ""; 
+			//		CollisionNbr++;
+			//		//Over = true;
+			//	}
+			//}
+			
 		}
 		
 		private function Check_Projectile_Hit():void {
@@ -157,7 +183,7 @@ package
 				var enemyBounds:Rectangle = enemy.bounds;
 			
 				if (projectileBounds.intersects(enemyBounds)){
-					ScoreLabel.text = HitNbr + ""; 
+					//ScoreLabel.text = HitNbr + ""; 
 					HitNbr++;
 					enemy.Regenerate();
 					projectile.DeleteProjectile();

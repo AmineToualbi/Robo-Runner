@@ -56,12 +56,14 @@ package
 				obstacle.y =  - obstacle.height;
 				Regenerate();
 			}
+			xPos = obstacle.x; 
+			yPos = obstacle.y; 
 		}
 			
 		// Reset the obstacle to a randomized position
 		public function Regenerate():void
 		{
-			obstacle.x = Math.random() * (Starling.current.stage.stageWidth/2-obstacle.width);
+			obstacle.x = Math.random() * (Starling.current.stage.stageWidth-obstacle.width);
 			//right.x = Starling.current.stage.stageWidth/2 + Math.random() * (Starling.current.stage.stageWidth/2-right.width); 
 		}
 	}
