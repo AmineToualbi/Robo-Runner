@@ -24,7 +24,7 @@ package
 	import flash.events.Event;
 	
 	
-	public class Enemy extends Sprite
+	public class Enemy extends MovableObject
 	{
 		private var enemy_json:Object;
 		private var enemy_data:DragonBonesData;
@@ -63,13 +63,29 @@ package
 			enemy_armature.armature.getSlot("Spike_Glow").displayController = "7";
 			enemy_armature.armature.getSlot("Cannon_Glow").displayController = "8";
 			enemy_armature.armature.getSlot("Cannon_Bullet").displayController = "9";
-			enemy_armature.animation.fadeIn( "Flash_Long", -1, -1, 0, "" + 2);
+			
+			enemy_armature.animation.fadeIn( "Flash_Long", -1, -1, 0, "" + 3);
 			
 			//addEventListener(Event.ENTER_FRAME, ProjectileMovement);
+			
+			speed = 5; 
+			
+			enemy_armature.width = 200;
+			enemy_armature.height = 200;
 
 			addChild(enemy_armature);
 			
 		}
+		
+		override public function Move(input:String):void {
+			 enemy_armature.y += speed; 
+			if (enemy_armature.y > 1024 + enemy_armature.height)
+			{
+				enemy_armature.y =  - enemy_armature.height;
+				Regenerate();
+			}
+		}
+		
 		
 		public function Regenerate():void
 		{

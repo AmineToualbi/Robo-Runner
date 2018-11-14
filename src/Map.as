@@ -117,8 +117,6 @@ package
 			shoot_button.x = 1920 - shoot_button.width * 2;
 			shoot_button.y = 1520 + 25 * 4 + right_button.height;
 			
-			
-			
 			addChild(up_button);
 			addChild(down_button);
 			addChild(left_button);
@@ -135,6 +133,7 @@ package
 		{
 			animation_name = "mapanim"; // typo, I know
 			bg_armature.animation.gotoAndPlayByProgress(animation_name , 0, -1);
+			
 		}
 		private function Update_Armature_Display():void
 		{
@@ -144,6 +143,7 @@ package
 		{
 			// Starts the animation specified by animation_name, using the display controller specified by objects_index
 			objects_armature.animation.fadeIn( animation_name, -1, -1, 0, "" + 2);
+			
 		}
 		
 	}
