@@ -16,9 +16,10 @@
     <x>0</x>
     <y>0</y>
     <requestedDisplayResolution>standard</requestedDisplayResolution>
-    <width>500</width>
-    <height>500</height>
+    <width>1024</width>
+    <height>1024</height>
     <maximizable>false</maximizable>
+    <maxSize>1024 1024</maxSize>
   </initialWindow>
   <!-- 
 	More options:
