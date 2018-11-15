@@ -63,7 +63,10 @@ package
 			hk_armature.visible = true;
 			hk_armature.rotation = 3 * Math.PI / 2;
 			
-			speed = 5; 
+			speed = 15; 
+			
+			hk_armature.width = 200;
+			hk_armature.height = 200;
 
 			
 			this.addChild(hk_armature);
@@ -81,7 +84,7 @@ package
 		}
 		
 		override public function Move(input:String):void {
-			if (input == "s" && (hk_armature.y + speed + 0.5 * hk_armature.height > Stage_Height)) {
+			if (input == "s" && !(hk_armature.y + speed + 0.5 * hk_armature.height >= Stage_Height - hk_armature.height)) {
 				hk_armature.y += speed; 
 			}
 			if (input == "a" && !(hk_armature.x - speed - 0.5 * hk_armature.width <= 0)) {

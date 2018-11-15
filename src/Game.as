@@ -34,6 +34,7 @@ package
 			addEventListener(Menu.HELP_BUTTON_PRESSED, Help_Button_Pressed_Handler);
 			addEventListener(Help.BACK_BUTTON_PRESSED, Back_Button_Pressed_Handler);
 			addEventListener(GameOver.EXIT_BUTTON_PRESSED, Exit_Button_Pressed_Handler);
+			addEventListener(Level.GAME_OVER, GameOver_Handler);
 		}
 		
 		public function On_Assets_Load_Error(error:String):void 
@@ -56,8 +57,10 @@ package
 			menu_screen = new Menu();
 			help_screen = new Help();
 			level = new Level();
+			gameOver_screen = new GameOver();
 			addChild(menu_screen);
 			addChild(help_screen);
+			addChild(gameOver_screen);
 			addChild(level);
 			
 			// Last, set the state to display the menu.
@@ -98,6 +101,9 @@ package
 					break;
 					
 				case State.GAME_OVER:
+					level.visible = false; 
+					removeChild(level); 
+					gameOver_screen.visible = true;
 	
 					break;
 					
@@ -126,6 +132,11 @@ package
 		private function Exit_Button_Pressed_Handler():void 
 		{
 			Game_State = State.GAME_OVER;
+		}
+		
+		private function GameOver_Handler():void 
+		{
+			Game_State = State.GAME_OVER; 
 		}
 		
 	}

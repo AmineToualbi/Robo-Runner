@@ -7,6 +7,7 @@
 package 
 {
 
+	import flash.display3D.textures.RectangleTexture;
 	import flash.geom.Rectangle;
 	import starling.core.Starling;
 	import starling.display.Button;
@@ -21,6 +22,10 @@ package
 	import starling.text.TextField;
 	import starling.text.TextFormat;
 	import flash.text.TextFieldAutoSize;
+	import flash.utils.Timer;
+	import flash.events.TimerEvent;
+	import flash.utils.setTimeout;
+
 	
 	public class Level extends Sprite
 	{
@@ -42,6 +47,15 @@ package
 		
 		private var ScoreLabel:TextField;
 		
+		public static const GAME_OVER:String = "GAME OVER";
+		
+		public static var Over: Boolean = false; 
+		
+		private var HitNbr:int; //Testing purposes.
+		private var CollisionNbr:int; //Testing purposes.
+
+
+		
 		
 		public function Level() 
 		{
@@ -51,7 +65,7 @@ package
 			map = new Map();
 			hero = new Hero();
 			obstacle = new Obstacle();
-			projectile = new Projectile();
+			//projectile = new Projectile();
 			
 			Score = 0; 
 			
@@ -82,7 +96,7 @@ package
 			addChild(obstacle);
 			Score = 1000000;
 			
-			ScoreLabel = new TextField(100, 50, "Score: " + Score);
+			ScoreLabel = new TextField(200, 50, "Score: " + Score);
 			ScoreLabel.format.font = "Arial";
 			ScoreLabel.format.color = 0xffffff;
 			ScoreLabel.format.size = 30;
@@ -98,78 +112,86 @@ package
 			
 			// Add button listener
 			// flap_button.addEventListener(Event.TRIGGERED, Flap_Wings_Button_Handler);
+			
+			HitNbr = 0;
+			CollisionNbr = 0;
 		}
 		
 		//This function is called every frame by Game.as. 
 		public function UpdateUI():void
 		{
+			if(Over != true){
 			//hero.Update();
-			Move_Obstacles();
-			Move_Projectile();
+			//Move_Projectile();
 			Collision_Obstacle();
-			Move_Enemy(); 
-		}
-		
-		private function Move_Enemy() {
-			enemy.y += 5;
-			if (enemy.y > 1024 + obstacle.height)
-			{
-				enemy.y =  - enemy.height;
-				enemy.Regenerate();
+			//Move_Enemy(); 
+			hero.Move(userInput)
+			if(enemy != null) { 
+				enemy.Move(userInput);
+			}
+			obstacle.Move(userInput);
+			userInput = "";
+			Check_Projectile_Hit();
 			}
 		}
 		
-		private function Move_Obstacles():void
-		{
-			obstacle.y += 5;
-			if (obstacle.y > 1024 + obstacle.height)
-			{
-				obstacle.y =  - obstacle.height;
-				obstacle.Regenerate();
-			}
-		}
-		
-		private function Move_Projectile():void
-		{
-			///(var i:int = 0; i < bullets.length; i++) 
-			//	{
-				//	addChild(bullets[i]);
-				//	bullets[i].y -= 3; 
-			//	}
-			/*
-			
-			if(bullets.length != 0) 
-			{ 
-				for(var i:int = 0; i < bullets.length; i++) 
-				{
-					addChild(bullets[i]);
-					bullets[i].y -= 3; 
-					
-					// Destroy offstage bullets 
-          
-					if(bullets[i].y < 0) 
-					{ 
-						removeChild(bullets[i]); 
-						bullets[i] = null; 
-						bullets.splice(i, 1); 
-					} 
-				} 
-			}
-			*/
-			
-		}
+	
 		
 		private function Collision_Obstacle():void
 		{
 			//consider them as rectangles
 			var bounds1:Rectangle = hero.bounds;
 			var bounds2:Rectangle = obstacle.bounds;
-			if (bounds1.intersects(bounds2))
-			{	//test
-				trace("collisions!");
-				ScoreLabel.text = "Collision";
+			//if (bounds1.intersects(bounds2))
+			//{	//test
+			//	trace("collisions!");
+			//	ScoreLabel.text = "Collision";
+			//	setTimeout(GameIsOver, 3000);		//Wait for 3000 seconds before displaying screen. 
+			//	Over = true;
+				
+				//dispatchEventWith(GAME_OVER, true);	
+			//}
+			
+			var leftObstacleX:int = obstacle.xPos - 0.5 * obstacle.width; 
+			var rightObstacleX:int = obstacle.xPos + 0.5 * obstacle.width;  
+			
+			if (obstacle.yPos >= hero.yPos - 0.5 * hero.height) {
+				if (rightObstacleX >= hero.xPos - 0.5 * hero.width && rightObstacleX <= hero.xPos + 0.5 * hero.width) {
+					ScoreLabel.text = CollisionNbr + ""; 
+					CollisionNbr++;
+				}
+				if (leftObstacleX >= hero.xPos - 0.5 * hero.width && leftObstacleX <= hero.xPos + 0.5 * hero.width) {
+					ScoreLabel.text = CollisionNbr + "";
+					CollisionNbr++; 
+				}
 			}
+			
+			//if (rightObstacleX<= hero.xPos + 0.5 * hero.width && obstacle.xPos >= hero.xPos - 0.5 * hero.width) {
+			//	if (obstacle.yPos <= hero.yPos + 0.5 * hero.height && obstacle.yPos >= hero.yPos - 0.5 * hero.height) {
+			//		ScoreLabel.text = CollisionNbr + ""; 
+			//		CollisionNbr++;
+			//		//Over = true;
+			//	}
+			//}
+			
 		}
+		
+		private function Check_Projectile_Hit():void {
+			
+			if(projectile != null && enemy != null) { 
+				var projectileBounds:Rectangle = projectile.bounds; 
+				var enemyBounds:Rectangle = enemy.bounds;
+			
+				if (projectileBounds.intersects(enemyBounds)){
+					//ScoreLabel.text = HitNbr + ""; 
+					HitNbr++;
+					enemy.Regenerate();
+					projectile.DeleteProjectile();
+				}
+			}
+			
+		}
+		
 		
 		private function On_Key_Down(event:KeyboardEvent):void
 		{
@@ -191,13 +213,19 @@ package
 			}
 			if (event.keyCode == Keyboard.SPACE)
 			{
-				var projectile = new Projectile(); 
+				projectile = new Projectile(); 
 				addChild(projectile);
 				projectile.Move(hero.xPos, hero.yPos); 	//"x" as placeholder to have the same function with same parameter.
 				userInput = "";
 			}
 			
-			hero.Move(userInput);
+			//hero.Move(userInput);
+		}
+		
+		private function GameIsOver() 
+		{
+			dispatchEventWith(GAME_OVER, true);	
+
 		}
 		
 		private function On_Key_Up(event:KeyboardEvent):void
@@ -228,3 +256,46 @@ package
 	
 	
 }
+
+
+
+//	private function Move_Enemy() {
+	//		enemy.y += 5;
+	//		if (enemy.y > 1024 + obstacle.height)
+	//		{
+	//			enemy.y =  - enemy.height;
+	//			enemy.Regenerate();
+	///		}
+	//	}
+		
+		
+		
+	//	private function Move_Projectile():void
+	//	{
+			///(var i:int = 0; i < bullets.length; i++) 
+			//	{
+				//	addChild(bullets[i]);
+				//	bullets[i].y -= 3; 
+			//	}
+			/*
+			
+			if(bullets.length != 0) 
+			{ 
+				for(var i:int = 0; i < bullets.length; i++) 
+				{
+					addChild(bullets[i]);
+					bullets[i].y -= 3; 
+					
+					// Destroy offstage bullets 
+          
+					if(bullets[i].y < 0) 
+					{ 
+						removeChild(bullets[i]); 
+						bullets[i] = null; 
+						bullets.splice(i, 1); 
+					} 
+				} 
+			}
+			*/
+			
+		//}
