@@ -13,6 +13,7 @@ package
 	import starling.display.Button;
 	import starling.display.Sprite;
 	import flash.ui.Keyboard;
+	import starling.events.EnterFrameEvent;
 	import starling.events.Event;
 	import starling.events.KeyboardEvent;
 	import starling.textures.Texture;
@@ -44,7 +45,12 @@ package
 		private var start_background:Image;
 		private var userInput:String; 
 		private var Score:int;
-		
+		private var ADown:Boolean = false;
+		private var WDown:Boolean = false;
+		private var SDown:Boolean = false;
+		private var DDown:Boolean = false;
+		private var SpaceDown:Boolean = false;
+		private var canFire:Boolean = true;
 		private var ScoreLabel:TextField;
 		
 		public static const GAME_OVER:String = "GAME OVER";
@@ -109,6 +115,7 @@ package
 			// and setup the callback to listen on the stage object
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, On_Key_Down);
 			stage.addEventListener(KeyboardEvent.KEY_UP, On_Key_Up);
+			stage.addEventListener(Event.ENTER_FRAME, eFrame);
 			
 			// Add button listener
 			// flap_button.addEventListener(Event.TRIGGERED, Flap_Wings_Button_Handler);
@@ -195,7 +202,32 @@ package
 		
 		private function On_Key_Down(event:KeyboardEvent):void
 		{
-			if (event.keyCode == Keyboard.A)
+			
+			switch(event.keyCode)
+			{
+				case Keyboard.A:
+					ADown = true;
+					break;
+				case Keyboard.D:
+					DDown = true;
+					break;
+				case Keyboard.W:
+					WDown = true;
+					break;
+				case Keyboard.S:
+					SDown = true;
+					break;
+				case Keyboard.SPACE:
+					SpaceDown = true;
+					
+					/*projectile = new Projectile(); 
+					addChild(projectile);
+					projectile.Move(hero.xPos, hero.yPos); 	//"x" as placeholder to have the same function with same parameter.*/
+					break;
+				
+			}
+			
+			/*if (event.keyCode == Keyboard.A)
 			{
 					userInput = "a";
 			}
@@ -216,10 +248,10 @@ package
 				projectile = new Projectile(); 
 				addChild(projectile);
 				projectile.Move(hero.xPos, hero.yPos); 	//"x" as placeholder to have the same function with same parameter.
-				userInput = "";
+				//userInput = "";
 			}
 			
-			//hero.Move(userInput);
+			//hero.Move(userInput);*/
 		}
 		
 		private function GameIsOver() 
@@ -230,7 +262,30 @@ package
 		
 		private function On_Key_Up(event:KeyboardEvent):void
 		{
-			// reset now that we've released space
+			switch(event.keyCode)
+			{
+				case Keyboard.A:
+					ADown = false;
+					break;
+				case Keyboard.D:
+					DDown = false;
+					break;
+				case Keyboard.W:
+					WDown = false;
+					break;
+				case Keyboard.S:
+					SDown = false;
+					break;
+				case Keyboard.SPACE:
+					SpaceDown = false;
+					canFire = true;
+					/*projectile = new Projectile(); 
+					addChild(projectile);
+					projectile.Move(hero.xPos, hero.yPos); 	//"x" as placeholder to have the same function with same parameter.*/
+					break;
+				
+			}
+			/*// reset now that we've released space
 			if(event.keyCode == Keyboard.SPACE)
 			{
 			
@@ -250,8 +305,33 @@ package
 			if(event.keyCode == Keyboard.D)
 			{
 				
-			}
+			}*/
+			
 		}
+		function eFrame(e:EnterFrameEvent):void
+			{ //runs on every frame
+				if(ADown){
+					userInput = "a";
+				}
+				if(SDown){
+					userInput = "s";
+				}
+				if(WDown){
+					userInput = "w";
+				}
+				if(DDown){
+					userInput = "d";
+				}
+				if (SpaceDown){
+					if(canFire){
+						projectile = new Projectile(); 
+						addChild(projectile);
+						projectile.Move(hero.xPos, hero.yPos); 	//"x" as placeholder to have the same function with same parameter.
+					}
+					canFire = false;
+				}
+				//UpdateUI();
+			}
 	}
 	
 	
