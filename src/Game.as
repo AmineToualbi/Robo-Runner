@@ -5,6 +5,8 @@ package
 	import starling.assets.AssetManager;
 	import starling.display.Sprite;
 	import flash.events.Event;
+	import starling.core.Starling;
+	
 	
 	public class Game extends Sprite
 	{
@@ -14,6 +16,8 @@ package
 		private var help_screen:Help;
 		private var gameOver_screen:GameOver;
 		private var level:Level;
+		private var star:Starling;
+		private var game:Game;
 		
 		public function Game() 
 		{
@@ -60,13 +64,20 @@ package
 			gameOver_screen = new GameOver();
 			addChild(menu_screen);
 			addChild(help_screen);
-			addChild(gameOver_screen);
+			//addChild(gameOver_screen);
 			addChild(level);
 			
 			// Last, set the state to display the menu.
 			Game_State = State.MENU_SCREEN;
 			
 			
+		}
+		
+		public function restart():void
+		{
+			removeChild(level);
+			level = new Level();
+			addChild(level);
 		}
 		
 		public function UpdateGameState():void
@@ -87,11 +98,11 @@ package
 					level.visible = false;
 					help_screen.visible = true;
 					menu_screen.visible = false;
-					//addChild(help_screen);
+					addChild(help_screen);
 					break;
 					
 				case State.IN_GAME:
-					//level.visible = true;
+					level.visible = true;
 					menu_screen.visible = false;
 					level.UpdateUI();
 					level.visible = true;
@@ -102,9 +113,11 @@ package
 					
 				case State.GAME_OVER:
 					level.visible = false; 
-					removeChild(level); 
+					removeChild(level);
+					menu_screen.visible = false;
+					help_screen.visible = false;
 					gameOver_screen.visible = true;
-	
+					addChild(gameOver_screen);
 					break;
 					
 				default:
@@ -131,7 +144,9 @@ package
 		
 		private function Exit_Button_Pressed_Handler():void 
 		{
-			Game_State = State.GAME_OVER;
+			Game_State = State.MENU_SCREEN;
+			restart();
+			
 		}
 		
 		private function GameOver_Handler():void 

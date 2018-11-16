@@ -31,7 +31,7 @@ package
 	public class Level extends Sprite
 	{
 		private var hero:Hero;
-		private var bullets:Array = new Array();
+		private var obstacle_Arr:Array = new Array();
 		//private var flap_button:Button;
 		//private var flap_button_texture:Texture;
 		
@@ -39,9 +39,9 @@ package
 		private var map:Map;
 		private var projectile:Projectile;
 		private var enemy:Enemy;
+		private var gameOver:GameOver;
 		private const Stage_Width:int = 1024;
 		private const Stage_Height:int = 1024;
-		private var n:int = 0;
 		private var start_background:Image;
 		private var userInput:String; 
 		private var Score:int;
@@ -59,6 +59,7 @@ package
 		
 		private var HitNbr:int; //Testing purposes.
 		private var CollisionNbr:int; //Testing purposes.
+		private var timer:Timer = new Timer(1000); 
 
 
 		
@@ -72,19 +73,20 @@ package
 			//Create the objects.
 			map = new Map();
 			hero = new Hero();
-			obstacle = new Obstacle();
+			//obstacle = new Obstacle();
 			enemy = new Enemy(); 
+			//gameOver = new GameOver();
 			//projectile = new Projectile();
 			
 			
 			// Set the obstacle's initial position
-			obstacle.y = 0; 
+			//obstacle.y = 0; 
 
 			//Add the objects to the display.
 			addChild(map);
 			addChild(hero);
 			addChild(enemy);
-			addChild(obstacle);
+			//addChild(obstacle);
 			
 			Score = 0;
 			HitNbr = 0;		//Testing purposes.
@@ -106,6 +108,8 @@ package
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, On_Key_Down);
 			stage.addEventListener(KeyboardEvent.KEY_UP, On_Key_Up);
 			stage.addEventListener(Event.ENTER_FRAME, eFrame);	//Called every frame.
+			timer.addEventListener(TimerEvent.TIMER, addObstacle); //every 1000ms call addObstacle
+			timer.start();
 			
 		}
 		
@@ -119,7 +123,15 @@ package
 				if(enemy != null) { 
 					enemy.Move(userInput);
 				}
-				obstacle.Move(userInput);
+				for (var j:int = 0; j < obstacle_Arr.length; j++) 
+				{
+					obstacle_Arr[j].Move(userInput);
+					if (obstacle_Arr[j].y > 1024 + 0.5 * obstacle_Arr[j].height) {
+						obstacle_Arr.removeAt[j];
+					}
+					
+				}
+				
 				userInput = "";
 				Check_Projectile_Hit();
 			}
@@ -134,33 +146,38 @@ package
 			//precision for collision detection. 
 			var precisionFactorLeft:int = 75;
 			var precisionFactorRight:int = 20;
-			var leftObstacleX:int = obstacle.xPos - 0.5 * 100 + precisionFactorLeft; 
-			var rightObstacleX:int = obstacle.xPos + 0.5 * 100 + precisionFactorRight;  
+			for (var j:int = 0; j < obstacle_Arr.length; j++) 
+				{
+			//var leftObstacleX:int = obstacle.xPos - 0.5 * 100 + precisionFactorLeft; 
+			//var rightObstacleX:int = obstacle.xPos + 0.5 * 100 + precisionFactorRight;  
+			var leftObstacleX:int = obstacle_Arr[j].xPos - 0.5 * 100 + precisionFactorLeft; 
+			var rightObstacleX:int = obstacle_Arr[j].xPos + 0.5 * 100 + precisionFactorRight;  
 			
 			
 			//350 is a hard-coded value tested on Amine's screen to find when obstacle
 			//actually leaves the game screen. 
 			var precisionFactorBottom:int = 350;
 			
-			if (!(obstacle.yPos - 0.5 * 100 >= Stage_Height - precisionFactorBottom)) {	//If obstacle hasn't left screen.
-				if (obstacle.yPos + 0.5 * 100 >= hero.yPos - 0.5 * 200 && obstacle.y - 0.5 * 100 <= hero.yPos + 0.5 * 200){
+			if (!(obstacle_Arr[j].yPos - 0.5 * 100 >= Stage_Height - precisionFactorBottom)) {	//If obstacle hasn't left screen.
+				if (obstacle_Arr[j].yPos + 0.5 * 100 >= hero.yPos - 0.5 * 200 && obstacle_Arr[j].y - 0.5 * 100 <= hero.yPos + 0.5 * 200){
 					
 					if (rightObstacleX >= hero.xPos - 0.5 * 200 && rightObstacleX <= hero.xPos + 0.5 * 200) {
 						ScoreLabel.text = "COL=" + CollisionNbr;
 						CollisionNbr++;
 						Over = true; 
-						setTimeout(GameIsOver, 2000);
+						setTimeout(GameIsOver, 1000);
 					}
 					
 					if (leftObstacleX >= hero.xPos - 0.5 * 200 && leftObstacleX <= hero.xPos + 0.5 * 200) {
 						ScoreLabel.text = "COL=" + CollisionNbr;
 						CollisionNbr++; 
 						Over = true; 
-						setTimeout(GameIsOver, 2000);
+						setTimeout(GameIsOver, 1000);
 					}
 					
 				}
 			}
+				}
 			
 		}
 			
@@ -186,6 +203,13 @@ package
 	
 		}
 		
+		public function addObstacle(e:TimerEvent):void
+		{
+			obstacle = new Obstacle();
+			obstacle.Regenerate();
+			obstacle_Arr.push(obstacle);
+			addChild(obstacle);
+		}
 		
 		private function On_Key_Down(event:KeyboardEvent):void
 		{
@@ -200,10 +224,10 @@ package
 					break;
 				case Keyboard.W:
 				//	WDown = true;
-				//	break;
+					break;
 				case Keyboard.S:
 					//SDown = true;
-				//	break;
+					break;
 				case Keyboard.SPACE:
 					SpaceDown = true;
 					break;
@@ -213,8 +237,10 @@ package
 		
 		
 		//Notify Game.as that the game is over. 
-		private function GameIsOver() 
+		private function GameIsOver():void 
 		{
+			Over = true;
+			//addChild(gameOver);
 			dispatchEventWith(GAME_OVER, true);	
 
 		}
@@ -232,10 +258,10 @@ package
 					break;
 				case Keyboard.W:
 					//WDown = false;
-					//break;
+					break;
 				case Keyboard.S:
 					//SDown = false;
-				//	break;
+					break;
 				case Keyboard.SPACE:
 					SpaceDown = false;
 					canFire = true;
@@ -245,7 +271,7 @@ package
 		}
 		
 		
-		function eFrame(e:EnterFrameEvent):void		//Runs on every frame.
+		private function eFrame(e:EnterFrameEvent):void		//Runs on every frame.
 			{
 				
 				if(ADown){
@@ -268,6 +294,7 @@ package
 					}
 					canFire = false;
 				}
+				
 				//UpdateUI();
 			}
 	}
