@@ -27,6 +27,7 @@ package
 			
 			obstacle.width = 100;
 			obstacle.height = 100;
+			
 			// Initialize to a random position
 			obstacle.x = Math.random() * (Starling.current.stage.stageWidth / 2 - obstacle.width);
 			
@@ -51,7 +52,7 @@ package
 		override public function Move(input:String):void
 		{
 			obstacle.y += speed;
-			if (obstacle.y > 1024 + obstacle.height)
+			if (obstacle.y > 1024 + 0.5 * 100)
 			{
 				obstacle.y =  - obstacle.height;
 				Regenerate();
@@ -63,7 +64,7 @@ package
 		// Reset the obstacle to a randomized position
 		public function Regenerate():void
 		{
-			obstacle.x = Math.random() * (Starling.current.stage.stageWidth-obstacle.width);
+			obstacle.x = Math.random() * (Starling.current.stage.stageWidth - obstacle.width);
 			//right.x = Starling.current.stage.stageWidth/2 + Math.random() * (Starling.current.stage.stageWidth/2-right.width); 
 		}
 	}
