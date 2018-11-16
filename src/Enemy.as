@@ -90,7 +90,9 @@ package
 		public function Regenerate():void
 		{
 			enemy_armature.x = 0.5*enemy_armature.width + Math.random() * (Stage_Width - 0.5 * enemy_armature.width);
-			enemy_armature.y = -0.5*enemy_armature.height;  
+			enemy_armature.y = -0.5 * enemy_armature.height; 
+			xPos = enemy_armature.x;
+			yPos = enemy_armature.y; 
 		}
 		
 		

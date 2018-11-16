@@ -23,7 +23,7 @@ package
 	import flash.events.Event;
 
 
-	public class Projectile extends Sprite
+	public class Projectile extends MovableObject
 	{
 		private var projectile_json:Object;
 		private var projectile_data:DragonBonesData;
@@ -65,25 +65,40 @@ package
 			objects_armature.animation.fadeIn( "Flash_Long", -1, -1, 0, "" + 9);
 			
 			addEventListener(Event.ENTER_FRAME, ProjectileMovement);
+			
+			speed = 40;
+			
+			xPos = objects_armature.x; 
+			yPos = objects_armature.y; 
 
 			addChild(objects_armature);
 			
 		}
 		
-		function Move(xPos:int, yPos:int) {
-			objects_armature.x = xPos + 101;
-			objects_armature.y = yPos; 
+		function MoveProjectile(heroX:int, heroY:int) {
+			objects_armature.x = heroX;
+			objects_armature.y = heroY; 
+			xPos = objects_armature.x; 
 			
-			while (objects_armature.y <= 0) {
+			if (objects_armature.y <= 0) {		//Was a while before, we don't need the while.
 				ProjectileMovement(); 
 			}
+			
+			if (objects_armature.y < 0) {
+				DeleteProjectile(); 
+			}
+			
+			yPos = objects_armature.y;
 			
 			
 		}
 		
 		function ProjectileMovement() {
 
-				objects_armature.y -= 5;
+				objects_armature.y -= speed;
+				yPos = objects_armature.y; 
+				xPos = objects_armature.x;
+				
 			
 		}
 		
