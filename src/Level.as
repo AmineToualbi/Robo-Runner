@@ -69,6 +69,7 @@ package
 		private var gameTimer:Timer; 
 		
 		private var obstacleCount:int = 0;
+		private var killCount: int = 0;
 
 
 		
@@ -157,7 +158,8 @@ package
 			
 			if (Over != true){
 				
-				ScoreLabel.text = gameTimer.currentCount + "";
+				Score = gameTimer.currentCount + killCount;
+				ScoreLabel.text = Score + "";
 				Collision_Obstacle();
 				hero.Move(userInput)
 				if(enemy != null) { 
@@ -198,14 +200,14 @@ package
 				if (obstacle.yPos + 0.5 * 100 >= hero.yPos - 0.5 * 200 && obstacle.y - 0.5 * 100 <= hero.yPos + 0.5 * 200){
 					
 					if (rightObstacleX >= hero.xPos - 0.5 * 200 && rightObstacleX <= hero.xPos + 0.5 * 200) {
-						ScoreLabel.text = "COL=" + CollisionNbr;
+					//	ScoreLabel.text = "COL=" + CollisionNbr;
 						CollisionNbr++;
 						Over = true; 
 						setTimeout(GameIsOver, 2000);
 					}
 					
 					if (leftObstacleX >= hero.xPos - 0.5 * 200 && leftObstacleX <= hero.xPos + 0.5 * 200) {
-						ScoreLabel.text = "COL=" + CollisionNbr;
+					//	ScoreLabel.text = "COL=" + CollisionNbr;
 						CollisionNbr++; 
 						Over = true; 
 						setTimeout(GameIsOver, 2000);
@@ -258,6 +260,7 @@ package
 						HitNbr++; 
 						enemy.Regenerate();
 						projectile.DeleteProjectile();
+						killCount += 3; 
 					}
 					
 				}
@@ -296,6 +299,7 @@ package
 		{
 			gameTimer.stop();
 			gameTimer.reset(); 
+			killCount = 0;
 			dispatchEventWith(GAME_OVER, true);	
 
 		}
