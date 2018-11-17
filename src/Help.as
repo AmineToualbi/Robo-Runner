@@ -17,7 +17,7 @@ package
 		public function Help() 
 		{
 			var assets:AssetManager = Main.Assets;
-			help_menu = new Image(assets.getTexture("help"));
+			help_menu = new Image(assets.getTexture("help_menu"));
 			addChild(help_menu);
 			
 			// Initialize the button texture

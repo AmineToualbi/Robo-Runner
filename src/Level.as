@@ -13,6 +13,7 @@ package
 	import starling.display.Button;
 	import starling.display.Sprite;
 	import flash.ui.Keyboard;
+	import starling.events.EnterFrameEvent;
 	import starling.events.Event;
 	import starling.events.KeyboardEvent;
 	import starling.textures.Texture;
@@ -44,8 +45,19 @@ package
 		private var start_background:Image;
 		private var userInput:String; 
 		private var Score:int;
-		
+		private var ADown:Boolean = false;
+		private var WDown:Boolean = false;
+		private var SDown:Boolean = false;
+		private var DDown:Boolean = false;
+		private var SpaceDown:Boolean = false;
+		private var canFire:Boolean = true;
 		private var ScoreLabel:TextField;
+		private var newObstacle_Arr:Array = new Array();
+		private var newObstacle_Count:Array = new Array(); 
+		private var obstacle1:Obstacle;
+		private var obstacle2:Obstacle;
+		private var obs1Added:Boolean = false;
+
 		
 		public static const GAME_OVER:String = "GAME OVER";
 		
@@ -53,6 +65,11 @@ package
 		
 		private var HitNbr:int; //Testing purposes.
 		private var CollisionNbr:int; //Testing purposes.
+		
+		private var gameTimer:Timer; 
+		
+		private var obstacleCount:int = 0;
+		private var killCount: int = 0;
 
 
 		
@@ -62,46 +79,44 @@ package
 			var stage:starling.display.Stage = Starling.current.stage;
 			var assets:AssetManager = Main.Assets;
 			start_background = new Image(assets.getTexture("start"));
+			
+			//Create the objects.
 			map = new Map();
 			hero = new Hero();
 			obstacle = new Obstacle();
+			enemy = new Enemy(); 
 			//projectile = new Projectile();
 			
-			Score = 0; 
-			
+			gameTimer = new Timer(1000,0); 
+
 			// Set the obstacle's initial position
-			obstacle.y = 0; // screen width
+			obstacle.y = 0; 
 			
-			// Initialize the button texture
-			//flap_button_texture = MAIN.Assets.getTexture("flapWingsButton");
-			//flap_button = new Button(flap_button_texture);
-			
-			// Place button in bottom center
-			//flap_button.x = stage.stageWidth / 2 - flap_button.width / 2;
-			//flap_button.y = stage.stageHeight - flap_button.height;
-			
-			// Add the obstacle and player to the display
-			
-			enemy = new Enemy(); 
-			
-			//addChild(flap_button);
+			obstacle1 = new Obstacle(); 
+			obstacle2 = new Obstacle(); 
+
+			//Add the objects to the display.
 			addChild(map);
-			
 			addChild(hero);
-			
 			addChild(enemy);
-			
-			//addChild(projectile);
-			
 			addChild(obstacle);
-			Score = 1000000;
 			
+			Score = 0;
+			HitNbr = 0;		//Testing purposes.
+			CollisionNbr = 0;	//Testing purposes.
+			
+			//Score Label. 
 			ScoreLabel = new TextField(200, 50, "Score: " + Score);
 			ScoreLabel.format.font = "Arial";
 			ScoreLabel.format.color = 0xffffff;
 			ScoreLabel.format.size = 30;
 
+			//Add Score label to the display.
 			addChild(ScoreLabel);
+			
+			for (var i: int = 0; i < 3; i++) {
+				newObstacle_Count[i] = false;
+			}
 			
 			// Add keyboard listeners
 			// Keyboard Events aren't sent to sprites, 
@@ -109,149 +124,237 @@ package
 			// and setup the callback to listen on the stage object
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, On_Key_Down);
 			stage.addEventListener(KeyboardEvent.KEY_UP, On_Key_Up);
+			stage.addEventListener(Event.ENTER_FRAME, eFrame);	//Called every frame.
+			gameTimer.addEventListener(TimerEvent.TIMER, updateObstacleNumber);
+			gameTimer.start();	
 			
-			// Add button listener
-			// flap_button.addEventListener(Event.TRIGGERED, Flap_Wings_Button_Handler);
-			
-			HitNbr = 0;
-			CollisionNbr = 0;
+		}
+
+		public function updateObstacleNumber(e:TimerEvent):void {
+			if (gameTimer.currentCount % 10 == 0 && gameTimer.currentCount != 0 && newObstacle_Count[obstacleCount] == false) {
+					
+					var obstacleToAppear:Obstacle = new Obstacle();
+					newObstacle_Arr[obstacleCount] = obstacleToAppear;
+					obstacleToAppear.y = - obstacleToAppear.height; 
+					addChild(obstacleToAppear);
+					if(obstacleCount == 0){
+						obstacleToAppear.speed = 7;
+					}
+					if (obstacleCount == 1) {
+						obstacleToAppear.speed = 2;
+					}
+					if (obstacleCount == 2) {
+						obstacleToAppear.speed = 6;
+					}
+					newObstacle_Count[obstacleCount] = true;
+					obstacleCount += 1;
+					trace("NEW OBSTACLE ADDED");
+				}
 		}
 		
 		//This function is called every frame by Game.as. 
 		public function UpdateUI():void
 		{
-			if(Over != true){
-			//hero.Update();
-			//Move_Projectile();
-			Collision_Obstacle();
-			//Move_Enemy(); 
-			hero.Move(userInput)
-			if(enemy != null) { 
-				enemy.Move(userInput);
+			
+			if (Over != true){
+				
+				Score = gameTimer.currentCount + killCount;
+				ScoreLabel.text = Score + "";
+				Collision_Obstacle();
+				hero.Move(userInput)
+				if(enemy != null) { 
+					enemy.Move(userInput);
+				}
+				obstacle.Move(userInput);
+				userInput = "";
+				Check_Projectile_Hit();
+				
+				for (var i:int = 0; i < 3; i++) {
+					//if (newObstacle_Count[obstacleCount] == true && newObstacle_Arr[i] != null) {
+					if(newObstacle_Arr[i] != null) {	
+					newObstacle_Arr[i].Move(userInput);
+					}
+					//}
+				}
 			}
-			obstacle.Move(userInput);
-			userInput = "";
-			Check_Projectile_Hit();
-			}
+			
 		}
 		
-	
 		
 		private function Collision_Obstacle():void
 		{
-			//consider them as rectangles
-			var bounds1:Rectangle = hero.bounds;
-			var bounds2:Rectangle = obstacle.bounds;
-			//if (bounds1.intersects(bounds2))
-			//{	//test
-			//	trace("collisions!");
-			//	ScoreLabel.text = "Collision";
-			//	setTimeout(GameIsOver, 3000);		//Wait for 3000 seconds before displaying screen. 
-			//	Over = true;
-				
-				//dispatchEventWith(GAME_OVER, true);	
-			//}
 			
-			var leftObstacleX:int = obstacle.xPos - 0.5 * obstacle.width; 
-			var rightObstacleX:int = obstacle.xPos + 0.5 * obstacle.width;  
+			//75 & 20 are hard-coded values tested on Amine's screen to find right 
+			//precision for collision detection. 
+			var precisionFactorLeft:int = 75;
+			var precisionFactorRight:int = 20;
+			var leftObstacleX:int = obstacle.xPos - 0.5 * 100 + precisionFactorLeft; 
+			var rightObstacleX:int = obstacle.xPos + 0.5 * 100 + precisionFactorRight;  
 			
-			if (obstacle.yPos >= hero.yPos - 0.5 * hero.height) {
-				if (rightObstacleX >= hero.xPos - 0.5 * hero.width && rightObstacleX <= hero.xPos + 0.5 * hero.width) {
-					ScoreLabel.text = CollisionNbr + ""; 
-					CollisionNbr++;
-				}
-				if (leftObstacleX >= hero.xPos - 0.5 * hero.width && leftObstacleX <= hero.xPos + 0.5 * hero.width) {
-					ScoreLabel.text = CollisionNbr + "";
-					CollisionNbr++; 
+			
+			//350 is a hard-coded value tested on Amine's screen to find when obstacle
+			//actually leaves the game screen. 
+			var precisionFactorBottom:int = 350;
+			
+			if (!(obstacle.yPos - 0.5 * 100 >= Stage_Height - precisionFactorBottom)) {	//If obstacle hasn't left screen.
+				if (obstacle.yPos + 0.5 * 100 >= hero.yPos - 0.5 * 200 && obstacle.y - 0.5 * 100 <= hero.yPos + 0.5 * 200){
+					
+					if (rightObstacleX >= hero.xPos - 0.5 * 200 && rightObstacleX <= hero.xPos + 0.5 * 200) {
+					//	ScoreLabel.text = "COL=" + CollisionNbr;
+						CollisionNbr++;
+						Over = true;	 
+						setTimeout(GameIsOver, 2000);
+					}
+					
+					if (leftObstacleX >= hero.xPos - 0.5 * 200 && leftObstacleX <= hero.xPos + 0.5 * 200) {
+					//	ScoreLabel.text = "COL=" + CollisionNbr;
+						CollisionNbr++; 
+						Over = true; 
+						setTimeout(GameIsOver, 2000);
+					}
+					
 				}
 			}
 			
-			//if (rightObstacleX<= hero.xPos + 0.5 * hero.width && obstacle.xPos >= hero.xPos - 0.5 * hero.width) {
-			//	if (obstacle.yPos <= hero.yPos + 0.5 * hero.height && obstacle.yPos >= hero.yPos - 0.5 * hero.height) {
-			//		ScoreLabel.text = CollisionNbr + ""; 
-			//		CollisionNbr++;
-			//		//Over = true;
-			//	}
-			//}
+			for (var i:int = 0; i < 3; i++) {
+				if(newObstacle_Arr[i] != null) {
+				 leftObstacleX = newObstacle_Arr[i].xPos - 0.5 * 100 + precisionFactorLeft; 
+				rightObstacleX  = newObstacle_Arr[i].xPos + 0.5 * 100 + precisionFactorRight; 
+				
+			if (!(newObstacle_Arr[i].yPos - 0.5 * 100 >= Stage_Height - precisionFactorBottom)) {	//If obstacle hasn't left screen.
+				if (newObstacle_Arr[i].yPos + 0.5 * 100 >= hero.yPos && newObstacle_Arr[i].y - 0.5 * 100 <= hero.yPos + 0.5 * 200){	//For some reason, >= hero.yPos works here.
+					
+					if (rightObstacleX >= hero.xPos - 0.5 * 200 && rightObstacleX <= hero.xPos + 0.5 * 200) {
+						ScoreLabel.text = "COL=" + CollisionNbr;
+						CollisionNbr++;
+						Over = true; 
+						setTimeout(GameIsOver, 2000);
+					}
+					
+					if (leftObstacleX >= hero.xPos - 0.5 * 200 && leftObstacleX <= hero.xPos + 0.5 * 200) {
+						ScoreLabel.text = "COL=" + CollisionNbr;
+						CollisionNbr++; 
+						Over = true; 
+						setTimeout(GameIsOver, 2000);
+					}
+					
+				}
+			}
+			}
+			}
 			
 		}
+			
 		
 		private function Check_Projectile_Hit():void {
 			
-			if(projectile != null && enemy != null) { 
-				var projectileBounds:Rectangle = projectile.bounds; 
-				var enemyBounds:Rectangle = enemy.bounds;
+			//Hard-coded tested value. 
+			var precisionFactorProjectileX = 50;
 			
-				if (projectileBounds.intersects(enemyBounds)){
-					//ScoreLabel.text = HitNbr + ""; 
-					HitNbr++;
-					enemy.Regenerate();
-					projectile.DeleteProjectile();
+			if(projectile != null) { 
+				if (projectile.yPos >= enemy.yPos - 0.5 * 200 && projectile.yPos <= enemy.yPos + 0.5 * 200) {
+					
+					if (projectile.xPos - precisionFactorProjectileX >= enemy.xPos - 0.5 * 200 &&
+					projectile.xPos + precisionFactorProjectileX<= enemy.xPos + 0.5 * 200) {
+						//ScoreLabel.text = "Score: " + HitNbr;
+						HitNbr++; 
+						enemy.Regenerate();
+						projectile.DeleteProjectile();
+						killCount += 3; 
+					}
+					
 				}
 			}
-			
+	
 		}
 		
 		
 		private function On_Key_Down(event:KeyboardEvent):void
 		{
-			if (event.keyCode == Keyboard.A)
+			
+			switch(event.keyCode)
 			{
-					userInput = "a";
-			}
-			if (event.keyCode == Keyboard.D)
-			{
-					userInput = "d";
-			}
-			if (event.keyCode == Keyboard.W)
-			{
-					userInput = "w";
-			}
-			if (event.keyCode == Keyboard.S)
-			{
-					userInput = "s";	
-			}
-			if (event.keyCode == Keyboard.SPACE)
-			{
-				projectile = new Projectile(); 
-				addChild(projectile);
-				projectile.Move(hero.xPos, hero.yPos); 	//"x" as placeholder to have the same function with same parameter.
-				userInput = "";
+				case Keyboard.A:
+					ADown = true;
+					break;
+				case Keyboard.D:
+					DDown = true;
+					break;
+				case Keyboard.W:
+				//	WDown = true;
+				//	break;
+				case Keyboard.S:
+					//SDown = true;
+				//	break;
+				case Keyboard.SPACE:
+					SpaceDown = true;
+					break;
 			}
 			
-			//hero.Move(userInput);
 		}
 		
+		
+		//Notify Game.as that the game is over. 
 		private function GameIsOver() 
 		{
+			gameTimer.stop();
+			gameTimer.reset(); 
+			killCount = 0;
 			dispatchEventWith(GAME_OVER, true);	
 
 		}
 		
 		private function On_Key_Up(event:KeyboardEvent):void
 		{
-			// reset now that we've released space
-			if(event.keyCode == Keyboard.SPACE)
-			{
 			
-			}
-			if(event.keyCode == Keyboard.W)
+			switch(event.keyCode)
 			{
-				
+				case Keyboard.A:
+					ADown = false;
+					break;
+				case Keyboard.D:
+					DDown = false;
+					break;
+				case Keyboard.W:
+					//WDown = false;
+					//break;
+				case Keyboard.S:
+					//SDown = false;
+				//	break;
+				case Keyboard.SPACE:
+					SpaceDown = false;
+					canFire = true;
+					break;
 			}
-			if(event.keyCode == Keyboard.S)
-			{
-				
-			}
-			if(event.keyCode == Keyboard.A)
-			{
-				
-			}
-			if(event.keyCode == Keyboard.D)
-			{
-				
-			}
+
 		}
+		
+		
+		function eFrame(e:EnterFrameEvent):void		//Runs on every frame.
+			{
+				
+				if(ADown){
+					userInput = "a";
+				}
+				if(SDown){
+				//	userInput = "s";
+				}
+				if(WDown){
+				//	userInput = "w";
+				}
+				if(DDown){
+					userInput = "d";
+				}
+				if (SpaceDown){
+					if(canFire){
+						projectile = new Projectile(); 
+						addChild(projectile);
+						projectile.MoveProjectile(hero.xPos, hero.yPos); 	//"x" as placeholder to have the same function with same parameter.
+					}
+					canFire = false;
+				}
+				//UpdateUI();
+			}
 	}
 	
 	
@@ -259,43 +362,3 @@ package
 
 
 
-//	private function Move_Enemy() {
-	//		enemy.y += 5;
-	//		if (enemy.y > 1024 + obstacle.height)
-	//		{
-	//			enemy.y =  - enemy.height;
-	//			enemy.Regenerate();
-	///		}
-	//	}
-		
-		
-		
-	//	private function Move_Projectile():void
-	//	{
-			///(var i:int = 0; i < bullets.length; i++) 
-			//	{
-				//	addChild(bullets[i]);
-				//	bullets[i].y -= 3; 
-			//	}
-			/*
-			
-			if(bullets.length != 0) 
-			{ 
-				for(var i:int = 0; i < bullets.length; i++) 
-				{
-					addChild(bullets[i]);
-					bullets[i].y -= 3; 
-					
-					// Destroy offstage bullets 
-          
-					if(bullets[i].y < 0) 
-					{ 
-						removeChild(bullets[i]); 
-						bullets[i] = null; 
-						bullets.splice(i, 1); 
-					} 
-				} 
-			}
-			*/
-			
-		//}
