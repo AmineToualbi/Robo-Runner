@@ -26,12 +26,14 @@ package
 	import flash.utils.Timer;
 	import flash.events.TimerEvent;
 	import flash.utils.setTimeout;
+	import starling.utils.Align;
 
 	
 	public class Level extends Sprite
 	{
 		private var hero:Hero;
 		private var obstacle_Arr:Array = new Array();
+		private var enemy_Arr:Array = new Array();
 		//private var flap_button:Button;
 		//private var flap_button_texture:Texture;
 		
@@ -59,9 +61,18 @@ package
 		
 		private var HitNbr:int; //Testing purposes.
 		private var CollisionNbr:int; //Testing purposes.
-		private var timer:Timer = new Timer(1000); 
+		private var Otimer:Timer = new Timer(1500);
+		private var Etimer:Timer = new Timer(2000);
 
-
+		public static const LEFT_BUTTON_PRESSED:String = "LEFT_BUTTON_PRESSED";
+		private var left_button:Button;
+		private var left_button_texture:Texture;
+		public static const RIGHT_BUTTON_PRESSED:String = "RIGHT_BUTTON_PRESSED";
+		private var right_button:Button;
+		private var right_button_texture:Texture;
+		public static const SHOOT_BUTTON_PRESSED:String = "SHOOT_BUTTON_PRESSED";
+		private var shoot_button:Button;
+		private var shoot_button_texture:Texture;
 		
 		
 		public function Level() 
@@ -74,7 +85,7 @@ package
 			map = new Map();
 			hero = new Hero();
 			//obstacle = new Obstacle();
-			enemy = new Enemy(); 
+			//enemy = new Enemy(); 
 			//gameOver = new GameOver();
 			//projectile = new Projectile();
 			
@@ -85,7 +96,7 @@ package
 			//Add the objects to the display.
 			addChild(map);
 			addChild(hero);
-			addChild(enemy);
+			//addChild(enemy);
 			//addChild(obstacle);
 			
 			Score = 0;
@@ -97,9 +108,36 @@ package
 			ScoreLabel.format.font = "Arial";
 			ScoreLabel.format.color = 0xffffff;
 			ScoreLabel.format.size = 30;
+			ScoreLabel.format.horizontalAlign = Align.LEFT;
 
 			//Add Score label to the display.
 			addChild(ScoreLabel);
+			
+			//buttons
+			left_button_texture = assets.getTexture("left");
+		    left_button = new Button(left_button_texture);
+			right_button_texture = assets.getTexture("right");
+		    right_button = new Button(right_button_texture);
+			shoot_button_texture = assets.getTexture("shoot");
+		    shoot_button = new Button(shoot_button_texture);
+			
+			// Add an event listener for when the button is pressed
+			left_button.addEventListener(Event.TRIGGERED, Left_Button_Pressed);
+			right_button.addEventListener(Event.TRIGGERED, Right_Button_Pressed);
+			shoot_button.addEventListener(Event.TRIGGERED, Shoot_Button_Pressed);
+			
+			//DETERMINE WHERE TO PUT IT, PROBS IN MIDDLE.
+			left_button.x = 30;
+			left_button.y = 600;
+			right_button.x = left_button.x + 10 + right_button.width;
+			right_button.y = 600;
+			shoot_button.x = 990-shoot_button.width;
+			shoot_button.y = 550;
+			
+			//try to put on the top
+			addChild(left_button);
+			addChild(right_button);
+			addChild(shoot_button);
 			
 			// Add keyboard listeners
 			// Keyboard Events aren't sent to sprites, 
@@ -107,9 +145,14 @@ package
 			// and setup the callback to listen on the stage object
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, On_Key_Down);
 			stage.addEventListener(KeyboardEvent.KEY_UP, On_Key_Up);
+			stage.addEventListener(LEFT_BUTTON_PRESSED, Left_Button_Pressed_Handler);
+			stage.addEventListener(RIGHT_BUTTON_PRESSED, Right_Button_Pressed_Handler);
+			stage.addEventListener(SHOOT_BUTTON_PRESSED, Shoot_Button_Pressed_Handler);
 			stage.addEventListener(Event.ENTER_FRAME, eFrame);	//Called every frame.
-			timer.addEventListener(TimerEvent.TIMER, addObstacle); //every 1000ms call addObstacle
-			timer.start();
+			Otimer.addEventListener(TimerEvent.TIMER, AddObstacle); //every 1500ms call addObstacle
+			Otimer.start();
+			Etimer.addEventListener(TimerEvent.TIMER, AddEnemy); //every 2000ms call addObstacle
+			Etimer.start();
 			
 		}
 		
@@ -120,17 +163,9 @@ package
 			if(Over != true){
 				Collision_Obstacle();
 				hero.Move(userInput)
-				if(enemy != null) { 
-					enemy.Move(userInput);
-				}
-				for (var j:int = 0; j < obstacle_Arr.length; j++) 
-				{
-					obstacle_Arr[j].Move(userInput);
-					if (obstacle_Arr[j].y > 1024 + 0.5 * obstacle_Arr[j].height) {
-						obstacle_Arr.removeAt[j];
-					}
-					
-				}
+				MoveEnemies();
+				
+				MoveObstacles();
 				
 				userInput = "";
 				Check_Projectile_Hit();
@@ -186,29 +221,65 @@ package
 			
 			//Hard-coded tested value. 
 			var precisionFactorProjectileX = 50;
-			
-			if(projectile != null) { 
-				if (projectile.yPos >= enemy.yPos - 0.5 * 200 && projectile.yPos <= enemy.yPos + 0.5 * 200) {
+			for (var i:int = 0; i < enemy_Arr.length; i++ )
+			{
+				if(projectile != null) { 
+					if (projectile.yPos >= enemy_Arr[i].yPos - 0.5 * 200 && projectile.yPos <= enemy_Arr[i].yPos + 0.5 * 200) {
+						if (projectile.xPos - precisionFactorProjectileX >= enemy_Arr[i].xPos - 0.5 * 200 &&
+						projectile.xPos + precisionFactorProjectileX<= enemy_Arr[i].xPos + 0.5 * 200) {
+							ScoreLabel.text = "Score: " + HitNbr;
+							HitNbr++; 
+							enemy_Arr[i].Regenerate();
+							projectile.DeleteProjectile();
+						}
 					
-					if (projectile.xPos - precisionFactorProjectileX >= enemy.xPos - 0.5 * 200 &&
-					projectile.xPos + precisionFactorProjectileX<= enemy.xPos + 0.5 * 200) {
-						ScoreLabel.text = "Score: " + HitNbr;
-						HitNbr++; 
-						enemy.Regenerate();
-						projectile.DeleteProjectile();
 					}
-					
 				}
 			}
 	
 		}
 		
-		public function addObstacle(e:TimerEvent):void
+		public function AddObstacle(e:TimerEvent):void
 		{
 			obstacle = new Obstacle();
 			obstacle.Regenerate();
 			obstacle_Arr.push(obstacle);
 			addChild(obstacle);
+		}
+		
+		public function MoveObstacles():void
+		{
+			for (var j:int = 0; j < obstacle_Arr.length; j++) 
+				{
+					obstacle_Arr[j].Move(userInput);
+					if (obstacle_Arr[j].y > 1024 + 0.5 * obstacle_Arr[j].height) {
+						obstacle_Arr.removeAt[j];
+					}
+					
+				}
+		}
+		
+		public function AddEnemy(e:TimerEvent):void
+		{
+			enemy = new Enemy();
+			enemy.Regenerate();
+			enemy_Arr.push(enemy);
+			addChild(enemy);
+		}
+		
+		public function MoveEnemies():void
+		{
+			if ( enemy_Arr.length != 0)
+			{
+				for (var i:int = 0; i < enemy_Arr.length; i++) 
+					{
+						enemy_Arr[i].Move(userInput);
+						if (enemy_Arr[i].y > 1024 + 0.5 * enemy_Arr[i].height) {
+							enemy_Arr.removeAt[i];
+						}
+					
+					}
+			}
 		}
 		
 		private function On_Key_Down(event:KeyboardEvent):void
@@ -245,6 +316,21 @@ package
 
 		}
 		
+		private function Left_Button_Pressed():void
+		{
+			dispatchEventWith(LEFT_BUTTON_PRESSED, true);
+		}
+		
+		private function Right_Button_Pressed():void
+		{
+			dispatchEventWith(RIGHT_BUTTON_PRESSED, true);
+		}
+		
+		private function Shoot_Button_Pressed():void
+		{
+			dispatchEventWith(SHOOT_BUTTON_PRESSED, true);
+		}
+		
 		private function On_Key_Up(event:KeyboardEvent):void
 		{
 			
@@ -268,6 +354,25 @@ package
 					break;
 			}
 
+		}
+		
+		private function Left_Button_Pressed_Handler():void 
+		{
+			//ADown = true;
+			userInput = "a";
+		}
+		
+		private function Right_Button_Pressed_Handler():void 
+		{
+			//DDown = true;
+			userInput = "d";
+		}
+		
+		private function Shoot_Button_Pressed_Handler():void 
+		{
+			SpaceDown = true;
+			canFire = true;
+			
 		}
 		
 		

@@ -8,6 +8,8 @@ package
 	import starling.display.Button;
 	import starling.text.TextField;
 	import starling.text.TextFormat;
+	import starling.text.TextFieldAutoSize;
+	import starling.utils.Align;
 	/**
 	 * ...
 	 * @author Amine Toualbi
@@ -23,6 +25,8 @@ package
 		private var restart_button_texture:Texture;
 		private var CreditLabel:TextField;
 		private var Credit:int = 0;
+		private var TotalCreditLabel:TextField;
+		private var TotalCredit:int;
 		
 		public function GameOver() 
 		{
@@ -32,14 +36,23 @@ package
 			gameOver_menu = new Image(assets.getTexture("gameOver"));
 			addChild(gameOver_menu);
 			
+			TotalCredit = 0;
 			
-			CreditLabel = new TextField(200, 50, "Yon won : " + Credit + " credits");
+			//text
+			CreditLabel = new TextField(400, 50, "Yon won : " + Credit + " credits");
 			CreditLabel.format.font = "Arial";
 			CreditLabel.format.color = 0xffffff;
 			CreditLabel.format.size = 40;
-			CreditLabel.x = 400;
+			CreditLabel.x = 300;
 			CreditLabel.y = 300;
 			addChild(CreditLabel);
+			
+			TotalCreditLabel = new TextField(400, 50, "Total Credit: " + TotalCredit);
+			TotalCreditLabel.format.font = "Arial";
+			TotalCreditLabel.format.color = 0xffffff;
+			TotalCreditLabel.format.size = 40;
+			TotalCreditLabel.format.horizontalAlign = Align.LEFT;
+			addChild(TotalCreditLabel);
 			
 			// Initialize the button texture
 			//ADD TEXTURE TO ASSETS

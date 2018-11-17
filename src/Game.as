@@ -38,6 +38,7 @@ package
 			addEventListener(Menu.HELP_BUTTON_PRESSED, Help_Button_Pressed_Handler);
 			addEventListener(Help.BACK_BUTTON_PRESSED, Back_Button_Pressed_Handler);
 			addEventListener(GameOver.EXIT_BUTTON_PRESSED, Exit_Button_Pressed_Handler);
+			addEventListener(GameOver.RESTART_BUTTON_PRESSED, Restart_Button_Pressed_Handler);
 			addEventListener(Level.GAME_OVER, GameOver_Handler);
 		}
 		
@@ -104,7 +105,7 @@ package
 				case State.IN_GAME:
 					level.visible = true;
 					menu_screen.visible = false;
-					level.UpdateUI();
+					//level.UpdateUI();
 					level.visible = true;
 					removeChild(help_screen);		//removeChild bc help_screen won't be displayed after game starts.
 					// Make sure first level is updated every frame
@@ -146,6 +147,14 @@ package
 		{
 			Game_State = State.MENU_SCREEN;
 			restart();
+			
+		}
+		
+		private function Restart_Button_Pressed_Handler():void 
+		{
+			restart();
+			Game_State = State.IN_GAME;
+			
 			
 		}
 		

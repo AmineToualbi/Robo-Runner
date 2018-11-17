@@ -81,8 +81,9 @@ package
 			 enemy_armature.y += speed; 
 			if (enemy_armature.y > 1024 + enemy_armature.height)
 			{
+				removeChild(enemy_armature);
 				enemy_armature.y =  - enemy_armature.height;
-				Regenerate();
+				//Regenerate();
 			}
 		}
 		

@@ -75,7 +75,7 @@ package
 			
 		}
 		
-		function MoveProjectile(heroX:int, heroY:int) {
+		public function MoveProjectile(heroX:int, heroY:int):void {
 			objects_armature.x = heroX;
 			objects_armature.y = heroY; 
 			xPos = objects_armature.x; 
@@ -93,7 +93,7 @@ package
 			
 		}
 		
-		function ProjectileMovement() {
+		public function ProjectileMovement():void {
 
 				objects_armature.y -= speed;
 				yPos = objects_armature.y; 
@@ -102,7 +102,7 @@ package
 			
 		}
 		
-		function DeleteProjectile() {
+		public function DeleteProjectile():void {
 			removeChild(objects_armature);
 		}
 			
