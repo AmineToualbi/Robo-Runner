@@ -52,6 +52,12 @@ package
 		private var SpaceDown:Boolean = false;
 		private var canFire:Boolean = true;
 		private var ScoreLabel:TextField;
+		private var newObstacle_Arr:Array = new Array();
+		private var newObstacle_Count:Array = new Array(); 
+		private var obstacle1:Obstacle;
+		private var obstacle2:Obstacle;
+		private var obs1Added:Boolean = false;
+
 		
 		public static const GAME_OVER:String = "GAME OVER";
 		
@@ -59,6 +65,10 @@ package
 		
 		private var HitNbr:int; //Testing purposes.
 		private var CollisionNbr:int; //Testing purposes.
+		
+		private var gameTimer:Timer; 
+		
+		private var obstacleCount:int = 0;
 
 
 		
@@ -76,9 +86,13 @@ package
 			enemy = new Enemy(); 
 			//projectile = new Projectile();
 			
-			
+			gameTimer = new Timer(1000,0); 
+
 			// Set the obstacle's initial position
 			obstacle.y = 0; 
+			
+			obstacle1 = new Obstacle(); 
+			obstacle2 = new Obstacle(); 
 
 			//Add the objects to the display.
 			addChild(map);
@@ -99,6 +113,10 @@ package
 			//Add Score label to the display.
 			addChild(ScoreLabel);
 			
+			for (var i: int = 0; i < 3; i++) {
+				newObstacle_Count[i] = false;
+			}
+			
 			// Add keyboard listeners
 			// Keyboard Events aren't sent to sprites, 
 			// so we have to grab the current stage 
@@ -106,14 +124,40 @@ package
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, On_Key_Down);
 			stage.addEventListener(KeyboardEvent.KEY_UP, On_Key_Up);
 			stage.addEventListener(Event.ENTER_FRAME, eFrame);	//Called every frame.
+			gameTimer.addEventListener(TimerEvent.TIMER, updateObstacleNumber);
+			gameTimer.start();	
 			
+		}
+
+		public function updateObstacleNumber(e:TimerEvent):void {
+			if (gameTimer.currentCount % 10 == 0 && gameTimer.currentCount != 0 && newObstacle_Count[obstacleCount] == false) {
+					
+					var obstacleToAppear:Obstacle = new Obstacle();
+					newObstacle_Arr[obstacleCount] = obstacleToAppear;
+					obstacleToAppear.y = - obstacleToAppear.height; 
+					addChild(obstacleToAppear);
+					if(obstacleCount == 0){
+						obstacleToAppear.speed = 7;
+					}
+					if (obstacleCount == 1) {
+						obstacleToAppear.speed = 2;
+					}
+					if (obstacleCount == 2) {
+						obstacleToAppear.speed = 6;
+					}
+					newObstacle_Count[obstacleCount] = true;
+					obstacleCount += 1;
+					trace("NEW OBSTACLE ADDED");
+				}
 		}
 		
 		//This function is called every frame by Game.as. 
 		public function UpdateUI():void
 		{
 			
-			if(Over != true){
+			if (Over != true){
+				
+				ScoreLabel.text = gameTimer.currentCount + "";
 				Collision_Obstacle();
 				hero.Move(userInput)
 				if(enemy != null) { 
@@ -122,6 +166,14 @@ package
 				obstacle.Move(userInput);
 				userInput = "";
 				Check_Projectile_Hit();
+				
+				for (var i:int = 0; i < 3; i++) {
+					//if (newObstacle_Count[obstacleCount] == true && newObstacle_Arr[i] != null) {
+					if(newObstacle_Arr[i] != null) {	
+					newObstacle_Arr[i].Move(userInput);
+					}
+					//}
+				}
 			}
 			
 		}
@@ -162,6 +214,33 @@ package
 				}
 			}
 			
+			for (var i:int = 0; i < 3; i++) {
+				if(newObstacle_Arr[i] != null) {
+				 leftObstacleX = newObstacle_Arr[i].xPos - 0.5 * 100 + precisionFactorLeft; 
+				rightObstacleX  = newObstacle_Arr[i].xPos + 0.5 * 100 + precisionFactorRight; 
+				
+			if (!(newObstacle_Arr[i].yPos - 0.5 * 100 >= Stage_Height - precisionFactorBottom)) {	//If obstacle hasn't left screen.
+				if (newObstacle_Arr[i].yPos + 0.5 * 100 >= hero.yPos && newObstacle_Arr[i].y - 0.5 * 100 <= hero.yPos + 0.5 * 200){	//For some reason, >= hero.yPos works here.
+					
+					if (rightObstacleX >= hero.xPos - 0.5 * 200 && rightObstacleX <= hero.xPos + 0.5 * 200) {
+						ScoreLabel.text = "COL=" + CollisionNbr;
+						CollisionNbr++;
+						Over = true; 
+						setTimeout(GameIsOver, 2000);
+					}
+					
+					if (leftObstacleX >= hero.xPos - 0.5 * 200 && leftObstacleX <= hero.xPos + 0.5 * 200) {
+						ScoreLabel.text = "COL=" + CollisionNbr;
+						CollisionNbr++; 
+						Over = true; 
+						setTimeout(GameIsOver, 2000);
+					}
+					
+				}
+			}
+			}
+			}
+			
 		}
 			
 		
@@ -175,7 +254,7 @@ package
 					
 					if (projectile.xPos - precisionFactorProjectileX >= enemy.xPos - 0.5 * 200 &&
 					projectile.xPos + precisionFactorProjectileX<= enemy.xPos + 0.5 * 200) {
-						ScoreLabel.text = "Score: " + HitNbr;
+						//ScoreLabel.text = "Score: " + HitNbr;
 						HitNbr++; 
 						enemy.Regenerate();
 						projectile.DeleteProjectile();
@@ -215,6 +294,8 @@ package
 		//Notify Game.as that the game is over. 
 		private function GameIsOver() 
 		{
+			gameTimer.stop();
+			gameTimer.reset(); 
 			dispatchEventWith(GAME_OVER, true);	
 
 		}
