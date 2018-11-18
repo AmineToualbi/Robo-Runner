@@ -76,9 +76,11 @@ package
 		
 		public function restart():void
 		{
+			Level.Over = false;
 			removeChild(level);
 			level = new Level();
 			addChild(level);
+			
 		}
 		
 		public function UpdateGameState():void
@@ -103,11 +105,13 @@ package
 					break;
 					
 				case State.IN_GAME:
-					level.visible = true;
+					//level = new Level();
+					//level.visible = true;
 					menu_screen.visible = false;
 					//level.UpdateUI();
 					level.visible = true;
-					removeChild(help_screen);		//removeChild bc help_screen won't be displayed after game starts.
+					help_screen.visible = false;
+					//removeChild(help_screen);		//removeChild bc help_screen won't be displayed after game starts.
 					// Make sure first level is updated every frame
 					level.UpdateUI();
 					break;

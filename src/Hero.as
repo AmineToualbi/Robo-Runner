@@ -98,7 +98,7 @@ package
 			}
 			
 			xPos = hk_armature.x;
-			yPos = hk_armature.y; 
+			//yPos = hk_armature.y; 
 		
 		}
 		
