@@ -147,7 +147,7 @@ package
 				InsufficientLabel.format.font = "Arial";
 				InsufficientLabel.format.color = 0xff0000;
 				InsufficientLabel.format.size = 30;
-				InsufficientLabel.x = 350;
+				InsufficientLabel.x = 475;
 				InsufficientLabel.y = 375;
 				
 				menu_screen.addChild(InsufficientLabel);
@@ -172,9 +172,9 @@ package
 		
 		private function Exit_Button_Pressed_Handler():void 
 		{
-			Level.credits = GameOver.TotalCredit;
-			menu_screen.CreditsLabel.text = "Credits: " + Level.credits;
-			restart();
+			///Level.credits = GameOver.TotalCredit;
+			//menu_screen.CreditsLabel.text = "Credits: " + Level.credits;
+			//restart();
 			Game_State = State.MENU_SCREEN;
 			
 			
