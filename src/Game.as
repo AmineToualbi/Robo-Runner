@@ -20,6 +20,7 @@ package
 		private var level:Level;
 		private var star:Starling;
 		private var game:Game;
+		private var gameOver_Screen:GameOver;
 		
 		public function Game() 
 		{
@@ -80,8 +81,10 @@ package
 		{
 			Level.Over = false;
 			removeChild(level);
+			removeChild(menu_screen);
 			level = new Level();
 			addChild(level);
+			
 			
 		}
 		
@@ -124,7 +127,7 @@ package
 					menu_screen.visible = false;
 					help_screen.visible = false;
 					//gameOver_screen.visible = true;
-					var gameOver_Screen:GameOver = new GameOver();	//Create GameOver here bc we need to retrieve the Score at that time. 
+					gameOver_Screen = new GameOver();	//Create GameOver here bc we need to retrieve the Score at that time. 
 					addChild(gameOver_Screen);
 					gameOver_Screen.visible = true;
 					//addChild(gameOver_screen);
@@ -147,9 +150,11 @@ package
 				InsufficientLabel.x = 350;
 				InsufficientLabel.y = 375;
 				
-				menu_screen.addChild(InsufficientLabel)
+				menu_screen.addChild(InsufficientLabel);
 			}
 			else {
+				Level.credits -= 100;
+				menu_screen.removeChild(InsufficientLabel);
 				Game_State = State.IN_GAME;
 				Level.start = true;
 			}
@@ -167,16 +172,32 @@ package
 		
 		private function Exit_Button_Pressed_Handler():void 
 		{
-			Game_State = State.MENU_SCREEN;
+			Level.credits = GameOver.TotalCredit;
+			menu_screen.CreditsLabel.text = "Credits: " + Level.credits;
 			restart();
+			Game_State = State.MENU_SCREEN;
+			
 			
 		}
 		
 		private function Restart_Button_Pressed_Handler():void 
 		{
-			restart();
-			Game_State = State.IN_GAME;
-			
+			if (Level.credits < 100) {
+				var InsufficientLabel: TextField = new TextField(300, 50, "Insufficient Credits!");
+				InsufficientLabel.format.font = "Arial";
+				InsufficientLabel.format.color = 0xff0000;
+				InsufficientLabel.format.size = 30;
+				InsufficientLabel.x = 350;
+				InsufficientLabel.y = 375;
+				
+				gameOver_Screen.addChild(InsufficientLabel);
+			}
+			else {
+				Level.credits -= 100;
+				restart();
+				Game_State = State.IN_GAME;
+				
+			}
 			
 		}
 		
@@ -192,7 +213,7 @@ package
 			switch(event.keyCode)
 			{
 				case Keyboard.ENTER:
-					if(Game_State = State.MENU_SCREEN) {
+					if(Game_State == State.MENU_SCREEN) {
 						Level.credits += 100;
 						("ENTER PRESSED");
 						menu_screen.CreditsLabel.text = "Credits: " + Level.credits;
