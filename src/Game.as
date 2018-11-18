@@ -6,6 +6,9 @@ package
 	import starling.display.Sprite;
 	import flash.events.Event;
 	import starling.core.Starling;
+	import starling.text.TextField;
+	import starling.events.KeyboardEvent;
+		import flash.ui.Keyboard;
 	
 	
 	public class Game extends Sprite
@@ -14,7 +17,6 @@ package
 		private var assets:AssetManager;
 		private var menu_screen:Menu;
 		private var help_screen:Help;
-		private var gameOver_screen:GameOver;
 		private var level:Level;
 		private var star:Starling;
 		private var game:Game;
@@ -62,12 +64,12 @@ package
 			menu_screen = new Menu();
 			help_screen = new Help();
 			level = new Level();
-			gameOver_screen = new GameOver();
 			addChild(menu_screen);
 			addChild(help_screen);
 			//addChild(gameOver_screen);
 			addChild(level);
 			
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, On_Key_Down);
 			// Last, set the state to display the menu.
 			Game_State = State.MENU_SCREEN;
 			
@@ -121,8 +123,11 @@ package
 					removeChild(level);
 					menu_screen.visible = false;
 					help_screen.visible = false;
-					gameOver_screen.visible = true;
-					addChild(gameOver_screen);
+					//gameOver_screen.visible = true;
+					var gameOver_Screen:GameOver = new GameOver();	//Create GameOver here bc we need to retrieve the Score at that time. 
+					addChild(gameOver_Screen);
+					gameOver_Screen.visible = true;
+					//addChild(gameOver_screen);
 					break;
 					
 				default:
@@ -134,7 +139,20 @@ package
 		// Change the game state when the play button is pressed
 		private function Play_Button_Pressed_Handler():void
 		{
-			Game_State = State.IN_GAME;
+			if (Level.credits < 100) {
+				var InsufficientLabel: TextField = new TextField(300, 50, "Insufficient Credits!");
+				InsufficientLabel.format.font = "Arial";
+				InsufficientLabel.format.color = 0xff0000;
+				InsufficientLabel.format.size = 30;
+				InsufficientLabel.x = 350;
+				InsufficientLabel.y = 375;
+				
+				menu_screen.addChild(InsufficientLabel)
+			}
+			else {
+				Game_State = State.IN_GAME;
+				Level.start = true;
+			}
 		}
 		
 		private function Help_Button_Pressed_Handler():void
@@ -165,6 +183,23 @@ package
 		private function GameOver_Handler():void 
 		{
 			Game_State = State.GAME_OVER; 
+		}
+		
+				
+		private function On_Key_Down(event:KeyboardEvent):void
+		{
+			
+			switch(event.keyCode)
+			{
+				case Keyboard.ENTER:
+					if(Game_State = State.MENU_SCREEN) {
+						Level.credits += 100;
+						("ENTER PRESSED");
+						menu_screen.CreditsLabel.text = "Credits: " + Level.credits;
+					}
+					break;
+			}
+			
 		}
 		
 	}

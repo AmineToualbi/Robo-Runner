@@ -48,7 +48,7 @@ package
 		private var n:int = 0;
 		private var start_background:Image;
 		private var userInput:String; 
-		private var Score:int;
+		public static var Score:int = 0;
 		private var ADown:Boolean = false;
 		private var WDown:Boolean = false;
 		private var SDown:Boolean = false;
@@ -64,6 +64,8 @@ package
 		//private var collision:Boolean = false;
 		private var blockObstacle:Vector.<Obstacle> = new Vector.<Obstacle>;
 		private var heroRec:Rectangle = new Rectangle(0, 0, 150, 150);
+
+		
 		public static const GAME_OVER:String = "GAME OVER";
 		
 		public static var Over: Boolean = false; 
@@ -75,6 +77,9 @@ package
 		
 		private var obstacleCount:int = 0;
 		private var killCount: int = 0;
+		
+		public static var credits:int = 55; 
+		public static var start:Boolean = false;
 
 
 		
@@ -107,7 +112,6 @@ package
 			addChild(enemy);
 			//addChild(obstacle);
 			
-			Score = 0;
 			HitNbr = 0;		//Testing purposes.
 			CollisionNbr = 0;	//Testing purposes.
 			
@@ -131,33 +135,45 @@ package
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, On_Key_Down);
 			stage.addEventListener(KeyboardEvent.KEY_UP, On_Key_Up);
 			stage.addEventListener(Event.ENTER_FRAME, eFrame);	//Called every frame.
-			gameTimer.addEventListener(TimerEvent.TIMER, updateObstacleNumber);
-			gameTimer.start();	
+			stage.addEventListener(Event.ENTER_FRAME, startGame);
 			
+			
+			
+		}
+		
+		public function startGame(e:EnterFrameEvent): void {
+			if(start == true) {
+				gameTimer.addEventListener(TimerEvent.TIMER, updateObstacleNumber);
+				gameTimer.start();
+			}
 		}
 
 		public function updateObstacleNumber(e:TimerEvent):void {
 			if (gameTimer.currentCount % 3 == 0 && gameTimer.currentCount != 0 && Over == false) {
 					
+					
 					var obstacleToAppear:Obstacle = new Obstacle();
 					//newObstacle_Arr[obstacleCount] = obstacleToAppear;
-					//obstacleToAppear.y = - obstacleToAppear.height; 
-					
+					obstacleToAppear.y = - obstacleToAppear.height; 
+          
 					addChild(obstacleToAppear);
 					if(obstacleCount == 0){
-						obstacleToAppear.speed = 7;
+						obstacleToAppear.speed = 10;
 					}
 					else if (obstacleCount == 1) {
-						obstacleToAppear.speed = 2;
-					}
-					else if (obstacleCount == 2) {
+
 						obstacleToAppear.speed = 6;
 					}
-					else
-					{
-						obstacleToAppear.speed = 4;
+					else if (obstacleCount == 2) {
+						obstacleToAppear.speed = 7;
 					}
-					blockObstacle.push(obstacleToAppear);
+					//We don't want more than 3 obstacles.
+					//else
+					//{
+						//obstacleToAppear.speed = 6;
+					//}
+
+           blockObstacle.push(obstacleToAppear);
 					//newObstacle_Count[obstacleCount] = true;
 					obstacleCount += 1;
 					//trace("NEW OBSTACLE ADDED");
@@ -168,7 +184,7 @@ package
 		public function UpdateUI():void
 		{
 			
-			if (Over != true){
+			if (Over != true && start == true){
 				
 				Score = gameTimer.currentCount + killCount;
 				ScoreLabel.text = Score + "";
@@ -195,6 +211,9 @@ package
 					}
 					//}
 				}*/
+
+			}
+			
 			}
 			
 		}
@@ -212,6 +231,7 @@ package
 			//for (var i:int = 0; i < blockObstacle.length; i++)
 			//{
 				if(heroRec.intersects(obstacle.bounds))
+
 				{
 					CollisionNbr++;
 					Over = true;	 

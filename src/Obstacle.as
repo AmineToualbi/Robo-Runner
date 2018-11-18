@@ -31,6 +31,7 @@ package
 			// Initialize to a random position
 			obstacle.x = Math.random() * (Starling.current.stage.stageWidth - obstacle.width);
 			obstacle.y = -obstacle.height /2;
+
 			
 			//right.x = Starling.current.stage.stageWidth/2 + Math.random() * (Starling.current.stage.stageWidth/2-right.width); 
 			
@@ -57,8 +58,9 @@ package
 			{
 				removeChild(obstacle);
 				obstacle.y =  obstacle.height /2;
+
 				
-				//Regenerate();
+				Regenerate();
 			}
 			xPos = obstacle.x-50; 
 			yPos = obstacle.y-50; 

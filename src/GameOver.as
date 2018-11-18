@@ -24,7 +24,6 @@ package
 		private var restart_button:Button;
 		private var restart_button_texture:Texture;
 		private var CreditLabel:TextField;
-		private var Credit:int = 0;
 		private var TotalCreditLabel:TextField;
 		private var TotalCredit:int;
 		
@@ -36,16 +35,17 @@ package
 			gameOver_menu = new Image(assets.getTexture("gameOver"));
 			addChild(gameOver_menu);
 			
-			TotalCredit = 0;
 			
 			//text
-			CreditLabel = new TextField(400, 50, "Yon won : " + Credit + " credits");
+			CreditLabel = new TextField(400, 50, "Yon won : " + Level.Score + " credits");
 			CreditLabel.format.font = "Arial";
 			CreditLabel.format.color = 0xffffff;
 			CreditLabel.format.size = 40;
 			CreditLabel.x = 300;
 			CreditLabel.y = 300;
 			addChild(CreditLabel);
+			
+			TotalCredit = Level.Score + Level.credits;
 			
 			TotalCreditLabel = new TextField(400, 50, "Total Credit: " + TotalCredit);
 			TotalCreditLabel.format.font = "Arial";
