@@ -28,7 +28,7 @@ package
 	import flash.utils.Timer;
 	import flash.events.TimerEvent;
 	import flash.utils.setTimeout;
-	import flash.events.Event;
+	import starling.events.Event;
 	//import flash.display.DisplayObject;
 	
 	
@@ -82,7 +82,15 @@ package
 		public static var start:Boolean = false;
 
 
-		
+		public static const LEFT_BUTTON_PRESSED:String = "LEFT_BUTTON_PRESSED";
+		private var left_button:Button;
+		private var left_button_texture:Texture;
+		public static const RIGHT_BUTTON_PRESSED:String = "RIGHT_BUTTON_PRESSED";
+		private var right_button:Button;
+		private var right_button_texture:Texture;
+		public static const SHOOT_BUTTON_PRESSED:String = "SHOOT_BUTTON_PRESSED";
+		private var shoot_button:Button;
+		private var shoot_button_texture:Texture;
 		
 		public function Level() 
 		{
@@ -124,6 +132,32 @@ package
 			//Add Score label to the display.
 			addChild(ScoreLabel);
 			
+			//buttons
+			left_button_texture = assets.getTexture("left");
+		    left_button = new Button(left_button_texture);
+			right_button_texture = assets.getTexture("right");
+		    right_button = new Button(right_button_texture);
+			shoot_button_texture = assets.getTexture("shoot");
+		    shoot_button = new Button(shoot_button_texture);
+			
+			// Add an event listener for when the button is pressed
+			left_button.addEventListener(Event.TRIGGERED, Left_Button_Pressed);
+			right_button.addEventListener(Event.TRIGGERED, Right_Button_Pressed);
+			shoot_button.addEventListener(Event.TRIGGERED, Shoot_Button_Pressed);
+			
+			
+			left_button.x = 1050;
+			left_button.y = 500;
+			right_button.x = 1060 + right_button.width;
+			right_button.y = 500;
+			shoot_button.x = 1050;
+			shoot_button.y = 600;
+			
+			
+			addChild(left_button);
+			addChild(right_button);
+			addChild(shoot_button);
+			
 			/*for (var i: int = 0; i < 3; i++) {
 				newObstacle_Count[i] = false;
 			}*/
@@ -136,7 +170,9 @@ package
 			stage.addEventListener(KeyboardEvent.KEY_UP, On_Key_Up);
 			stage.addEventListener(Event.ENTER_FRAME, eFrame);	//Called every frame.
 			stage.addEventListener(Event.ENTER_FRAME, startGame);
-			
+			stage.addEventListener(LEFT_BUTTON_PRESSED, Left_Button_Pressed_Handler);
+			stage.addEventListener(RIGHT_BUTTON_PRESSED, Right_Button_Pressed_Handler);
+			stage.addEventListener(SHOOT_BUTTON_PRESSED, Shoot_Button_Pressed_Handler);
 			
 			
 		}
@@ -325,6 +361,20 @@ package
 	
 		}
 		
+		private function Left_Button_Pressed():void
+		{
+			dispatchEventWith(LEFT_BUTTON_PRESSED, true);
+		}
+		
+		private function Right_Button_Pressed():void
+		{
+			dispatchEventWith(RIGHT_BUTTON_PRESSED, true);
+		}
+		
+		private function Shoot_Button_Pressed():void
+		{
+			dispatchEventWith(SHOOT_BUTTON_PRESSED, true);
+		}
 		
 		private function On_Key_Down(event:KeyboardEvent):void
 		{
@@ -386,6 +436,24 @@ package
 
 		}
 		
+		private function Left_Button_Pressed_Handler():void 
+		{
+			//ADown = true;
+			userInput = "a";
+		}
+		
+		private function Right_Button_Pressed_Handler():void 
+		{
+			//DDown = true;
+			userInput = "d";
+		}
+		
+		private function Shoot_Button_Pressed_Handler():void 
+		{
+			SpaceDown = true;
+			canFire = true;
+			
+		}
 		
 		function eFrame(e:EnterFrameEvent):void		//Runs on every frame.
 			{

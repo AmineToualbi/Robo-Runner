@@ -7,6 +7,8 @@ package
 	import starling.core.Starling;
 	import flash.filesystem.File;
 	
+	//black area on left of map
+	[SWF(backgroundColor = "0x000000")]
 	public class Main extends Sprite 
 	{
 		public static var Assets:AssetManager;
