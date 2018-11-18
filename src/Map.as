@@ -42,23 +42,6 @@ package
 		private const Stage_Width:int = 1024;
 		private const Stage_Height:int = 1024;
 		
-		public static const UP_BUTTON_PRESSED:String = "UP_BUTTON_PRESSED";
-		public static const DOWN_BUTTON_PRESSED:String = "DOWN_BUTTON_PRESSED";
-		public static const LEFT_BUTTON_PRESSED:String = "LEFT_BUTTON_PRESSED";
-		public static const RIGHT_BUTTON_PRESSED:String = "RIGHT_BUTTON_PRESSED";
-		public static const SHOOT_BUTTON_PRESSED:String = "SHOOT_BUTTON_PRESSED";
-		
-		private var up_button:Button;
-		private var up_button_texture:Texture;
-		private var down_button:Button;
-		private var down_button_texture:Texture;
-		private var left_button:Button;
-		private var left_button_texture:Texture;
-		private var right_button:Button;
-		private var right_button_texture:Texture;
-		private var shoot_button:Button;
-		private var shoot_button_texture:Texture;
-
 		
 		public function Map()
 		{
@@ -82,52 +65,15 @@ package
 			
 			
 			addChild(bg_armature);
-			//play_button
+			
 			var assets:AssetManager = Main.Assets;
-			
-			// Initialize the button texture
-			up_button_texture = assets.getTexture("up");
-			up_button = new Button(up_button_texture);
-			down_button_texture = assets.getTexture("down");
-			down_button = new Button(down_button_texture);
-			left_button_texture = assets.getTexture("left");
-			left_button = new Button(down_button_texture);
-			right_button_texture = assets.getTexture("right");
-			right_button = new Button(down_button_texture);
-			shoot_button_texture = assets.getTexture("shoot");
-			shoot_button = new Button(down_button_texture);
-			
-			// Add an event listener for when the button is pressed
-			//up_button.addEventListener(Event.TRIGGERED, UP_Button_Pressed);
-			//down_button.addEventListener(Event.TRIGGERED, DOWN_Button_Pressed);
-			//left_button.addEventListener(Event.TRIGGERED, LEFT_Button_Pressed);
-			//right_button.addEventListener(Event.TRIGGERED, RIGHT_Button_Pressed);
-			//shoot_button.addEventListener(Event.TRIGGERED, SHOOT_Button_Pressed);
-			
-			
-			// Center the button
-			up_button.x = 1920 - up_button.width * 2;
-			up_button.y = 1520
-			down_button.x = 1920 - down_button.width * 2;
-			down_button.y = 1520 + 25 + up_button.height;
-			left_button.x = 1920 - left_button.width * 2;
-			left_button.y = 1520 + 25 * 2 + down_button.height;
-			right_button.x = 1920 - right_button.width * 2;
-			right_button.y = 1520 + 25 * 3 + left_button.height;
-			shoot_button.x = 1920 - shoot_button.width * 2;
-			shoot_button.y = 1520 + 25 * 4 + right_button.height;
-			
-			addChild(up_button);
-			addChild(down_button);
-			addChild(left_button);
-			addChild(right_button);
-			addChild(shoot_button);
 			
 			//Update_Armature_Display();
 			//Update_Animation_Display();
 			//Update_Object_Display();
 			
 		}
+		
 		
 		private function Update_Animation_Display():void
 		{
