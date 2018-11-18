@@ -216,7 +216,7 @@ package
 			
 			}
 			
-		}
+		
 		
 		
 		function Collision_Obstacle(obstacle:Obstacle)
@@ -237,6 +237,8 @@ package
 					Over = true;	 
 					setTimeout(GameIsOver, 2000);
 				}
+				
+		}
 			//}
 			/*
 			//75 & 20 are hard-coded values tested on Amine's screen to find right 
@@ -298,7 +300,7 @@ package
 			}
 			}*/
 			
-		}
+		
 			
 		
 		private function Check_Projectile_Hit():void {
