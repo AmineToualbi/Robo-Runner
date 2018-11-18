@@ -10,12 +10,13 @@ package
 	import dragonBones.events.EventObject;
 	import flash.display3D.textures.RectangleTexture;
 	import flash.geom.Rectangle;
+	//import starling.utils.RectangleUtil;
 	import starling.core.Starling;
 	import starling.display.Button;
 	import starling.display.Sprite;
 	import flash.ui.Keyboard;
 	import starling.events.EnterFrameEvent;
-	//import starling.events.Event;
+	import starling.geom.Polygon;
 	import starling.events.KeyboardEvent;
 	import starling.textures.Texture;
 	import starling.assets.AssetManager;
@@ -62,6 +63,8 @@ package
 		//private var obs1Added:Boolean = false;
 		//private var collision:Boolean = false;
 		private var blockObstacle:Vector.<Obstacle> = new Vector.<Obstacle>;
+		private var heroRec:Rectangle = new Rectangle(0, 0, 150, 150);
+
 		
 		public static const GAME_OVER:String = "GAME OVER";
 		
@@ -146,17 +149,19 @@ package
 		}
 
 		public function updateObstacleNumber(e:TimerEvent):void {
-			if (gameTimer.currentCount % 3 == 0 && gameTimer.currentCount != 0 /*&& newObstacle_Count[obstacleCount] == false*/) {
+			if (gameTimer.currentCount % 3 == 0 && gameTimer.currentCount != 0 && Over == false) {
+					
 					
 					var obstacleToAppear:Obstacle = new Obstacle();
 					//newObstacle_Arr[obstacleCount] = obstacleToAppear;
 					obstacleToAppear.y = - obstacleToAppear.height; 
-					
+          
 					addChild(obstacleToAppear);
 					if(obstacleCount == 0){
 						obstacleToAppear.speed = 10;
 					}
 					else if (obstacleCount == 1) {
+
 						obstacleToAppear.speed = 6;
 					}
 					else if (obstacleCount == 2) {
@@ -167,10 +172,11 @@ package
 					//{
 						//obstacleToAppear.speed = 6;
 					//}
-					blockObstacle.push(obstacleToAppear);
+
+           blockObstacle.push(obstacleToAppear);
 					//newObstacle_Count[obstacleCount] = true;
 					obstacleCount += 1;
-					trace("NEW OBSTACLE ADDED");
+					//trace("NEW OBSTACLE ADDED");
 				}
 		}
 		
@@ -205,9 +211,9 @@ package
 					}
 					//}
 				}*/
+
 			}
-			if (Over == true) {
-				trace("SCORE = " + Score);
+			
 			}
 			
 		}
@@ -215,10 +221,17 @@ package
 		
 		function Collision_Obstacle(obstacle:Obstacle)
 		{
-			var block:Rectangle = obstacle.getBounds(this);
+			//var block:Rectangle = obstacle.bounds;
+			heroRec.x = hero.xPos;
+			heroRec.y = hero.yPos;
+			heroRec.offset(-75, -75);
+			
+			
+			//heroRec.offset(0, 50);
 			//for (var i:int = 0; i < blockObstacle.length; i++)
 			//{
-				if(hero.bounds.intersects(block))
+				if(heroRec.intersects(obstacle.bounds))
+
 				{
 					CollisionNbr++;
 					Over = true;	 

@@ -30,6 +30,8 @@ package
 			
 			// Initialize to a random position
 			obstacle.x = Math.random() * (Starling.current.stage.stageWidth - obstacle.width);
+			obstacle.y = -obstacle.height /2;
+
 			
 			//right.x = Starling.current.stage.stageWidth/2 + Math.random() * (Starling.current.stage.stageWidth/2-right.width); 
 			
@@ -54,7 +56,9 @@ package
 			obstacle.y += speed;
 			if (obstacle.y > 1024 + 0.5 * 100)
 			{
-				//removeChild(obstacle);
+				removeChild(obstacle);
+				obstacle.y =  obstacle.height /2;
+
 				
 				Regenerate();
 			}
@@ -66,7 +70,7 @@ package
 		public function Regenerate():void
 		{
 			obstacle.x = Math.random() * (Starling.current.stage.stageWidth - obstacle.width);
-			obstacle.y = - obstacle.height;
+			obstacle.y = obstacle.height;
 			//addChild(obstacle);
 			//right.x = Starling.current.stage.stageWidth/2 + Math.random() * (Starling.current.stage.stageWidth/2-right.width); 
 		}
