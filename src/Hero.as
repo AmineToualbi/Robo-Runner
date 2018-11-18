@@ -61,7 +61,7 @@ package
 			yPos = hk_armature.y;
 			hk_armature.animation.gotoAndPlayByProgress("Idle_Shoot", 0, -1);
 			hk_armature.visible = true;
-			hk_armature.rotation = 3 * Math.PI / 2;
+			//hk_armature.rotation = 3 * Math.PI / 2;
 			
 			speed = 15; 
 			

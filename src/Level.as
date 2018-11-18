@@ -47,7 +47,7 @@ package
 		private var n:int = 0;
 		private var start_background:Image;
 		private var userInput:String; 
-		private var Score:int;
+		public static var Score:int = 0;
 		private var ADown:Boolean = false;
 		private var WDown:Boolean = false;
 		private var SDown:Boolean = false;
@@ -74,6 +74,9 @@ package
 		
 		private var obstacleCount:int = 0;
 		private var killCount: int = 0;
+		
+		public static var credits:int = 55; 
+		public static var start:Boolean = false;
 
 
 		
@@ -106,7 +109,6 @@ package
 			addChild(enemy);
 			//addChild(obstacle);
 			
-			Score = 0;
 			HitNbr = 0;		//Testing purposes.
 			CollisionNbr = 0;	//Testing purposes.
 			
@@ -130,9 +132,17 @@ package
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, On_Key_Down);
 			stage.addEventListener(KeyboardEvent.KEY_UP, On_Key_Up);
 			stage.addEventListener(Event.ENTER_FRAME, eFrame);	//Called every frame.
-			gameTimer.addEventListener(TimerEvent.TIMER, updateObstacleNumber);
-			gameTimer.start();	
+			stage.addEventListener(Event.ENTER_FRAME, startGame);
 			
+			
+			
+		}
+		
+		public function startGame(e:EnterFrameEvent): void {
+			if(start == true) {
+				gameTimer.addEventListener(TimerEvent.TIMER, updateObstacleNumber);
+				gameTimer.start();
+			}
 		}
 
 		public function updateObstacleNumber(e:TimerEvent):void {
@@ -168,7 +178,7 @@ package
 		public function UpdateUI():void
 		{
 			
-			if (Over != true){
+			if (Over != true && start == true){
 				
 				Score = gameTimer.currentCount + killCount;
 				ScoreLabel.text = Score + "";
@@ -195,6 +205,9 @@ package
 					}
 					//}
 				}*/
+			}
+			if (Over == true) {
+				trace("SCORE = " + Score);
 			}
 			
 		}
