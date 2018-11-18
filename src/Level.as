@@ -63,7 +63,10 @@ package
 		//private var obs1Added:Boolean = false;
 		//private var collision:Boolean = false;
 		private var blockObstacle:Vector.<Obstacle> = new Vector.<Obstacle>;
-		private var heroRec:Rectangle = new Rectangle(0, 0, 150, 150);
+		private var enemyVector:Vector.<Enemy> = new Vector.<Enemy>;
+		private var heroRec:Rectangle = new Rectangle(0, 0, 140, 140);
+		private var enemyRec:Rectangle = new Rectangle(0, 0, 75, 75);
+		private var projRec:Rectangle = new Rectangle(0, 0, 10, 10);
 
 		
 		public static const GAME_OVER:String = "GAME OVER";
@@ -94,7 +97,7 @@ package
 			map = new Map();
 			hero = new Hero();
 			//obstacle = new Obstacle();
-			enemy = new Enemy(); 
+			//enemy = new Enemy(); 
 			//projectile = new Projectile();
 			
 			gameTimer = new Timer(1000,0); 
@@ -109,7 +112,7 @@ package
 			//Add the objects to the display.
 			addChild(map);
 			addChild(hero);
-			addChild(enemy);
+			//addChild(enemy);
 			//addChild(obstacle);
 			
 			HitNbr = 0;		//Testing purposes.
@@ -173,11 +176,18 @@ package
 						//obstacleToAppear.speed = 6;
 					//}
 
-           blockObstacle.push(obstacleToAppear);
+					blockObstacle.push(obstacleToAppear);
 					//newObstacle_Count[obstacleCount] = true;
 					obstacleCount += 1;
 					//trace("NEW OBSTACLE ADDED");
 				}
+				
+			if (gameTimer.currentCount % 3 == 0 && gameTimer.currentCount != 0 && Over == false)
+			{
+				var enemyAppears:Enemy = new Enemy();
+				addChild(enemyAppears);
+				enemyVector.push(enemyAppears);
+			}
 		}
 		
 		//This function is called every frame by Game.as. 
@@ -192,17 +202,33 @@ package
 				{
 					Collision_Obstacle(blockObstacle[i]);
 				}
-				hero.Move(userInput)
-				if(enemy != null) { 
-					enemy.Move(userInput);
+				for (var l:int = 0; l < enemyVector.length; l++)
+				{
+					Collision_Enemy(enemyVector[l]);
 				}
+				hero.Move(userInput)
+				/*if(enemy != null) { 
+					enemy.Move(userInput);
+				}*/
+				userInput = "";
 				for (var j:int = 0; j < blockObstacle.length; j++)
 				{
 					blockObstacle[j].Move(userInput);
 				}
+				
+				for (var k:int = 0; k < enemyVector.length; k++)
+				{
+					enemyVector[k].Move(userInput);
+				}
+				
+				for (var m:int = 0; m < enemyVector.length; m++)
+				{
+					Shoot_Enemy(enemyVector[m], m);
+				}
+				
 				//obstacle.Move(userInput);
-				userInput = "";
-				Check_Projectile_Hit();
+				//userInput = "";
+				//Check_Projectile_Hit();
 				
 				/*for (var i:int = 0; i < 3; i++) {
 					//if (newObstacle_Count[obstacleCount] == true && newObstacle_Arr[i] != null) {
@@ -219,7 +245,7 @@ package
 		
 		
 		
-		function Collision_Obstacle(obstacle:Obstacle)
+		function Collision_Obstacle(obstacle:Obstacle):void
 		{
 			//var block:Rectangle = obstacle.bounds;
 			heroRec.x = hero.xPos;
@@ -227,17 +253,58 @@ package
 			heroRec.offset(-75, -75);
 			
 			
-			//heroRec.offset(0, 50);
-			//for (var i:int = 0; i < blockObstacle.length; i++)
-			//{
-				if(heroRec.intersects(obstacle.bounds))
-
-				{
-					CollisionNbr++;
-					Over = true;	 
-					setTimeout(GameIsOver, 2000);
-				}
+			
+			if(heroRec.intersects(obstacle.bounds))
+			{
+				CollisionNbr++;
+				Over = true;	 
+				setTimeout(GameIsOver, 2000);
+			}
 				
+		}
+		
+		function Collision_Enemy(enemy:Enemy):void
+		{
+			heroRec.x = hero.xPos;
+			heroRec.y = hero.yPos;
+			heroRec.offset( -70, -70);
+			
+			
+			enemyRec.x = enemy.xPos;
+			enemyRec.y = enemy.yPos;
+			enemyRec.offset( -37, -37);
+			
+			if (heroRec.intersects(enemyRec))
+			{
+				Over = true;
+				setTimeout(GameIsOver, 2000);
+			}
+		}
+		
+		function Shoot_Enemy(enemy:Enemy, num:int):void
+		{
+			enemyRec.x = enemy.xPos;
+			enemyRec.y = enemy.yPos;
+			enemyRec.offset( -37, -37);
+			
+			if (!projectile)
+			{
+				return;
+			}
+			
+			projRec.x = projectile.xPos;
+			projRec.y = projectile.yPos;
+			projRec.offset( -5, -5);
+			
+			if (projRec.intersects(enemyRec))
+			{
+				projectile.DeleteProjectile();
+				removeChild(enemy);
+				enemyVector.removeAt(num);
+				credits += 3;
+			}
+		
+		
 		}
 			//}
 			/*
@@ -247,6 +314,8 @@ package
 			var precisionFactorRight:int = 20;
 			var leftObstacleX:int = obstacle.xPos - 0.5 * 100 + precisionFactorLeft; 
 			var rightObstacleX:int = obstacle.xPos + 0.5 * 100 + precisionFactorRight;  
+		}
+		}
 			
 			
 			//350 is a hard-coded value tested on Amine's screen to find when obstacle
@@ -303,13 +372,13 @@ package
 		
 			
 		
-		private function Check_Projectile_Hit():void {
+		/*private function Check_Projectile_Hit():void {
 			
 			//Hard-coded tested value. 
 			var precisionFactorProjectileX = 50;
 			
 			if(projectile != null) { 
-				if (projectile.yPos >= enemy.yPos - 0.5 * 200 && projectile.yPos <= enemy.yPos + 0.5 * 200) {
+ 				if (projectile.yPos >= enemy.yPos - 0.5 * 200 && projectile.yPos <= enemy.yPos + 0.5 * 200) {
 					
 					if (projectile.xPos - precisionFactorProjectileX >= enemy.xPos - 0.5 * 200 &&
 					projectile.xPos + precisionFactorProjectileX<= enemy.xPos + 0.5 * 200) {
@@ -323,7 +392,7 @@ package
 				}
 			}
 	
-		}
+		}*/
 		
 		
 		private function On_Key_Down(event:KeyboardEvent):void

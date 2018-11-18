@@ -139,7 +139,7 @@ package
 		// Change the game state when the play button is pressed
 		private function Play_Button_Pressed_Handler():void
 		{
-			if (Level.credits < 100) {
+			if (Level.credits < 50) {
 				var InsufficientLabel: TextField = new TextField(300, 50, "Insufficient Credits!");
 				InsufficientLabel.format.font = "Arial";
 				InsufficientLabel.format.color = 0xff0000;
@@ -192,7 +192,7 @@ package
 			switch(event.keyCode)
 			{
 				case Keyboard.ENTER:
-					if(Game_State = State.MENU_SCREEN) {
+					if(Game_State == State.MENU_SCREEN) {
 						Level.credits += 100;
 						("ENTER PRESSED");
 						menu_screen.CreditsLabel.text = "Credits: " + Level.credits;
