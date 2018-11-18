@@ -50,8 +50,8 @@ package
 			enemy_data = factory.parseDragonBonesData(enemy_json);
 			
 			enemy_armature = factory.buildArmatureDisplay(enemy_data.armatureNames[1]);
-			enemy_armature.x = 100;
-			enemy_armature.y = 100;
+			enemy_armature.x = 0.5*enemy_armature.width + Math.random() * (Stage_Width - 0.5 * enemy_armature.width);
+			enemy_armature.y = -50;
 			enemy_armature.visible = true;
 			enemy_armature.armature.getSlot("HK_Laser").displayController = "0";
 			enemy_armature.armature.getSlot("Cannon_Bullet_Glow").displayController = "1";
@@ -84,6 +84,8 @@ package
 				enemy_armature.y =  - enemy_armature.height;
 				Regenerate();
 			}
+			xPos = enemy_armature.x;
+			yPos = enemy_armature.y;
 		}
 		
 		

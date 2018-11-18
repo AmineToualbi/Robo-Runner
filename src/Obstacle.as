@@ -60,11 +60,11 @@ package
 			{
 				//removeChild(obstacle);
 				obstacle.y = -  obstacle.height /2;
-
+				
 				Regenerate();
 			}
-			xPos = obstacle.x-50; 
-			yPos = obstacle.y-50; 
+			xPos = obstacle.x; 
+			yPos = obstacle.y; 
 		}
 			
 		// Reset the obstacle to a randomized position
