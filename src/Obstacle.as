@@ -15,12 +15,14 @@ package
 		//private var left:Image;
 		//private var right:Image;
 		private var obstacle:Image; 
+		private const Stage_Width:int = 1024;
+		private const Stage_Height:int = 1024;
 		
 		public function Obstacle() 
 		{
 			// Get the asset manager from the MAIN class so images can be loaded
 			var assets:AssetManager = Main.Assets;
-			var stage:starling.display.Stage = Starling.current.stage;
+			//var stage:starling.display.Stage = Starling.current.stage;
 			// Initialize the images
 			obstacle = new Image(assets.getTexture("rBlock"));
 			//right = new Image(assets.getTexture("bBlock"));
@@ -29,7 +31,7 @@ package
 			obstacle.height = 100;
 			
 			// Initialize to a random position
-			obstacle.x = Math.random() * (Starling.current.stage.stageWidth - obstacle.width);
+			obstacle.x = Math.random() * (Stage_Width - obstacle.width);
 			obstacle.y = -obstacle.height /2;
 
 			
@@ -68,7 +70,7 @@ package
 		// Reset the obstacle to a randomized position
 		public function Regenerate():void
 		{
-			obstacle.x = Math.random() * (Starling.current.stage.stageWidth - obstacle.width);
+			obstacle.x = Math.random() * (Stage_Width - obstacle.width);
 			obstacle.y = - obstacle.height;
 			//addChild(obstacle);
 			//right.x = Starling.current.stage.stageWidth/2 + Math.random() * (Starling.current.stage.stageWidth/2-right.width); 
