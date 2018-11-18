@@ -140,26 +140,27 @@ package
 					
 					var obstacleToAppear:Obstacle = new Obstacle();
 					//newObstacle_Arr[obstacleCount] = obstacleToAppear;
-					//obstacleToAppear.y = - obstacleToAppear.height; 
+					obstacleToAppear.y = - obstacleToAppear.height; 
 					
 					addChild(obstacleToAppear);
 					if(obstacleCount == 0){
-						obstacleToAppear.speed = 7;
+						obstacleToAppear.speed = 10;
 					}
 					else if (obstacleCount == 1) {
-						obstacleToAppear.speed = 2;
-					}
-					else if (obstacleCount == 2) {
 						obstacleToAppear.speed = 6;
 					}
-					else
-					{
-						obstacleToAppear.speed = 4;
+					else if (obstacleCount == 2) {
+						obstacleToAppear.speed = 7;
 					}
+					//We don't want more than 3 obstacles.
+					//else
+					//{
+						//obstacleToAppear.speed = 6;
+					//}
 					blockObstacle.push(obstacleToAppear);
 					//newObstacle_Count[obstacleCount] = true;
 					obstacleCount += 1;
-					//trace("NEW OBSTACLE ADDED");
+					trace("NEW OBSTACLE ADDED");
 				}
 		}
 		
