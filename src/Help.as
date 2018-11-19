@@ -17,7 +17,7 @@ package
 		public function Help() 
 		{
 			var assets:AssetManager = Main.Assets;
-			help_menu = new Image(assets.getTexture("help_screen"));
+			help_menu = new Image(assets.getTexture("help_screen_final"));
 			//help_menu.alignPivot = "center";
 			addChild(help_menu);
 			

@@ -32,7 +32,7 @@ package
 			
 			var assets:AssetManager = Main.Assets;
 			//ADD TEXTURE TO ASSETS!
-			gameOver_menu = new Image(assets.getTexture("gameOver"));
+			gameOver_menu = new Image(assets.getTexture("gameOver_final"));
 			addChild(gameOver_menu);
 			
 			
