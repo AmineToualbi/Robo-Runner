@@ -64,6 +64,7 @@ package
 		//private var collision:Boolean = false;
 		private var blockObstacle:Vector.<Obstacle> = new Vector.<Obstacle>;
 		private var enemyVector:Vector.<Enemy> = new Vector.<Enemy>;
+		private var projVector:Vector.<Projectile> = new Vector.<Projectile>;
 		private var heroRec:Rectangle = new Rectangle(0, 0, 140, 140);
 		private var enemyRec:Rectangle = new Rectangle(0, 0, 75, 75);
 		private var projRec:Rectangle = new Rectangle(0, 0, 10, 10);
@@ -233,7 +234,7 @@ package
 			if (Over != true && start == true){
 				
 				Score = gameTimer.currentCount + killCount;
-				ScoreLabel.text = Score + "";
+				ScoreLabel.text = "Credits:" + " " + Score;
 				for (var i:int = 0; i < blockObstacle.length; i++)
 				{
 					Collision_Obstacle(blockObstacle[i]);
@@ -257,26 +258,17 @@ package
 					enemyVector[k].Move(userInput);
 				}
 				
-				for (var m:int = 0; m < enemyVector.length; m++)
+				for (var n:int = 0; n < projVector.length; n++)
 				{
-					Shoot_Enemy(enemyVector[m], m);
-				}
-				
-				//obstacle.Move(userInput);
-				//userInput = "";
-				//Check_Projectile_Hit();
-				
-				/*for (var i:int = 0; i < 3; i++) {
-					//if (newObstacle_Count[obstacleCount] == true && newObstacle_Arr[i] != null) {
-					if(newObstacle_Arr[i] != null) {	
-					newObstacle_Arr[i].Move(userInput);
+					for (var m:int = 0; m < enemyVector.length; m++)
+					{
+						Shoot_Enemy(enemyVector[m], m, projVector[n], n);
 					}
-					//}
-				}*/
+				}
 
 			}
 			
-			}
+		}
 			
 		
 		
@@ -317,7 +309,7 @@ package
 			}
 		}
 		
-		function Shoot_Enemy(enemy:Enemy, num:int):void
+		function Shoot_Enemy(enemy:Enemy, num:int, proj:Projectile, pnum:int):void
 		{
 			enemyRec.x = enemy.xPos;
 			enemyRec.y = enemy.yPos;
@@ -328,16 +320,24 @@ package
 				return;
 			}
 			
-			projRec.x = projectile.xPos;
-			projRec.y = projectile.yPos;
+			projRec.x = proj.xPos;
+			projRec.y = proj.yPos;
 			projRec.offset( -5, -5);
+			
 			
 			if (projRec.intersects(enemyRec))
 			{
-				projectile.DeleteProjectile();
+				proj.DeleteProjectile();
 				removeChild(enemy);
+				removeChild(proj);
 				enemyVector.removeAt(num);
-				credits += 3;
+				projVector.removeAt(pnum);
+				killCount += 3;
+			}
+			
+			if (proj.x > 0)
+			{
+				projVector.removeAt(pnum);
 			}
 		
 		
@@ -542,6 +542,7 @@ package
 				if (SpaceDown){
 					if(canFire){
 						projectile = new Projectile(); 
+						projVector.push(projectile);
 						addChild(projectile);
 						projectile.MoveProjectile(hero.xPos, hero.yPos); 	//"x" as placeholder to have the same function with same parameter.
 					}
