@@ -26,7 +26,7 @@ package
 		{
 			// Get the asset manager from the MAIN class so images can be loaded
 			var assets:AssetManager = Main.Assets;
-			menu_background = new Image(assets.getTexture("bk"));
+			menu_background = new Image(assets.getTexture("background"));
 			addChild(menu_background);
 			
 			// Initialize the button texture
@@ -49,13 +49,13 @@ package
 			help_button.width = 300;
 			
 			// Center the button
-			play_button.x = 150;
+			play_button.x = 250;
 			play_button.y = 500;
-			help_button.x = 550;
+			help_button.x = 650;
 			help_button.y = 500;
 			
-			CreditsLabel.x = 400; 
-			CreditsLabel.y = 300; 
+			CreditsLabel.x = 525; 
+			CreditsLabel.y = 325; 
 			
 			addChild(play_button);
 			addChild(help_button);

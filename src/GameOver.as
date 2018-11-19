@@ -41,7 +41,7 @@ package
 			CreditLabel.format.font = "Arial";
 			CreditLabel.format.color = 0xffffff;
 			CreditLabel.format.size = 40;
-			CreditLabel.x = 300;
+			CreditLabel.x = 450;
 			CreditLabel.y = 300;
 			addChild(CreditLabel);
 			
@@ -66,7 +66,7 @@ package
 			restart_button.addEventListener(Event.TRIGGERED, Restart_Button_Pressed);
 			
 			//DETERMINE WHERE TO PUT IT, PROBS IN MIDDLE.
-			exit_button.x = 380;
+			exit_button.x = 500;
 			exit_button.y = 430;
 			restart_button.x = 380;
 			restart_button.y = 600;

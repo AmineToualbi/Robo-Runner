@@ -6,7 +6,7 @@
     <movie input="" />
     <movie path="bin\ROBORunner.swf" />
     <movie fps="30" />
-    <movie width="1024" />
+    <movie width="1500" />
     <movie height="1024" />
     <movie version="23" />
     <movie minorVersion="0" />
