@@ -77,7 +77,7 @@ package
 			
 		}
 		
-		public function restart():void
+		public function Restart():void
 		{
 			Level.Over = false;
 			removeChild(level);
@@ -142,7 +142,8 @@ package
 		// Change the game state when the play button is pressed
 		private function Play_Button_Pressed_Handler():void
 		{
-			if (Level.credits < 50) {
+			if (Level.credits < 50)
+			{
 				var InsufficientLabel: TextField = new TextField(300, 50, "Insufficient Credits!");
 				InsufficientLabel.format.font = "Arial";
 				InsufficientLabel.format.color = 0xff0000;
@@ -152,7 +153,8 @@ package
 				
 				menu_screen.addChild(InsufficientLabel);
 			}
-			else {
+			else
+			{
 				Level.credits -= 100;
 				menu_screen.removeChild(InsufficientLabel);
 				Game_State = State.IN_GAME;
@@ -182,7 +184,8 @@ package
 		
 		private function Restart_Button_Pressed_Handler():void 
 		{
-			if (Level.credits < 100) {
+			if (Level.credits < 100)
+			{
 				var InsufficientLabel: TextField = new TextField(300, 50, "Insufficient Credits!");
 				InsufficientLabel.format.font = "Arial";
 				InsufficientLabel.format.color = 0xff0000;
@@ -192,9 +195,10 @@ package
 				
 				gameOver_Screen.addChild(InsufficientLabel);
 			}
-			else {
+			else
+			{
 				Level.credits -= 100;
-				restart();
+				Restart();
 				Game_State = State.IN_GAME;
 				
 			}
@@ -213,7 +217,8 @@ package
 			switch(event.keyCode)
 			{
 				case Keyboard.ENTER:
-					if(Game_State == State.MENU_SCREEN) {
+					if (Game_State == State.MENU_SCREEN) 
+					{
 						Level.credits += 100;
 						("ENTER PRESSED");
 						menu_screen.CreditsLabel.text = "Credits: " + Level.credits;

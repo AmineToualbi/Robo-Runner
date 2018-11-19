@@ -19,7 +19,8 @@ package
 			
 		}
 		
-		public function Move(input:String):void {
+		public function Move(input:String):void 
+		{
 			
 		}
 		

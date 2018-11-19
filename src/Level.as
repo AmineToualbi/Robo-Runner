@@ -181,15 +181,19 @@ package
 			
 		}
 		
-		public function startGame(e:EnterFrameEvent): void {
-			if(start == true) {
+		public function startGame(e:EnterFrameEvent): void
+		{
+			if (start == true)
+			{
 				gameTimer.addEventListener(TimerEvent.TIMER, updateObstacleNumber);
 				gameTimer.start();
 			}
 		}
 
-		public function updateObstacleNumber(e:TimerEvent):void {
-			if (gameTimer.currentCount % 3 == 0 && gameTimer.currentCount != 0 && Over == false) {
+		public function updateObstacleNumber(e:TimerEvent):void
+		{
+			if (gameTimer.currentCount % 3 == 0 && gameTimer.currentCount != 0 && Over == false)
+			{
 					
 					
 					var obstacleToAppear:Obstacle = new Obstacle();
@@ -231,7 +235,8 @@ package
 		public function UpdateUI():void
 		{
 			
-			if (Over != true && start == true){
+			if (Over != true && start == true)
+			{
 				
 				Score = gameTimer.currentCount + killCount;
 				ScoreLabel.text = "Credits:" + " " + Score;
@@ -527,7 +532,8 @@ package
 		function eFrame(e:EnterFrameEvent):void		//Runs on every frame.
 			{
 				
-				if(ADown){
+				if (ADown)
+				{
 					userInput = "a";
 				}
 				//if(SDown){
@@ -536,11 +542,14 @@ package
 				//if(WDown){
 				//	userInput = "w";
 				//}
-				if(DDown){
+				if (DDown)
+				{
 					userInput = "d";
 				}
-				if (SpaceDown){
-					if(canFire){
+				if (SpaceDown)
+				{
+					if (canFire)
+					{
 						projectile = new Projectile(); 
 						projVector.push(projectile);
 						addChild(projectile);
