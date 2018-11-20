@@ -25,6 +25,7 @@ package
 	import starling.text.TextField;
 	import starling.text.TextFormat;
 	import flash.text.TextFieldAutoSize;
+	import starling.utils.Align;
 	import flash.utils.Timer;
 	import flash.events.TimerEvent;
 	import flash.utils.setTimeout;
@@ -128,10 +129,11 @@ package
 			CollisionNbr = 0;	//Testing purposes.
 			
 			//Score Label. 
-			ScoreLabel = new TextField(200, 50, "Score: " + Score);
+			ScoreLabel = new TextField(300, 50, "Score: " + Score);
 			ScoreLabel.format.font = "Arial";
 			ScoreLabel.format.color = 0xffffff;
 			ScoreLabel.format.size = 30;
+			ScoreLabel.format.horizontalAlign = Align.LEFT;
 
 			//Add Score label to the display.
 			addChild(ScoreLabel);
@@ -239,7 +241,7 @@ package
 			{
 				
 				Score = gameTimer.currentCount + killCount;
-				ScoreLabel.text = "Credits:" + " " + Score;
+				ScoreLabel.text = "Score:" + " " + Score;
 				for (var i:int = 0; i < blockObstacle.length; i++)
 				{
 					Collision_Obstacle(blockObstacle[i]);
