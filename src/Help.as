@@ -28,8 +28,8 @@ package
 			// Add an event listener for when the button is pressed
 			back_button.addEventListener(Event.TRIGGERED, Back_Button_Pressed);
 			
-			back_button.x = 0;
-			back_button.y = 0;
+			back_button.x = 1000;
+			back_button.y = 600;
 			
 			addChild(back_button);
 		}
