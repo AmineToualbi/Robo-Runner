@@ -61,14 +61,15 @@ package
 			yPos = hk_armature.y;
 			hk_armature.animation.gotoAndPlayByProgress("Idle_Shoot", 0, -1);
 			hk_armature.visible = true;
-			hk_armature.rotation = 3 * Math.PI / 2;
+
 			
 			speed = 15; 
 			
 			hk_armature.width = 200;
 			hk_armature.height = 200;
 
-			
+			//hk_armature.x = -hk_armature.width / 2;
+			//hk_armature.y = -hk_armature.height / 2;
 			this.addChild(hk_armature);
 			
 			
@@ -84,21 +85,23 @@ package
 		}
 		
 		override public function Move(input:String):void {
-			if (input == "s" && !(hk_armature.y + speed + 0.5 * hk_armature.height >= Stage_Height - hk_armature.height)) {
+			/*if (input == "s" && !(hk_armature.y + speed + 0.5 * hk_armature.height >= Stage_Height - hk_armature.height)) {
 				hk_armature.y += speed; 
-			}
-			if (input == "a" && !(hk_armature.x - speed - 0.5 * hk_armature.width <= 0)) {
+			}*/
+			if (input == "a" && !(hk_armature.x - speed - 0.5 * hk_armature.width <= 0))
+			{
 				hk_armature.x -= speed; 
 			}
-			if (input == "d" && !(hk_armature.x + speed + 0.5 * hk_armature.width > Stage_Width)) {
+			if (input == "d" && !(hk_armature.x + speed + 0.5 * hk_armature.width > Stage_Width))
+			{
 				hk_armature.x += speed; 
 			}
-			if (input == "w" && !(hk_armature.y - speed - 0.5 * hk_armature.height <= 0)) {
+			/*if (input == "w" && !(hk_armature.y - speed - 0.5 * hk_armature.height <= 0)) {
 				hk_armature.y -= speed;
-			}
+			}*/
 			
 			xPos = hk_armature.x;
-			yPos = hk_armature.y; 
+			//yPos = hk_armature.y; 
 		
 		}
 		
