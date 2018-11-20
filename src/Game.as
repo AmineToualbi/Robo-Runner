@@ -41,7 +41,6 @@ package
 			addEventListener(Menu.HELP_BUTTON_PRESSED, Help_Button_Pressed_Handler);
 			addEventListener(Help.BACK_BUTTON_PRESSED, Back_Button_Pressed_Handler);
 			addEventListener(GameOver.EXIT_BUTTON_PRESSED, Exit_Button_Pressed_Handler);
-			addEventListener(GameOver.RESTART_BUTTON_PRESSED, Restart_Button_Pressed_Handler);
 			addEventListener(Level.GAME_OVER, GameOver_Handler);
 		}
 		
@@ -64,6 +63,7 @@ package
 			//Create the menu objects & add child to the scene. 
 			menu_screen = new Menu();
 			help_screen = new Help();
+			gameOver_Screen = new GameOver();
 			level = new Level();
 			addChild(menu_screen);
 			addChild(help_screen);
@@ -99,6 +99,7 @@ package
 				case State.MENU_SCREEN:
 					level.visible = false;
 					menu_screen.visible = true;
+					gameOver_Screen.visible = false;
 					addChild(menu_screen);
 					break;
 					
@@ -106,6 +107,7 @@ package
 					level.visible = false;
 					help_screen.visible = true;
 					menu_screen.visible = false;
+					gameOver_Screen.visible = false;
 					addChild(help_screen);
 					break;
 					
@@ -116,6 +118,7 @@ package
 					//level.UpdateUI();
 					level.visible = true;
 					help_screen.visible = false;
+					gameOver_Screen.visible = false;
 					//removeChild(help_screen);		//removeChild bc help_screen won't be displayed after game starts.
 					// Make sure first level is updated every frame
 					level.UpdateUI();
@@ -126,8 +129,10 @@ package
 					removeChild(level);
 					menu_screen.visible = false;
 					help_screen.visible = false;
-					//gameOver_screen.visible = true;
-					gameOver_Screen = new GameOver();	//Create GameOver here bc we need to retrieve the Score at that time. 
+					// refresh credits in gameover
+					GameOver.TotalCredit = Level.Score + Level.credits;
+					gameOver_Screen.TotalCreditLabel.text = "Total Credit: " + GameOver.TotalCredit;	
+					gameOver_Screen.CreditLabel.text = "Yon won : " + Level.Score + " credits";
 					addChild(gameOver_Screen);
 					gameOver_Screen.visible = true;
 					//addChild(gameOver_screen);
@@ -152,14 +157,17 @@ package
 				InsufficientLabel.y = 375;
 				
 				menu_screen.addChild(InsufficientLabel);
+				
 			}
 			else
 			{
-				Level.credits -= 100;
-				menu_screen.removeChild(InsufficientLabel);
+
+				Level.credits -= 50;
+				
 				Game_State = State.IN_GAME;
 				Level.start = true;
 			}
+				
 		}
 		
 		private function Help_Button_Pressed_Handler():void
@@ -174,35 +182,10 @@ package
 		
 		private function Exit_Button_Pressed_Handler():void 
 		{
-			///Level.credits = GameOver.TotalCredit;
-			//menu_screen.CreditsLabel.text = "Credits: " + Level.credits;
-			//restart();
+			Level.credits = GameOver.TotalCredit;
+			menu_screen.CreditsLabel.text = "Credits: " + Level.credits;
+			Restart();
 			Game_State = State.MENU_SCREEN;
-			
-			
-		}
-		
-		private function Restart_Button_Pressed_Handler():void 
-		{
-			if (Level.credits < 100)
-			{
-				var InsufficientLabel: TextField = new TextField(300, 50, "Insufficient Credits!");
-				InsufficientLabel.format.font = "Arial";
-				InsufficientLabel.format.color = 0xff0000;
-				InsufficientLabel.format.size = 30;
-				InsufficientLabel.x = 350;
-				InsufficientLabel.y = 375;
-				
-				gameOver_Screen.addChild(InsufficientLabel);
-			}
-			else
-			{
-				Level.credits -= 100;
-				Restart();
-				Game_State = State.IN_GAME;
-				
-			}
-			
 		}
 		
 		private function GameOver_Handler():void 
