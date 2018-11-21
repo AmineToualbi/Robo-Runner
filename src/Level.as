@@ -9,7 +9,9 @@ package
 
 	import dragonBones.events.EventObject;
 	import flash.display3D.textures.RectangleTexture;
+	import flash.filesystem.File;
 	import flash.geom.Rectangle;
+	import flash.media.SoundMixer;
 	//import starling.utils.RectangleUtil;
 	import starling.core.Starling;
 	import starling.display.Button;
@@ -30,6 +32,8 @@ package
 	import flash.events.TimerEvent;
 	import flash.utils.setTimeout;
 	import starling.events.Event;
+	import flash.media.Sound;
+	import flash.media.SoundChannel;
 	//import flash.display.DisplayObject;
 	
 	
@@ -69,7 +73,6 @@ package
 		private var heroRec:Rectangle = new Rectangle(0, 0, 140, 140);
 		private var enemyRec:Rectangle = new Rectangle(0, 0, 75, 75);
 		private var projRec:Rectangle = new Rectangle(0, 0, 10, 10);
-
 		
 		public static const GAME_OVER:String = "GAME OVER";
 		
@@ -85,7 +88,6 @@ package
 		
 		public static var credits:int = 55; 
 		public static var start:Boolean = false;
-
 
 		public static const LEFT_BUTTON_PRESSED:String = "LEFT_BUTTON_PRESSED";
 		private var left_button:Button;
@@ -267,9 +269,16 @@ package
 				
 				for (var n:int = 0; n < projVector.length; n++)
 				{
-					for (var m:int = 0; m < enemyVector.length; m++)
+					if (!projectile)
 					{
-						Shoot_Enemy(enemyVector[m], m, projVector[n], n);
+						return;
+					}
+					if (!Over)
+					{
+						for (var m:int = 0; m < enemyVector.length; m++)
+						{
+							Shoot_Enemy(enemyVector[m], m, projVector[n], n);
+						}
 					}
 				}
 
@@ -327,6 +336,10 @@ package
 				return;
 			}
 			
+			if (proj.x > 0)
+			{
+				projVector.removeAt(pnum);
+			}
 			projRec.x = proj.xPos;
 			projRec.y = proj.yPos;
 			projRec.offset( -5, -5);
@@ -342,10 +355,7 @@ package
 				killCount += 3;
 			}
 			
-			if (proj.x > 0)
-			{
-				projVector.removeAt(pnum);
-			}
+			
 		
 		
 		}

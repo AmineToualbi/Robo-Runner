@@ -21,6 +21,7 @@ package
 		private var star:Starling;
 		private var game:Game;
 		private var gameOver_Screen:GameOver;
+		var InsufficientLabel: TextField = new TextField(300, 50, "Insufficient Credits!");
 		
 		public function Game() 
 		{
@@ -64,11 +65,11 @@ package
 			menu_screen = new Menu();
 			help_screen = new Help();
 			gameOver_Screen = new GameOver();
-			level = new Level();
+			//level = new Level();
 			addChild(menu_screen);
 			addChild(help_screen);
 			//addChild(gameOver_screen);
-			addChild(level);
+			//addChild(level);
 			
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, On_Key_Down);
 			// Last, set the state to display the menu.
@@ -97,14 +98,14 @@ package
 					break;
 					
 				case State.MENU_SCREEN:
-					level.visible = false;
+					//level.visible = false;
 					menu_screen.visible = true;
 					gameOver_Screen.visible = false;
 					addChild(menu_screen);
 					break;
 					
 				case State.HELP_SCREEN:
-					level.visible = false;
+					//level.visible = false;
 					help_screen.visible = true;
 					menu_screen.visible = false;
 					gameOver_Screen.visible = false;
@@ -116,7 +117,7 @@ package
 					//level.visible = true;
 					menu_screen.visible = false;
 					//level.UpdateUI();
-					level.visible = true;
+					
 					help_screen.visible = false;
 					gameOver_Screen.visible = false;
 					//removeChild(help_screen);		//removeChild bc help_screen won't be displayed after game starts.
@@ -125,7 +126,8 @@ package
 					break;
 					
 				case State.GAME_OVER:
-					level.visible = false; 
+					//removeChild(level);
+					//level.visible = false; 
 					removeChild(level);
 					menu_screen.visible = false;
 					help_screen.visible = false;
@@ -149,7 +151,7 @@ package
 		{
 			if (Level.credits < 50)
 			{
-				var InsufficientLabel: TextField = new TextField(300, 50, "Insufficient Credits!");
+				//var InsufficientLabel: TextField = new TextField(300, 50, "Insufficient Credits!");
 				InsufficientLabel.format.font = "Arial";
 				InsufficientLabel.format.color = 0xff0000;
 				InsufficientLabel.format.size = 30;
@@ -158,10 +160,14 @@ package
 				
 				menu_screen.addChild(InsufficientLabel);
 				
+				
 			}
 			else
 			{
-
+				
+				level = new Level();
+				addChild(level);
+				level.visible = true;
 				Level.credits -= 50;
 				
 				Game_State = State.IN_GAME;
@@ -205,6 +211,7 @@ package
 						Level.credits += 100;
 						("ENTER PRESSED");
 						menu_screen.CreditsLabel.text = "Credits: " + Level.credits;
+						menu_screen.removeChild(InsufficientLabel);
 					}
 					break;
 			}
