@@ -26,7 +26,7 @@ package
 		{
 			// Get the asset manager from the MAIN class so images can be loaded
 			var assets:AssetManager = Main.Assets;
-			menu_background = new Image(assets.getTexture("background"));
+			menu_background = new Image(assets.getTexture("bk"));
 			addChild(menu_background);
 			
 			// Initialize the button texture

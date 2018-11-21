@@ -25,6 +25,7 @@ package
 	import starling.text.TextField;
 	import starling.text.TextFormat;
 	import flash.text.TextFieldAutoSize;
+	import starling.utils.Align;
 	import flash.utils.Timer;
 	import flash.events.TimerEvent;
 	import flash.utils.setTimeout;
@@ -64,6 +65,7 @@ package
 		//private var collision:Boolean = false;
 		private var blockObstacle:Vector.<Obstacle> = new Vector.<Obstacle>;
 		private var enemyVector:Vector.<Enemy> = new Vector.<Enemy>;
+		private var projVector:Vector.<Projectile> = new Vector.<Projectile>;
 		private var heroRec:Rectangle = new Rectangle(0, 0, 140, 140);
 		private var enemyRec:Rectangle = new Rectangle(0, 0, 75, 75);
 		private var projRec:Rectangle = new Rectangle(0, 0, 10, 10);
@@ -127,10 +129,11 @@ package
 			CollisionNbr = 0;	//Testing purposes.
 			
 			//Score Label. 
-			ScoreLabel = new TextField(200, 50, "Score: " + Score);
+			ScoreLabel = new TextField(300, 50, "Score: " + Score);
 			ScoreLabel.format.font = "Arial";
 			ScoreLabel.format.color = 0xffffff;
 			ScoreLabel.format.size = 30;
+			ScoreLabel.format.horizontalAlign = Align.LEFT;
 
 			//Add Score label to the display.
 			addChild(ScoreLabel);
@@ -180,15 +183,19 @@ package
 			
 		}
 		
-		public function startGame(e:EnterFrameEvent): void {
-			if(start == true) {
+		public function startGame(e:EnterFrameEvent): void
+		{
+			if (start == true)
+			{
 				gameTimer.addEventListener(TimerEvent.TIMER, updateObstacleNumber);
 				gameTimer.start();
 			}
 		}
 
-		public function updateObstacleNumber(e:TimerEvent):void {
-			if (gameTimer.currentCount % 3 == 0 && gameTimer.currentCount != 0 && Over == false) {
+		public function updateObstacleNumber(e:TimerEvent):void
+		{
+			if (gameTimer.currentCount % 3 == 0 && gameTimer.currentCount != 0 && Over == false)
+			{
 					
 					
 					var obstacleToAppear:Obstacle = new Obstacle();
@@ -230,10 +237,11 @@ package
 		public function UpdateUI():void
 		{
 			
-			if (Over != true && start == true){
+			if (Over != true && start == true)
+			{
 				
 				Score = gameTimer.currentCount + killCount;
-				ScoreLabel.text = Score + "";
+				ScoreLabel.text = "Score:" + " " + Score;
 				for (var i:int = 0; i < blockObstacle.length; i++)
 				{
 					Collision_Obstacle(blockObstacle[i]);
@@ -257,26 +265,17 @@ package
 					enemyVector[k].Move(userInput);
 				}
 				
-				for (var m:int = 0; m < enemyVector.length; m++)
+				for (var n:int = 0; n < projVector.length; n++)
 				{
-					Shoot_Enemy(enemyVector[m], m);
-				}
-				
-				//obstacle.Move(userInput);
-				//userInput = "";
-				//Check_Projectile_Hit();
-				
-				/*for (var i:int = 0; i < 3; i++) {
-					//if (newObstacle_Count[obstacleCount] == true && newObstacle_Arr[i] != null) {
-					if(newObstacle_Arr[i] != null) {	
-					newObstacle_Arr[i].Move(userInput);
+					for (var m:int = 0; m < enemyVector.length; m++)
+					{
+						Shoot_Enemy(enemyVector[m], m, projVector[n], n);
 					}
-					//}
-				}*/
+				}
 
 			}
 			
-			}
+		}
 			
 		
 		
@@ -317,7 +316,7 @@ package
 			}
 		}
 		
-		function Shoot_Enemy(enemy:Enemy, num:int):void
+		function Shoot_Enemy(enemy:Enemy, num:int, proj:Projectile, pnum:int):void
 		{
 			enemyRec.x = enemy.xPos;
 			enemyRec.y = enemy.yPos;
@@ -328,16 +327,24 @@ package
 				return;
 			}
 			
-			projRec.x = projectile.xPos;
-			projRec.y = projectile.yPos;
+			projRec.x = proj.xPos;
+			projRec.y = proj.yPos;
 			projRec.offset( -5, -5);
+			
 			
 			if (projRec.intersects(enemyRec))
 			{
-				projectile.DeleteProjectile();
+				proj.DeleteProjectile();
 				removeChild(enemy);
+				removeChild(proj);
 				enemyVector.removeAt(num);
-				credits += 3;
+				projVector.removeAt(pnum);
+				killCount += 3;
+			}
+			
+			if (proj.x > 0)
+			{
+				projVector.removeAt(pnum);
 			}
 		
 		
@@ -527,7 +534,8 @@ package
 		function eFrame(e:EnterFrameEvent):void		//Runs on every frame.
 			{
 				
-				if(ADown){
+				if (ADown)
+				{
 					userInput = "a";
 				}
 				//if(SDown){
@@ -536,12 +544,16 @@ package
 				//if(WDown){
 				//	userInput = "w";
 				//}
-				if(DDown){
+				if (DDown)
+				{
 					userInput = "d";
 				}
-				if (SpaceDown){
-					if(canFire){
+				if (SpaceDown)
+				{
+					if (canFire)
+					{
 						projectile = new Projectile(); 
+						projVector.push(projectile);
 						addChild(projectile);
 						projectile.MoveProjectile(hero.xPos, hero.yPos); 	//"x" as placeholder to have the same function with same parameter.
 					}

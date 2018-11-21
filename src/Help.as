@@ -17,7 +17,7 @@ package
 		public function Help() 
 		{
 			var assets:AssetManager = Main.Assets;
-			help_menu = new Image(assets.getTexture("help_screen"));
+			help_menu = new Image(assets.getTexture("help_screen_final"));
 			//help_menu.alignPivot = "center";
 			addChild(help_menu);
 			
@@ -28,8 +28,8 @@ package
 			// Add an event listener for when the button is pressed
 			back_button.addEventListener(Event.TRIGGERED, Back_Button_Pressed);
 			
-			back_button.x = 0;
-			back_button.y = 0;
+			back_button.x = 1000;
+			back_button.y = 600;
 			
 			addChild(back_button);
 		}

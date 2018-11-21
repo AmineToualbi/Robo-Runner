@@ -88,10 +88,12 @@ package
 			/*if (input == "s" && !(hk_armature.y + speed + 0.5 * hk_armature.height >= Stage_Height - hk_armature.height)) {
 				hk_armature.y += speed; 
 			}*/
-			if (input == "a" && !(hk_armature.x - speed - 0.5 * hk_armature.width <= 0)) {
+			if (input == "a" && !(hk_armature.x - speed - 0.5 * hk_armature.width <= 0))
+			{
 				hk_armature.x -= speed; 
 			}
-			if (input == "d" && !(hk_armature.x + speed + 0.5 * hk_armature.width > Stage_Width)) {
+			if (input == "d" && !(hk_armature.x + speed + 0.5 * hk_armature.width > Stage_Width))
+			{
 				hk_armature.x += speed; 
 			}
 			/*if (input == "w" && !(hk_armature.y - speed - 0.5 * hk_armature.height <= 0)) {
