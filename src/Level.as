@@ -12,6 +12,8 @@ package
 	import flash.filesystem.File;
 	import flash.geom.Rectangle;
 	import flash.media.SoundMixer;
+	import flash.net.URLRequest;
+	import flash.net.URLRequestHeader;
 	//import starling.utils.RectangleUtil;
 	import starling.core.Starling;
 	import starling.display.Button;
@@ -32,9 +34,6 @@ package
 	import flash.events.TimerEvent;
 	import flash.utils.setTimeout;
 	import starling.events.Event;
-	import flash.media.Sound;
-	import flash.media.SoundChannel;
-	//import flash.display.DisplayObject;
 	
 	
 	public class Level extends Sprite
@@ -98,6 +97,7 @@ package
 		public static const SHOOT_BUTTON_PRESSED:String = "SHOOT_BUTTON_PRESSED";
 		private var shoot_button:Button;
 		private var shoot_button_texture:Texture;
+		
 		
 		public function Level() 
 		{
@@ -169,7 +169,6 @@ package
 			/*for (var i: int = 0; i < 3; i++) {
 				newObstacle_Count[i] = false;
 			}*/
-			
 			// Add keyboard listeners
 			// Keyboard Events aren't sent to sprites, 
 			// so we have to grab the current stage 
@@ -183,6 +182,7 @@ package
 			stage.addEventListener(SHOOT_BUTTON_PRESSED, Shoot_Button_Pressed_Handler);
 			
 			
+			
 		}
 		
 		public function startGame(e:EnterFrameEvent): void
@@ -191,14 +191,17 @@ package
 			{
 				gameTimer.addEventListener(TimerEvent.TIMER, updateObstacleNumber);
 				gameTimer.start();
+
 			}
 		}
+
 
 		public function updateObstacleNumber(e:TimerEvent):void
 		{
 			if (gameTimer.currentCount % 3 == 0 && gameTimer.currentCount != 0 && Over == false)
 			{
-					
+					if (obstacleCount < 4) 
+					{
 					
 					var obstacleToAppear:Obstacle = new Obstacle();
 					//newObstacle_Arr[obstacleCount] = obstacleToAppear;
@@ -225,9 +228,10 @@ package
 					//newObstacle_Count[obstacleCount] = true;
 					obstacleCount += 1;
 					//trace("NEW OBSTACLE ADDED");
+					}
 				}
 				
-			if (gameTimer.currentCount % 3 == 0 && gameTimer.currentCount != 0 && Over == false)
+			if (gameTimer.currentCount % 3 == 0 && gameTimer.currentCount != 0 && Over == false && obstacleCount < 4)
 			{
 				var enemyAppears:Enemy = new Enemy();
 				addChild(enemyAppears);
@@ -348,9 +352,10 @@ package
 			if (projRec.intersects(enemyRec))
 			{
 				proj.DeleteProjectile();
-				removeChild(enemy);
+				//removeChild(enemy);
+				enemy.Regenerate();
 				removeChild(proj);
-				enemyVector.removeAt(num);
+			//	enemyVector.removeAt(num);
 				projVector.removeAt(pnum);
 				killCount += 3;
 			}
