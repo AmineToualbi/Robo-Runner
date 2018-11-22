@@ -75,16 +75,19 @@ package
 			
 		}
 		
-		function MoveProjectile(heroX:int, heroY:int) {
+		public function MoveProjectile(heroX:int, heroY:int):void
+		{
 			objects_armature.x = heroX;
 			objects_armature.y = heroY; 
 			xPos = objects_armature.x; 
 			
-			if (objects_armature.y <= 0) {		//Was a while before, we don't need the while.
+			if (objects_armature.y <= 0)
+			{		//Was a while before, we don't need the while.
 				ProjectileMovement(); 
 			}
 			
-			if (objects_armature.y < 0) {
+			if (objects_armature.y < 0)
+			{
 				DeleteProjectile(); 
 			}
 			
@@ -93,7 +96,7 @@ package
 			
 		}
 		
-		function ProjectileMovement() {
+		public function ProjectileMovement():void {
 
 				objects_armature.y -= speed;
 				yPos = objects_armature.y; 
@@ -102,7 +105,7 @@ package
 			
 		}
 		
-		function DeleteProjectile() {
+		public function DeleteProjectile():void {
 			removeChild(objects_armature);
 		}
 			

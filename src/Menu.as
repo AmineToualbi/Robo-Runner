@@ -3,9 +3,13 @@ package
 	import starling.assets.AssetManager;
 	import starling.display.Image;
 	import starling.display.Sprite;
+	import starling.text.TextField;
 	import starling.textures.Texture;
 	import starling.events.Event;
 	import starling.display.Button;
+	import starling.events.KeyboardEvent;
+		import flash.ui.Keyboard;
+
 	
 	public class Menu extends Sprite
 	{
@@ -16,6 +20,7 @@ package
 		private var play_button_texture:Texture;
 		private var help_button:Button;
 		private var help_button_texture:Texture;
+		public var CreditsLabel:TextField; 
 		
 		public function Menu() 
 		{
@@ -30,21 +35,32 @@ package
 			help_button_texture = assets.getTexture("helpButton");
 			help_button = new Button(help_button_texture);
 			
+			CreditsLabel = new TextField(200, 50, "Credits: " + Level.credits);
+			CreditsLabel.format.font = "Arial";
+			CreditsLabel.format.color = 0xffffff;
+			CreditsLabel.format.size = 30;
+			
 			// Add an event listener for when the button is pressed
 			play_button.addEventListener(Event.TRIGGERED, Play_Button_Pressed);
 			help_button.addEventListener(Event.TRIGGERED, Help_Button_Pressed);
+
 			
 			play_button.width = 300;
 			help_button.width = 300;
 			
 			// Center the button
-			play_button.x = 150;
+			play_button.x = 250;
 			play_button.y = 500;
-			help_button.x = 550;
+			help_button.x = 650;
 			help_button.y = 500;
+			
+			CreditsLabel.x = 525; 
+			CreditsLabel.y = 325; 
 			
 			addChild(play_button);
 			addChild(help_button);
+			
+			addChild(CreditsLabel);
 		}
 		
 		// Dispatch a new event that bubbles up to the GAME class to notify we have pressed the play button
@@ -57,6 +73,7 @@ package
 		{
 			dispatchEventWith(HELP_BUTTON_PRESSED, true);
 		}
+
 		
 		
 	}

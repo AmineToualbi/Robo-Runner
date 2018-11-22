@@ -5,6 +5,11 @@ package
 	import starling.assets.AssetManager;
 	import starling.display.Sprite;
 	import flash.events.Event;
+	import starling.core.Starling;
+	import starling.text.TextField;
+	import starling.events.KeyboardEvent;
+		import flash.ui.Keyboard;
+	
 	
 	public class Game extends Sprite
 	{
@@ -12,8 +17,11 @@ package
 		private var assets:AssetManager;
 		private var menu_screen:Menu;
 		private var help_screen:Help;
-		private var gameOver_screen:GameOver;
 		private var level:Level;
+		private var star:Starling;
+		private var game:Game;
+		private var gameOver_Screen:GameOver;
+		var InsufficientLabel: TextField = new TextField(300, 50, "Insufficient Credits!");
 		
 		public function Game() 
 		{
@@ -25,6 +33,7 @@ package
 			
 			// Enque the assets folder for loading
 			assets.enqueue(appDir.resolvePath("Assets"));
+			
 			
 			// Start loading the assets and setup the event handlers
 			assets.loadQueue(On_Assets_Loaded, On_Assets_Load_Error, On_Assets_Load_Progress);
@@ -56,15 +65,27 @@ package
 			//Create the menu objects & add child to the scene. 
 			menu_screen = new Menu();
 			help_screen = new Help();
-			level = new Level();
-			gameOver_screen = new GameOver();
+			gameOver_Screen = new GameOver();
+			//level = new Level();
 			addChild(menu_screen);
 			addChild(help_screen);
-			addChild(gameOver_screen);
-			addChild(level);
+			//addChild(gameOver_screen);
+			//addChild(level);
 			
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, On_Key_Down);
 			// Last, set the state to display the menu.
 			Game_State = State.MENU_SCREEN;
+			
+			
+		}
+		
+		public function Restart():void
+		{
+			Level.Over = false;
+			removeChild(level);
+			removeChild(menu_screen);
+			level = new Level();
+			addChild(level);
 			
 			
 		}
@@ -78,33 +99,46 @@ package
 					break;
 					
 				case State.MENU_SCREEN:
-					level.visible = false;
+					//level.visible = false;
 					menu_screen.visible = true;
+					gameOver_Screen.visible = false;
 					addChild(menu_screen);
 					break;
 					
 				case State.HELP_SCREEN:
-					level.visible = false;
+					//level.visible = false;
 					help_screen.visible = true;
 					menu_screen.visible = false;
-					//addChild(help_screen);
+					gameOver_Screen.visible = false;
+					addChild(help_screen);
 					break;
 					
 				case State.IN_GAME:
+					//level = new Level();
 					//level.visible = true;
 					menu_screen.visible = false;
-					level.UpdateUI();
-					level.visible = true;
-					removeChild(help_screen);		//removeChild bc help_screen won't be displayed after game starts.
+					//level.UpdateUI();
+					
+					help_screen.visible = false;
+					gameOver_Screen.visible = false;
+					//removeChild(help_screen);		//removeChild bc help_screen won't be displayed after game starts.
 					// Make sure first level is updated every frame
 					level.UpdateUI();
 					break;
 					
 				case State.GAME_OVER:
-					level.visible = false; 
-					removeChild(level); 
-					gameOver_screen.visible = true;
-	
+					//removeChild(level);
+					//level.visible = false; 
+					removeChild(level);
+					menu_screen.visible = false;
+					help_screen.visible = false;
+					// refresh credits in gameover
+					GameOver.TotalCredit = Level.Score + Level.credits;
+					gameOver_Screen.TotalCreditLabel.text = "Total Credit: " + GameOver.TotalCredit;	
+					gameOver_Screen.CreditLabel.text = "Yon won : " + Level.Score + " credits";
+					addChild(gameOver_Screen);
+					gameOver_Screen.visible = true;
+					//addChild(gameOver_screen);
 					break;
 					
 				default:
@@ -116,7 +150,32 @@ package
 		// Change the game state when the play button is pressed
 		private function Play_Button_Pressed_Handler():void
 		{
-			Game_State = State.IN_GAME;
+			if (Level.credits < 50)
+			{
+				//var InsufficientLabel: TextField = new TextField(300, 50, "Insufficient Credits!");
+				InsufficientLabel.format.font = "Arial";
+				InsufficientLabel.format.color = 0xff0000;
+				InsufficientLabel.format.size = 30;
+				InsufficientLabel.x = 475;
+				InsufficientLabel.y = 375;
+				
+				menu_screen.addChild(InsufficientLabel);
+				
+				
+			}
+			else
+			{
+				
+				level = new Level();
+				addChild(level);
+				level.visible = true;
+				Level.credits -= 50;
+				
+				Game_State = State.IN_GAME;
+				Level.start = true;
+				assets.playSound("Intriguing Possibilities");
+			}
+				
 		}
 		
 		private function Help_Button_Pressed_Handler():void
@@ -131,12 +190,34 @@ package
 		
 		private function Exit_Button_Pressed_Handler():void 
 		{
-			Game_State = State.GAME_OVER;
+			Level.credits = GameOver.TotalCredit;
+			menu_screen.CreditsLabel.text = "Credits: " + Level.credits;
+			Restart();
+			Game_State = State.MENU_SCREEN;
 		}
 		
 		private function GameOver_Handler():void 
 		{
 			Game_State = State.GAME_OVER; 
+		}
+		
+				
+		private function On_Key_Down(event:KeyboardEvent):void
+		{
+			
+			switch(event.keyCode)
+			{
+				case Keyboard.ENTER:
+					if (Game_State == State.MENU_SCREEN) 
+					{
+						Level.credits += 100;
+						("ENTER PRESSED");
+						menu_screen.CreditsLabel.text = "Credits: " + Level.credits;
+						menu_screen.removeChild(InsufficientLabel);
+					}
+					break;
+			}
+			
 		}
 		
 	}
