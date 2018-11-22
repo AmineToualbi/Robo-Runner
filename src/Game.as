@@ -34,6 +34,7 @@ package
 			// Enque the assets folder for loading
 			assets.enqueue(appDir.resolvePath("Assets"));
 			
+			
 			// Start loading the assets and setup the event handlers
 			assets.loadQueue(On_Assets_Loaded, On_Assets_Load_Error, On_Assets_Load_Progress);
 			//At every frame (= every time), run Update(). 
@@ -172,6 +173,7 @@ package
 				
 				Game_State = State.IN_GAME;
 				Level.start = true;
+				assets.playSound("Intriguing Possibilities");
 			}
 				
 		}

@@ -16,7 +16,7 @@
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'11/20/2018'</value>
+      <value>'11/21/2018'</value>
     </define>
     <define append="true">
       <name>CONFIG::air</name>
@@ -45,7 +45,7 @@
     <path-element>C:\Users\amtou\OneDrive\Documents\JUNIOR YEAR\CSIS 2450\ROBO_Runner\src\Main.as</path-element>
   </file-specs>
   <default-background-color>#FFFFFF</default-background-color>
-  <default-frame-rate>30</default-frame-rate>
+  <default-frame-rate>36</default-frame-rate>
   <default-size>
     <width>1500</width>
     <height>1024</height>
