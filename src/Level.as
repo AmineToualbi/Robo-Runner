@@ -9,7 +9,11 @@ package
 
 	import dragonBones.events.EventObject;
 	import flash.display3D.textures.RectangleTexture;
+	import flash.filesystem.File;
 	import flash.geom.Rectangle;
+	import flash.media.SoundMixer;
+	import flash.net.URLRequest;
+	import flash.net.URLRequestHeader;
 	//import starling.utils.RectangleUtil;
 	import starling.core.Starling;
 	import starling.display.Button;
@@ -30,7 +34,6 @@ package
 	import flash.events.TimerEvent;
 	import flash.utils.setTimeout;
 	import starling.events.Event;
-	//import flash.display.DisplayObject;
 	
 	
 	public class Level extends Sprite
@@ -69,7 +72,6 @@ package
 		private var heroRec:Rectangle = new Rectangle(0, 0, 140, 140);
 		private var enemyRec:Rectangle = new Rectangle(0, 0, 75, 75);
 		private var projRec:Rectangle = new Rectangle(0, 0, 10, 10);
-
 		
 		public static const GAME_OVER:String = "GAME OVER";
 		
@@ -86,7 +88,6 @@ package
 		public static var credits:int = 55; 
 		public static var start:Boolean = false;
 
-
 		public static const LEFT_BUTTON_PRESSED:String = "LEFT_BUTTON_PRESSED";
 		private var left_button:Button;
 		private var left_button_texture:Texture;
@@ -96,6 +97,7 @@ package
 		public static const SHOOT_BUTTON_PRESSED:String = "SHOOT_BUTTON_PRESSED";
 		private var shoot_button:Button;
 		private var shoot_button_texture:Texture;
+		
 		
 		public function Level() 
 		{
@@ -167,7 +169,6 @@ package
 			/*for (var i: int = 0; i < 3; i++) {
 				newObstacle_Count[i] = false;
 			}*/
-			
 			// Add keyboard listeners
 			// Keyboard Events aren't sent to sprites, 
 			// so we have to grab the current stage 
@@ -181,6 +182,7 @@ package
 			stage.addEventListener(SHOOT_BUTTON_PRESSED, Shoot_Button_Pressed_Handler);
 			
 			
+			
 		}
 		
 		public function startGame(e:EnterFrameEvent): void
@@ -189,14 +191,17 @@ package
 			{
 				gameTimer.addEventListener(TimerEvent.TIMER, updateObstacleNumber);
 				gameTimer.start();
+
 			}
 		}
+
 
 		public function updateObstacleNumber(e:TimerEvent):void
 		{
 			if (gameTimer.currentCount % 3 == 0 && gameTimer.currentCount != 0 && Over == false)
 			{
-					
+					if (obstacleCount < 4) 
+					{
 					
 					var obstacleToAppear:Obstacle = new Obstacle();
 					//newObstacle_Arr[obstacleCount] = obstacleToAppear;
@@ -223,9 +228,10 @@ package
 					//newObstacle_Count[obstacleCount] = true;
 					obstacleCount += 1;
 					//trace("NEW OBSTACLE ADDED");
+					}
 				}
 				
-			if (gameTimer.currentCount % 3 == 0 && gameTimer.currentCount != 0 && Over == false)
+			if (gameTimer.currentCount % 3 == 0 && gameTimer.currentCount != 0 && Over == false && obstacleCount < 4)
 			{
 				var enemyAppears:Enemy = new Enemy();
 				addChild(enemyAppears);
@@ -267,9 +273,16 @@ package
 				
 				for (var n:int = 0; n < projVector.length; n++)
 				{
-					for (var m:int = 0; m < enemyVector.length; m++)
+					if (!projectile)
 					{
-						Shoot_Enemy(enemyVector[m], m, projVector[n], n);
+						return;
+					}
+					if (!Over)
+					{
+						for (var m:int = 0; m < enemyVector.length; m++)
+						{
+							Shoot_Enemy(enemyVector[m], m, projVector[n], n);
+						}
 					}
 				}
 
@@ -327,6 +340,10 @@ package
 				return;
 			}
 			
+			if (proj.x > 0)
+			{
+				projVector.removeAt(pnum);
+			}
 			projRec.x = proj.xPos;
 			projRec.y = proj.yPos;
 			projRec.offset( -5, -5);
@@ -335,17 +352,15 @@ package
 			if (projRec.intersects(enemyRec))
 			{
 				proj.DeleteProjectile();
-				removeChild(enemy);
+				//removeChild(enemy);
+				enemy.Regenerate();
 				removeChild(proj);
-				enemyVector.removeAt(num);
+			//	enemyVector.removeAt(num);
 				projVector.removeAt(pnum);
 				killCount += 3;
 			}
 			
-			if (proj.x > 0)
-			{
-				projVector.removeAt(pnum);
-			}
+			
 		
 		
 		}

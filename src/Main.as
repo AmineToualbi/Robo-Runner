@@ -21,6 +21,8 @@ package
 			Assets = new AssetManager();
 			starling.start();
 			
+			
+			
 		}
 			/*
 			var greeting:TextField = new TextField();
