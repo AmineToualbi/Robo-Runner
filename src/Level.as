@@ -212,6 +212,7 @@ package
 				else if (obstacleCount == 1) {
 
 					obstacleToAppear.speed = 6;
+
 				}
 				else if (obstacleCount == 2) {
 					obstacleToAppear.speed = 7;
@@ -229,6 +230,7 @@ package
 			}
 				
 			if (gameTimer.currentCount % 2 == 0 && gameTimer.currentCount != 0 && Over == false)
+
 			{
 				var enemyAppears:Enemy = new Enemy();
 				addChild(enemyAppears);
@@ -303,6 +305,7 @@ package
 						{
 							Shoot_Enemy(enemies[m], m, bullets[n], n);
 						}
+
 					}
 						
 					
