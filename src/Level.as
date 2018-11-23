@@ -41,6 +41,7 @@ package
 	{
 		private var hero:Hero;
 		private var bullets:Array = new Array();
+		private var enemies:Array = new Array();
 		//private var flap_button:Button;
 		//private var flap_button_texture:Texture;
 		
@@ -67,9 +68,9 @@ package
 		//private var obstacle2:Obstacle;
 		//private var obs1Added:Boolean = false;
 		//private var collision:Boolean = false;
-		private var blockObstacle:Vector.<Obstacle> = new Vector.<Obstacle>;
-		private var enemyVector:Vector.<Enemy> = new Vector.<Enemy>;
-		private var projVector:Vector.<Projectile> = new Vector.<Projectile>;
+		private var blockObstacle:Vector.<Obstacle> = new Vector.<Obstacle>();
+		//private var enemyVector:Vector.<Enemy> = new Vector.<Enemy>();
+		//private var projVector:Vector.<Projectile> = new Vector.<Projectile>();
 		private var heroRec:Rectangle = new Rectangle(0, 0, 140, 140);
 		private var enemyRec:Rectangle = new Rectangle(0, 0, 75, 75);
 		private var projRec:Rectangle = new Rectangle(0, 0, 10, 10);
@@ -199,39 +200,41 @@ package
 			if (gameTimer.currentCount % 3 == 0 && gameTimer.currentCount != 0 && Over == false)
 			{
 					
-					
-					var obstacleToAppear:Obstacle = new Obstacle();
-					//newObstacle_Arr[obstacleCount] = obstacleToAppear;
-					obstacleToAppear.y = - obstacleToAppear.height; 
-          
-					addChild(obstacleToAppear);
-					if(obstacleCount == 0){
-						obstacleToAppear.speed = 10;
-					}
-					else if (obstacleCount == 1) {
-
-						obstacleToAppear.speed = 6;
-					}
-					else if (obstacleCount == 2) {
-						obstacleToAppear.speed = 7;
-					}
-					//We don't want more than 3 obstacles.
-					//else
-					//{
-						//obstacleToAppear.speed = 6;
-					//}
-
-					blockObstacle.push(obstacleToAppear);
-					//newObstacle_Count[obstacleCount] = true;
-					obstacleCount += 1;
-					//trace("NEW OBSTACLE ADDED");
-				}
 				
-			if (gameTimer.currentCount % 3 == 0 && gameTimer.currentCount != 0 && Over == false)
+				var obstacleToAppear:Obstacle = new Obstacle();
+				//newObstacle_Arr[obstacleCount] = obstacleToAppear;
+				obstacleToAppear.y = - obstacleToAppear.height; 
+	  
+				addChild(obstacleToAppear);
+				if(obstacleCount == 0){
+					obstacleToAppear.speed = 10;
+				}
+				else if (obstacleCount == 1) {
+
+					obstacleToAppear.speed = 6;
+
+				}
+				else if (obstacleCount == 2) {
+					obstacleToAppear.speed = 7;
+				}
+				//We don't want more than 3 obstacles.
+				//else
+				//{
+					//obstacleToAppear.speed = 6;
+				//}
+
+				blockObstacle.push(obstacleToAppear);
+				//newObstacle_Count[obstacleCount] = true;
+				obstacleCount += 1;
+				//trace("NEW OBSTACLE ADDED");
+			}
+				
+			if (gameTimer.currentCount % 2 == 0 && gameTimer.currentCount != 0 && Over == false)
+
 			{
 				var enemyAppears:Enemy = new Enemy();
 				addChild(enemyAppears);
-				enemyVector.push(enemyAppears);
+				enemies.push(enemyAppears);
 			}
 		}
 		
@@ -246,11 +249,17 @@ package
 				ScoreLabel.text = "Score:" + " " + Score;
 				for (var i:int = 0; i < blockObstacle.length; i++)
 				{
-					Collision_Obstacle(blockObstacle[i]);
+					if (blockObstacle[i] != null)
+					{
+						Collision_Obstacle(blockObstacle[i]);
+					}
 				}
-				for (var l:int = 0; l < enemyVector.length; l++)
+				for (var l:int = 0; l < enemies.length; l++)
 				{
-					Collision_Enemy(enemyVector[l]);
+					if (enemies[l] != null)
+					{
+						Collision_Enemy(enemies[l]);
+					}
 				}
 				hero.Move(userInput)
 				/*if(enemy != null) { 
@@ -262,30 +271,46 @@ package
 					blockObstacle[j].Move(userInput);
 				}
 				
-				for (var k:int = 0; k < enemyVector.length; k++)
+				for (var k:int = 0; k < enemies.length; k++)
 				{
-					enemyVector[k].Move(userInput);
+					if (enemies[k] != null)
+					{
+						enemies[k].Move(userInput);
+						if (enemies[k].yPos > Stage_Height)
+						{
+							removeChild(enemies[k]);
+							enemies[k] = null;
+							enemies.splice(i, 1);
+						}
+					}
 				}
 				
-				for (var m:int = 0; m < enemyVector.length; m++)
+				//check projectile distance
+				for (var projDist:int = 0; projDist < bullets.length; projDist++)
+				{
+					if (bullets[projDist] < 0)
+					{
+						removeChild(bullets[projDist]);
+						bullets[projDist] = null;
+						bullets.splice(projDist, 1);
+					}
+				}
+				
+				for (var m:int = 0; m < enemies.length; m++)
 				{
 				
-					for (var n:int = 0; n < projVector.length; n++)
+					for (var n:int = 0; n < bullets.length; n++)
 					{
-						Shoot_Enemy(enemyVector[m], m, projVector[n], n);
-						
+						if (enemies[m] != null && bullets[n] != null)
+						{
+							Shoot_Enemy(enemies[m], m, bullets[n], n);
+						}
+
 					}
 						
 					
 				}
-				//check projectile distance
-				for (var projDist:int = 0; projDist < projVector.lastIndexOf; projDist++)
-				{
-					if (projVector[projDist] <= 0)
-					{
-						projVector.splice(projDist, 1);
-					}
-				}
+				
 
 			}
 			
@@ -350,15 +375,19 @@ package
 			projRec.offset( -5, -5);
 			
 			
-			if (projRec.intersects(enemyRec))
+			
+			
+			
+		if (bullets[pnum] != null && projRec.intersects(enemyRec))
 			{
-				proj.DeleteProjectile();
-				enemyVector.removeAt(num);
-				
 				removeChild(enemy);
 				removeChild(proj);
+				enemies.removeAt(num);
+				bullets[pnum] = null;
+				bullets.splice(pnum, 1);
+				
 				killCount += 3;
-				projVector.splice(pnum, 1);
+				
 			}
 			
 			
@@ -569,7 +598,7 @@ package
 					if (canFire)
 					{
 						projectile = new Projectile(); 
-						projVector.push(projectile);
+						bullets.push(projectile);
 						addChild(projectile);
 						projectile.MoveProjectile(hero.xPos, hero.yPos); 	//"x" as placeholder to have the same function with same parameter.
 					}
