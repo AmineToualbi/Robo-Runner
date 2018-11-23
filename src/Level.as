@@ -216,6 +216,7 @@ package
 				else if (obstacleCount == 2) {
 					obstacleToAppear.speed = 7;
 				}
+
 				//We don't want more than 3 obstacles.
 				//else
 				//{
@@ -229,6 +230,7 @@ package
 			}
 				
 			if (gameTimer.currentCount % 2 == 0 && gameTimer.currentCount != 0 && Over == false)
+
 			{
 				var enemyAppears:Enemy = new Enemy();
 				addChild(enemyAppears);
@@ -281,6 +283,7 @@ package
 						enemies[k].Move(userInput);
 						
 						
+
 				}
 				
 				//check projectile distance
@@ -303,6 +306,7 @@ package
 						{
 							Shoot_Enemy(enemies[m], m, bullets[n], n);
 						}
+
 					}
 						
 					
