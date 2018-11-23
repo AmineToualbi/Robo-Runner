@@ -12,8 +12,6 @@ package
 	import flash.filesystem.File;
 	import flash.geom.Rectangle;
 	import flash.media.SoundMixer;
-	import flash.net.URLRequest;
-	import flash.net.URLRequestHeader;
 	//import starling.utils.RectangleUtil;
 	import starling.core.Starling;
 	import starling.display.Button;
@@ -34,12 +32,16 @@ package
 	import flash.events.TimerEvent;
 	import flash.utils.setTimeout;
 	import starling.events.Event;
+	import flash.media.Sound;
+	import flash.media.SoundChannel;
+	//import flash.display.DisplayObject;
 	
 	
 	public class Level extends Sprite
 	{
 		private var hero:Hero;
 		private var bullets:Array = new Array();
+		private var enemies:Array = new Array();
 		//private var flap_button:Button;
 		//private var flap_button_texture:Texture;
 		
@@ -66,9 +68,9 @@ package
 		//private var obstacle2:Obstacle;
 		//private var obs1Added:Boolean = false;
 		//private var collision:Boolean = false;
-		private var blockObstacle:Vector.<Obstacle> = new Vector.<Obstacle>;
-		private var enemyVector:Vector.<Enemy> = new Vector.<Enemy>;
-		private var projVector:Vector.<Projectile> = new Vector.<Projectile>;
+		private var blockObstacle:Vector.<Obstacle> = new Vector.<Obstacle>();
+		//private var enemyVector:Vector.<Enemy> = new Vector.<Enemy>();
+		//private var projVector:Vector.<Projectile> = new Vector.<Projectile>();
 		private var heroRec:Rectangle = new Rectangle(0, 0, 140, 140);
 		private var enemyRec:Rectangle = new Rectangle(0, 0, 75, 75);
 		private var projRec:Rectangle = new Rectangle(0, 0, 10, 10);
@@ -97,7 +99,6 @@ package
 		public static const SHOOT_BUTTON_PRESSED:String = "SHOOT_BUTTON_PRESSED";
 		private var shoot_button:Button;
 		private var shoot_button_texture:Texture;
-		
 		
 		public function Level() 
 		{
@@ -169,6 +170,7 @@ package
 			/*for (var i: int = 0; i < 3; i++) {
 				newObstacle_Count[i] = false;
 			}*/
+			
 			// Add keyboard listeners
 			// Keyboard Events aren't sent to sprites, 
 			// so we have to grab the current stage 
@@ -182,7 +184,6 @@ package
 			stage.addEventListener(SHOOT_BUTTON_PRESSED, Shoot_Button_Pressed_Handler);
 			
 			
-			
 		}
 		
 		public function startGame(e:EnterFrameEvent): void
@@ -191,51 +192,47 @@ package
 			{
 				gameTimer.addEventListener(TimerEvent.TIMER, updateObstacleNumber);
 				gameTimer.start();
-
 			}
 		}
-
 
 		public function updateObstacleNumber(e:TimerEvent):void
 		{
 			if (gameTimer.currentCount % 3 == 0 && gameTimer.currentCount != 0 && Over == false)
 			{
-					if (obstacleCount < 4) 
-					{
 					
-					var obstacleToAppear:Obstacle = new Obstacle();
-					//newObstacle_Arr[obstacleCount] = obstacleToAppear;
-					obstacleToAppear.y = - obstacleToAppear.height; 
-          
-					addChild(obstacleToAppear);
-					if(obstacleCount == 0){
-						obstacleToAppear.speed = 10;
-					}
-					else if (obstacleCount == 1) {
-
-						obstacleToAppear.speed = 6;
-					}
-					else if (obstacleCount == 2) {
-						obstacleToAppear.speed = 7;
-					}
-					//We don't want more than 3 obstacles.
-					//else
-					//{
-						//obstacleToAppear.speed = 6;
-					//}
-
-					blockObstacle.push(obstacleToAppear);
-					//newObstacle_Count[obstacleCount] = true;
-					obstacleCount += 1;
-					//trace("NEW OBSTACLE ADDED");
-					}
-				}
 				
-			if (gameTimer.currentCount % 3 == 0 && gameTimer.currentCount != 0 && Over == false && obstacleCount < 4)
+				var obstacleToAppear:Obstacle = new Obstacle();
+				//newObstacle_Arr[obstacleCount] = obstacleToAppear;
+				obstacleToAppear.y = - obstacleToAppear.height; 
+	  
+				addChild(obstacleToAppear);
+				if(obstacleCount == 0){
+					obstacleToAppear.speed = 10;
+				}
+				else if (obstacleCount == 1) {
+
+					obstacleToAppear.speed = 6;
+				}
+				else if (obstacleCount == 2) {
+					obstacleToAppear.speed = 7;
+				}
+				//We don't want more than 3 obstacles.
+				//else
+				//{
+					//obstacleToAppear.speed = 6;
+				//}
+
+				blockObstacle.push(obstacleToAppear);
+				//newObstacle_Count[obstacleCount] = true;
+				obstacleCount += 1;
+				//trace("NEW OBSTACLE ADDED");
+			}
+				
+			if (gameTimer.currentCount % 2 == 0 && gameTimer.currentCount != 0 && Over == false)
 			{
 				var enemyAppears:Enemy = new Enemy();
 				addChild(enemyAppears);
-				enemyVector.push(enemyAppears);
+				enemies.push(enemyAppears);
 			}
 		}
 		
@@ -250,11 +247,17 @@ package
 				ScoreLabel.text = "Score:" + " " + Score;
 				for (var i:int = 0; i < blockObstacle.length; i++)
 				{
-					Collision_Obstacle(blockObstacle[i]);
+					if (blockObstacle[i] != null)
+					{
+						Collision_Obstacle(blockObstacle[i]);
+					}
 				}
-				for (var l:int = 0; l < enemyVector.length; l++)
+				for (var l:int = 0; l < enemies.length; l++)
 				{
-					Collision_Enemy(enemyVector[l]);
+					if (enemies[l] != null)
+					{
+						Collision_Enemy(enemies[l]);
+					}
 				}
 				hero.Move(userInput)
 				/*if(enemy != null) { 
@@ -266,25 +269,45 @@ package
 					blockObstacle[j].Move(userInput);
 				}
 				
-				for (var k:int = 0; k < enemyVector.length; k++)
+				for (var k:int = 0; k < enemies.length; k++)
 				{
-					enemyVector[k].Move(userInput);
+					if (enemies[k].yPos > Stage_Height)
+						{
+							removeChild(enemies[k]);
+							enemies[k] = null;
+							enemies.removeAt(k);
+						}
+					
+						enemies[k].Move(userInput);
+						
+						
 				}
 				
-				for (var n:int = 0; n < projVector.length; n++)
+				//check projectile distance
+				for (var projDist:int = 0; projDist < bullets.length; projDist++)
 				{
-					if (!projectile)
+					if (bullets[projDist] < 0)
 					{
-						return;
-					}
-					if (!Over)
-					{
-						for (var m:int = 0; m < enemyVector.length; m++)
-						{
-							Shoot_Enemy(enemyVector[m], m, projVector[n], n);
-						}
+						removeChild(bullets[projDist]);
+						bullets[projDist] = null;
+						bullets.splice(projDist, 1);
 					}
 				}
+				
+				for (var m:int = 0; m < enemies.length; m++)
+				{
+				
+					for (var n:int = 0; n < bullets.length; n++)
+					{
+						if (enemies[m] != null && bullets[n] != null)
+						{
+							Shoot_Enemy(enemies[m], m, bullets[n], n);
+						}
+					}
+						
+					
+				}
+				
 
 			}
 			
@@ -340,24 +363,28 @@ package
 				return;
 			}
 			
-			if (proj.x > 0)
+			/*if (proj.x < 0)
 			{
 				projVector.removeAt(pnum);
-			}
+			}*/
 			projRec.x = proj.xPos;
 			projRec.y = proj.yPos;
 			projRec.offset( -5, -5);
 			
 			
-			if (projRec.intersects(enemyRec))
+			
+			
+			
+		if (bullets[pnum] != null && projRec.intersects(enemyRec))
 			{
-				proj.DeleteProjectile();
-				//removeChild(enemy);
-				enemy.Regenerate();
+				removeChild(enemy);
 				removeChild(proj);
-			//	enemyVector.removeAt(num);
-				projVector.removeAt(pnum);
+				enemies.removeAt(num);
+				bullets[pnum] = null;
+				bullets.splice(pnum, 1);
+				
 				killCount += 3;
+				
 			}
 			
 			
@@ -568,7 +595,7 @@ package
 					if (canFire)
 					{
 						projectile = new Projectile(); 
-						projVector.push(projectile);
+						bullets.push(projectile);
 						addChild(projectile);
 						projectile.MoveProjectile(hero.xPos, hero.yPos); 	//"x" as placeholder to have the same function with same parameter.
 					}

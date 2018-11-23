@@ -31,7 +31,8 @@ package
 			obstacle.height = 100;
 			
 			// Initialize to a random position
-			obstacle.x = Math.random() * (Stage_Width - obstacle.width);
+			//obstacle.x = Math.random() * (Stage_Width - obstacle.width);
+			obstacle.x = 0.1* obstacle.width + Math.random() * (Stage_Width - obstacle.width);
 			obstacle.y = -obstacle.height /2;
 
 			
