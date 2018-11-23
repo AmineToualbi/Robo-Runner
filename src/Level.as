@@ -212,11 +212,11 @@ package
 				else if (obstacleCount == 1) {
 
 					obstacleToAppear.speed = 6;
-
 				}
 				else if (obstacleCount == 2) {
 					obstacleToAppear.speed = 7;
 				}
+
 				//We don't want more than 3 obstacles.
 				//else
 				//{
@@ -273,16 +273,17 @@ package
 				
 				for (var k:int = 0; k < enemies.length; k++)
 				{
-					if (enemies[k] != null)
-					{
-						enemies[k].Move(userInput);
-						if (enemies[k].yPos > Stage_Height)
+					if (enemies[k].yPos > Stage_Height)
 						{
 							removeChild(enemies[k]);
 							enemies[k] = null;
-							enemies.splice(i, 1);
+							enemies.removeAt(k);
 						}
-					}
+					
+						enemies[k].Move(userInput);
+						
+						
+
 				}
 				
 				//check projectile distance
