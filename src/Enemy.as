@@ -51,6 +51,7 @@ package
 			
 			enemy_armature = factory.buildArmatureDisplay(enemy_data.armatureNames[1]);
 			enemy_armature.x = 0.1 * enemy_armature.width + Math.random() * (STAGE_WIDTH - 0.5 * enemy_armature.width);
+
 			enemy_armature.y = - enemy_armature.height / 2;
 			enemy_armature.visible = true;
 			enemy_armature.armature.getSlot("HK_Laser").displayController = "0";
@@ -80,6 +81,7 @@ package
 			
 			x_pos = enemy_armature.x;
 			y_pos = enemy_armature.y;
+
 		}
 	}
 }

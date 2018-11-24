@@ -4,6 +4,7 @@ package
 	import flash.filesystem.File;
 	import flash.media.Sound;
 	import flash.net.URLRequest;
+
 	import starling.assets.AssetManager;
 	import starling.display.Sprite;
 	import flash.events.Event;
@@ -14,6 +15,7 @@ package
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
 	//import flash.net.URLRequest;
+
 
 	
 	
@@ -31,8 +33,7 @@ package
 		private var music:Sound = new Sound();
 		private var music_channel:SoundChannel = new SoundChannel();
 		
-		
-		
+
 		
 		public function Game() 
 		{
@@ -45,6 +46,7 @@ package
 			// Enque the assets folder for loading
 			assets.enqueue(appDir.resolvePath("Assets"));
 			assets.enqueue(appDir.resolvePath("/bin/Assets"));
+			
 			
 			// Start loading the assets and setup the event handlers
 			assets.loadQueue(On_Assets_Loaded, On_Assets_Load_Error, On_Assets_Load_Progress);
@@ -80,6 +82,7 @@ package
 			
 			addChild(menu_screen);
 			addChild(help_screen);
+
 			
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, On_Key_Down);
 			// Last, set the state to display the menu.
@@ -93,6 +96,7 @@ package
 			removeChild(menu_screen);
 			level = new Level();
 			addChild(level);
+
 		}
 		
 		public function Update_Game_State():void
@@ -127,6 +131,7 @@ package
 					break;
 					
 				case State.GAME_OVER:
+
 					removeChild(level);
 					menu_screen.visible = false;
 					help_screen.visible = false;
@@ -169,6 +174,7 @@ package
 				game_state = State.IN_GAME;
 				Level.start = true;
 				music_channel = assets.playSound("Intriguing Possibilities");
+
 			}
 		}
 		

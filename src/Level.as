@@ -12,6 +12,7 @@ package
 	import flash.filesystem.File;
 	import flash.geom.Rectangle;
 	import flash.media.SoundMixer;
+
 	import starling.core.Starling;
 	import starling.display.Button;
 	import starling.display.Sprite;
@@ -33,15 +34,17 @@ package
 	import starling.events.Event;
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
-	
+
 	
 	
 	public class Level extends Sprite
 	{
+				private var assets:AssetManager;
 		private var hero:Hero;
 		private var bullets:Array = new Array();
 		private var enemies:Array = new Array();
 		private var obstacles:Array = new Array();
+
 		private var map:Map;
 		private var projectile:Projectile;
 		private var enemy:Enemy;
@@ -58,6 +61,7 @@ package
 		private var can_fire:Boolean = true;
 		private var score_label:TextField;
 		
+
 		
 		
 		//Create rectangles for hit boxes
@@ -97,6 +101,7 @@ package
 		{
 			var stage:starling.display.Stage = Starling.current.stage;
 			var assets:AssetManager = Main.assets;
+
 			start_background = new Image(assets.getTexture("start"));
 			
 			//Create the objects.
@@ -184,6 +189,7 @@ package
 		}
 
 		public function Update_Obstacle_Number(e:TimerEvent):void
+
 		{
 			if (game_timer.currentCount % 3 == 0 && game_timer.currentCount != 0 && over == false)
 			{
@@ -216,6 +222,7 @@ package
 				var enemy_appears:Enemy = new Enemy();
 				addChild(enemy_appears);
 				enemies.push(enemy_appears);
+
 			}
 		}
 		
@@ -254,6 +261,7 @@ package
 				for (var j:int = 0; j < obstacle_length; j++)
 				{
 					obstacles[j].Move(user_input);
+
 				}
 				
 				
@@ -305,10 +313,13 @@ package
 						if (obstacles[o] != null && bullets[n] != null)
 						{
 							Check_Obstacle(obstacles[o], bullets[n], n);
+
 						}
+
 					}
 					
 				}
+
 			}
 		}
 			
@@ -392,6 +403,7 @@ package
 				removeChild(proj);
 				bullets[pnum] = null;
 				bullets.splice(pnum, 1);
+
 			}
 			
 		}
@@ -478,6 +490,7 @@ package
 			shoot_sound = assets.playSound("Fixed Blaster Sound",0,0);
 			space_down = true;
 			can_fire = true;
+
 			
 		}
 		
@@ -502,6 +515,7 @@ package
 					addChild(projectile);
 					//shoot_sound = assets.playSound("Fixed Blaster Sound.mp3");
 					projectile.Move_Projectile(hero.x_pos, hero.y_pos); 	//"x" as placeholder to have the same function with same parameter.
+
 				}
 				can_fire = false;
 			}

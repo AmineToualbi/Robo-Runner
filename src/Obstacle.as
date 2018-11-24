@@ -29,6 +29,7 @@ package
 			
 			// Initialize to a random position
 			obstacle.x = Math.random() * (STAGE_WIDTH - obstacle.width);
+
 			obstacle.y = -obstacle.height /2;
 
 			// Add the obstacles to the display
