@@ -16,9 +16,8 @@ package
 		
 		public function Help() 
 		{
-			var assets:AssetManager = Main.Assets;
+			var assets:AssetManager = Main.assets;
 			help_menu = new Image(assets.getTexture("help_screen_final"));
-			//help_menu.alignPivot = "center";
 			addChild(help_menu);
 			
 			// Initialize the button texture
@@ -39,7 +38,5 @@ package
 		{
 			dispatchEventWith(BACK_BUTTON_PRESSED, true);
 		}
-		
 	}
-
 }

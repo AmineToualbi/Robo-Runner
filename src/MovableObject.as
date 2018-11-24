@@ -8,10 +8,10 @@ package
 	public class MovableObject extends Sprite
 	{
 		
-		public var xPos:int;
-		public var yPos:int; 
+		public var x_pos:int;
+		public var y_pos:int; 
 		public var speed:int; 
-		public var doesDamage:Boolean;
+		public var does_damage:Boolean;
 		
 		
 		public function MovableObject() 
