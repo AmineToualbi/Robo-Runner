@@ -2,13 +2,16 @@ package
 {
 
 	import flash.filesystem.File;
+	import flash.media.Sound;
 	import starling.assets.AssetManager;
 	import starling.display.Sprite;
 	import flash.events.Event;
 	import starling.core.Starling;
 	import starling.text.TextField;
 	import starling.events.KeyboardEvent;
-		import flash.ui.Keyboard;
+	import flash.ui.Keyboard;
+	import flash.media.Sound
+	import flash.media.SoundChannel;
 	
 	
 	public class Game extends Sprite
@@ -22,6 +25,7 @@ package
 		private var game:Game;
 		private var gameOver_Screen:GameOver;
 		var InsufficientLabel: TextField = new TextField(300, 50, "Insufficient Credits!");
+		private var Music:Sound;
 		
 		public function Game() 
 		{
@@ -33,6 +37,7 @@ package
 			
 			// Enque the assets folder for loading
 			assets.enqueue(appDir.resolvePath("Assets"));
+			
 			
 			
 			// Start loading the assets and setup the event handlers
@@ -71,6 +76,8 @@ package
 			addChild(help_screen);
 			//addChild(gameOver_screen);
 			//addChild(level);
+			assets.playSound("Intriguing Possibilities",0,1000);
+
 			
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, On_Key_Down);
 			// Last, set the state to display the menu.
@@ -86,7 +93,6 @@ package
 			removeChild(menu_screen);
 			level = new Level();
 			addChild(level);
-			
 			
 		}
 		
@@ -128,7 +134,7 @@ package
 					
 				case State.GAME_OVER:
 					//removeChild(level);
-					//level.visible = false; 
+					//level.visible = false;
 					removeChild(level);
 					menu_screen.visible = false;
 					help_screen.visible = false;
@@ -173,7 +179,8 @@ package
 				
 				Game_State = State.IN_GAME;
 				Level.start = true;
-				assets.playSound("Intriguing Possibilities");
+				//assets.playSound("Intriguing Possibilities");
+				//Music.play();
 			}
 				
 		}

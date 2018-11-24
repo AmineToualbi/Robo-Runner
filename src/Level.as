@@ -39,6 +39,7 @@ package
 	
 	public class Level extends Sprite
 	{
+				private var assets:AssetManager;
 		private var hero:Hero;
 		private var bullets:Array = new Array();
 		private var enemies:Array = new Array();
@@ -103,7 +104,7 @@ package
 		public function Level() 
 		{
 			var stage:starling.display.Stage = Starling.current.stage;
-			var assets:AssetManager = Main.Assets;
+			 assets = Main.Assets;
 			start_background = new Image(assets.getTexture("start"));
 			
 			//Create the objects.
@@ -572,6 +573,7 @@ package
 		
 		private function Shoot_Button_Pressed_Handler():void 
 		{
+									assets.playSound("Fixed Blaster Sound");
 			SpaceDown = true;
 			canFire = true;
 			
@@ -601,6 +603,7 @@ package
 						projectile = new Projectile(); 
 						bullets.push(projectile);
 						addChild(projectile);
+						assets.playSound("Fixed Blaster Sound");
 						projectile.MoveProjectile(hero.xPos, hero.yPos); 	//"x" as placeholder to have the same function with same parameter.
 					}
 					canFire = false;
