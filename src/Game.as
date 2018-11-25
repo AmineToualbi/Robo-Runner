@@ -25,6 +25,7 @@ package
 		private var assets:AssetManager;
 		private var menu_screen:Menu;
 		private var help_screen:Help;
+		private var score_screen:Score;
 		private var level:Level;
 		private var star:Starling;
 		private var game:Game;
@@ -54,7 +55,9 @@ package
 			addEventListener(Event.ENTER_FRAME, Update_Game_State);
 			addEventListener(Menu.PLAY_BUTTON_PRESSED, Play_Button_Pressed_Handler);
 			addEventListener(Menu.HELP_BUTTON_PRESSED, Help_Button_Pressed_Handler);
+			addEventListener(Menu.SCORE_BUTTON_PRESSED, Score_Button_Pressed_Handler);
 			addEventListener(Help.BACK_BUTTON_PRESSED, Back_Button_Pressed_Handler);
+			addEventListener(Score.BACK_BUTTON_PRESSED, Back_Button_Pressed_Handler);
 			addEventListener(GameOver.EXIT_BUTTON_PRESSED, Exit_Button_Pressed_Handler);
 			addEventListener(Level.GAME_OVER, Game_Over_Handler);
 		}
@@ -78,10 +81,12 @@ package
 			//Create the menu objects & add child to the scene. 
 			menu_screen = new Menu();
 			help_screen = new Help();
+			score_screen = new Score();
 			game_over_screen = new GameOver();
 			
 			addChild(menu_screen);
 			addChild(help_screen);
+			addChild(score_screen);
 
 			
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, On_Key_Down);
@@ -118,6 +123,33 @@ package
 					menu_screen.visible = false;
 					game_over_screen.visible = false;
 					addChild(help_screen);
+					break;
+					
+				case State.SCORE_SCREEN:
+					help_screen.visible = false;
+					menu_screen.visible = false;
+					game_over_screen.visible = false;
+					
+					if (Level.score > Score.score1)
+					{
+						Score.score3 = Score.score2;
+						Score.score2 = Score.score1;
+						Score.score1 = Level.score;
+					}
+					else if (Level.score > Score.score2 && Level.score < Score.score1)
+					{
+						Score.score3 = Score.score2;
+						Score.score2 = Level.score;
+					}
+					else if (Level.score > Score.score3 && Level.score < Score.score2)
+					{
+						Score.score3 = Level.score;
+					}
+					score_screen.no1_label.text = "1. " + Score.score1;
+					score_screen.no2_label.text = "2. " + Score.score2;
+					score_screen.no3_label.text = "3. " + Score.score3;
+					
+					addChild(score_screen);
 					break;
 					
 				case State.IN_GAME:
@@ -181,6 +213,11 @@ package
 		private function Help_Button_Pressed_Handler():void
 		{
 			game_state = State.HELP_SCREEN;
+		}
+		
+		private function Score_Button_Pressed_Handler():void
+		{
+			game_state = State.SCORE_SCREEN;
 		}
 		
 		private function Back_Button_Pressed_Handler():void

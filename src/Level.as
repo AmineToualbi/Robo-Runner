@@ -39,7 +39,7 @@ package
 	
 	public class Level extends Sprite
 	{
-				private var assets:AssetManager;
+				//private var assets:AssetManager;
 		private var hero:Hero;
 		private var bullets:Array = new Array();
 		private var enemies:Array = new Array();
@@ -201,14 +201,14 @@ package
 	  
 				addChild(obstacle_to_appear);
 				if(obstacle_count == 0){
-					obstacle_to_appear.speed = 10;
+					obstacle_to_appear.speed = 10 + 0.5 * game_timer.currentCount; //assume acceleration is 0.5.
 				}
 				else if (obstacle_count == 1) {
 
-					obstacle_to_appear.speed = 6;
+					obstacle_to_appear.speed = 6 + 0.5 * game_timer.currentCount;
 				}
 				else if (obstacle_count == 2) {
-					obstacle_to_appear.speed = 7;
+					obstacle_to_appear.speed = 7 + 0.5 * game_timer.currentCount;
 				}
 				//We don't want more than 3 obstacles.
 				
@@ -220,6 +220,7 @@ package
 			if (game_timer.currentCount % 2 == 0 && game_timer.currentCount != 0 && over == false)
 			{
 				var enemy_appears:Enemy = new Enemy();
+				enemy_appears.speed = 5 + 0.5 * game_timer.currentCount;
 				addChild(enemy_appears);
 				enemies.push(enemy_appears);
 
@@ -339,7 +340,9 @@ package
 			{
 				collision_nbr++;
 				over = true;	 
+				map.bg_armature.animation.gotoAndStopByProgress("animtion0", 0);
 				setTimeout(Game_Is_Over, 2000);
+				
 			}
 				
 		}
@@ -358,6 +361,7 @@ package
 			if (hero_rec.intersects(enemy_rec))
 			{
 				over = true;
+				map.bg_armature.animation.gotoAndStopByProgress("animtion0", 0);
 				setTimeout(Game_Is_Over, 2000);
 			}
 		}
