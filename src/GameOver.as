@@ -16,40 +16,40 @@ package
 	 */
 	public class GameOver extends Sprite
 	{
-		private var gameOver_menu:Image;
+		private var game_over_menu:Image;
 		public static const EXIT_BUTTON_PRESSED:String = "EXIT_BUTTON_PRESSED";
 		private var exit_button:Button;
 		private var exit_button_texture:Texture;
-		public var CreditLabel:TextField;
-		public var TotalCreditLabel:TextField;
-		public static var TotalCredit:int;
+		public var credit_label:TextField;
+		public var total_credit_label:TextField;
+		public static var total_credit:int;
 		
 		public function GameOver() 
 		{
 			
-			var assets:AssetManager = Main.Assets;
+			var assets:AssetManager = Main.assets;
 			//ADD TEXTURE TO ASSETS!
-			gameOver_menu = new Image(assets.getTexture("gameOver_final"));
-			addChild(gameOver_menu);
+			game_over_menu = new Image(assets.getTexture("gameOver_final"));
+			addChild(game_over_menu);
 			
 			
 			//text
-			CreditLabel = new TextField(400, 50, "Yon won : " + Level.Score + " credits");
-			CreditLabel.format.font = "Arial";
-			CreditLabel.format.color = 0xffffff;
-			CreditLabel.format.size = 40;
-			CreditLabel.x = 450;
-			CreditLabel.y = 300;
-			addChild(CreditLabel);
+			credit_label = new TextField(400, 50, "Yon won : " + Level.score + " credits");
+			credit_label.format.font = "Arial";
+			credit_label.format.color = 0xffffff;
+			credit_label.format.size = 40;
+			credit_label.x = 450;
+			credit_label.y = 300;
+			addChild(credit_label);
 			
-			TotalCredit = Level.Score + Level.credits;
+			total_credit = Level.score + Level.credits;
 			
-			TotalCreditLabel = new TextField(400, 50, "Total Credit: " + TotalCredit);
-			TotalCreditLabel.format.font = "Arial";
-			TotalCreditLabel.format.color = 0xffffff;
-			TotalCreditLabel.format.size = 40;
-			TotalCreditLabel.format.horizontalAlign = Align.LEFT;
-			addChild(TotalCreditLabel);
+			total_credit_label = new TextField(400, 50, "Total Credit: " + total_credit);
+			total_credit_label.format.font = "Arial";
+			total_credit_label.format.color = 0xffffff;
+			total_credit_label.format.size = 40;
+			total_credit_label.format.horizontalAlign = Align.LEFT;
+			addChild(total_credit_label);
 			
 			// Initialize the button texture
 			//ADD TEXTURE TO ASSETS
