@@ -35,7 +35,7 @@ package
 		private var animation_name:String;
 		private var hk_armature:StarlingArmatureDisplay;
 		private var objects_armature:StarlingArmatureDisplay;
-		private var bg_armature:StarlingArmatureDisplay;
+		public var bg_armature:StarlingArmatureDisplay;
 			
 		private const factory:StarlingFactory = new StarlingFactory();
 		
