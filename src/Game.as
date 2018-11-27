@@ -51,8 +51,12 @@ package
 			
 			// Start loading the assets and setup the event handlers
 			assets.loadQueue(On_Assets_Loaded, On_Assets_Load_Error, On_Assets_Load_Progress);
-			//At every frame (= every time), run Update(). 
+			
+			//At every frame (= every time), run Update_Game_State(). 
+			//It will keep track of where in the game the player is & show the corresponding screen. 
 			addEventListener(Event.ENTER_FRAME, Update_Game_State);
+			
+			//Listeners for buttons. 
 			addEventListener(Menu.PLAY_BUTTON_PRESSED, Play_Button_Pressed_Handler);
 			addEventListener(Menu.HELP_BUTTON_PRESSED, Help_Button_Pressed_Handler);
 			addEventListener(Menu.SCORE_BUTTON_PRESSED, Score_Button_Pressed_Handler);
@@ -78,7 +82,7 @@ package
 		{
 			trace("Everything is loaded");
 			
-			//Create the menu objects & add child to the scene. 
+			//Create the menu objects & add children to the scene. 
 			menu_screen = new Menu();
 			help_screen = new Help();
 			score_screen = new Score();
@@ -88,22 +92,28 @@ package
 			addChild(help_screen);
 			addChild(score_screen);
 
-			
+			//Listener to check for "ENTER" key to add 100 credits. 
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, On_Key_Down);
-			// Last, set the state to display the menu.
+			
+			//Last, set the state to display the menu.
 			game_state = State.MENU_SCREEN;
 		}
 		
+		
+		//Function to restart the game if the user wishes to play again after a game over. 
 		public function Restart():void
 		{
+			
 			Level.over = false;
-			removeChild(level);
+			removeChild(level);				//Remove the old level screen to put back original content. 
 			removeChild(menu_screen);
 			level = new Level();
 			addChild(level);
 
 		}
 		
+		
+		//Called every frame, this function keeps track of where the user is in the program. 
 		public function Update_Game_State():void
 		{
 			switch(game_state)
@@ -145,9 +155,9 @@ package
 					{
 						Score.score3 = Level.score;
 					}
-					score_screen.no1_label.text = "1. " + Score.score1;
-					score_screen.no2_label.text = "2. " + Score.score2;
-					score_screen.no3_label.text = "3. " + Score.score3;
+					score_screen.no1_label.text = "1st\t " + Score.score1;
+					score_screen.no2_label.text = "2nd\t " + Score.score2;
+					score_screen.no3_label.text = "3rd\t " + Score.score3;
 					
 					addChild(score_screen);
 					break;
@@ -156,8 +166,6 @@ package
 					menu_screen.visible = false;
 					help_screen.visible = false;
 					game_over_screen.visible = false;
-					
-					
 					// Make sure first level is updated every frame
 					level.UpdateUI();
 					break;
@@ -182,20 +190,23 @@ package
 			
 		}
 		
+		
 		// Change the game state when the play button is pressed
 		private function Play_Button_Pressed_Handler():void
 		{
-			if (Level.credits < 50)
+			if (Level.credits < 50)					//Display "Insufficient Credits". 
 			{
+				
 				insufficient_label.format.font = "Arial";
 				insufficient_label.format.color = 0xff0000;
 				insufficient_label.format.size = 30;
 				insufficient_label.x = 475;
 				insufficient_label.y = 375;
-				
 				menu_screen.addChild(insufficient_label);
+				
 			}
-			else
+			
+			else									//Start game & take 50 credits. 
 			{
 				
 				level = new Level();
@@ -205,11 +216,12 @@ package
 				
 				game_state = State.IN_GAME;
 				Level.start = true;
-				music_channel = assets.playSound("Intriguing Possibilities");
+				music_channel = assets.playSound("Intriguing Possibilities");	//Play background music. 
 
 			}
 		}
 		
+		//Functions to change the state of the game when the user presses a specific button. 
 		private function Help_Button_Pressed_Handler():void
 		{
 			game_state = State.HELP_SCREEN;
@@ -224,7 +236,7 @@ package
 		{
 			game_state = State.MENU_SCREEN;
 		}
-		
+	
 		private function Exit_Button_Pressed_Handler():void 
 		{
 			Level.credits = GameOver.total_credit;
@@ -236,24 +248,26 @@ package
 		private function Game_Over_Handler():void 
 		{
 			game_state = State.GAME_OVER;
-			music_channel.stop();
+			music_channel.stop();			//Stop the music when the player dies.
 		}
 		
 				
+		//Function to add 50 credits if the user presses "ENTER". 
 		private function On_Key_Down(event:KeyboardEvent):void
 		{
-			switch(event.keyCode)
+	
+			if (event.keyCode == Keyboard.ENTER)
 			{
-				case Keyboard.ENTER:
-					if (game_state == State.MENU_SCREEN) 
+				if (game_state == State.MENU_SCREEN) 
 					{
 						Level.credits += 50;
 						trace("ENTER PRESSED");
 						menu_screen.credits_label.text = "Credits: " + Level.credits;
 						menu_screen.removeChild(insufficient_label);
 					}
-					break;
 			}
+			
 		}
+		
 	}
 }

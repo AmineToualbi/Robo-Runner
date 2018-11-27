@@ -28,12 +28,12 @@ package
 		{
 			
 			var assets:AssetManager = Main.assets;
-			//ADD TEXTURE TO ASSETS!
+			
+			//Background image. 
 			game_over_menu = new Image(assets.getTexture("gameOver_final"));
 			addChild(game_over_menu);
 			
-			
-			//text
+			//TextField 'You Won'. 
 			credit_label = new TextField(400, 50, "Yon won : " + Level.score + " credits");
 			credit_label.format.font = "Arial";
 			credit_label.format.color = 0xffffff;
@@ -44,6 +44,7 @@ package
 			
 			total_credit = Level.score + Level.credits;
 			
+			//TextField 'Total Credits'
 			total_credit_label = new TextField(400, 50, "Total Credits: " + total_credit);
 			total_credit_label.format.font = "Arial";
 			total_credit_label.format.color = 0xffffff;
@@ -51,22 +52,20 @@ package
 			total_credit_label.format.horizontalAlign = Align.LEFT;
 			addChild(total_credit_label);
 			
-			// Initialize the button texture
-			//ADD TEXTURE TO ASSETS
+			// Exit button image. 
 			exit_button_texture = assets.getTexture("exit");
 		    exit_button = new Button(exit_button_texture);
 			
-			// Add an event listener for when the button is pressed
+			// Add an event listener for when the exit button is pressed
 			exit_button.addEventListener(Event.TRIGGERED, Exit_Button_Pressed);
 			
-			//DETERMINE WHERE TO PUT IT, PROBS IN MIDDLE.
 			exit_button.x = 500;
 			exit_button.y = 430;
 		
 			addChild(exit_button);			
 		}
 		
-		//Basically, it sends our PLAY_BUTTON_PRESSED back to Game class. 
+		//Sends our EXIT_BUTTON_PRESSED back to Game class. 
 		private function Exit_Button_Pressed():void
 		{
 			dispatchEventWith(EXIT_BUTTON_PRESSED, true);

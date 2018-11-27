@@ -76,8 +76,8 @@ package
 			bg_armature = factory.buildArmatureDisplay(placeholder_data.armatureNames[2]);
 			bg_armature.x = STAGE_WIDTH / 2;
 			bg_armature.y = STAGE_HEIGHT / 2;
-			bg_armature.rotation = 3 * Math.PI / 2;
-			bg_armature.animation.gotoAndPlayByProgress("animtion0", 0, -1);
+			bg_armature.rotation = 3 * Math.PI / 2;			//Rotate the map. 
+			bg_armature.animation.gotoAndPlayByProgress("animtion0", 0, -1);	//Make the map scroll. 
 			bg_armature.visible = true;
 			
 			
@@ -85,7 +85,7 @@ package
 			//play_button
 			var assets:AssetManager = Main.assets;
 			
-			// Initialize the button texture
+			// Add the buttons to the map on the side. 
 			up_button_texture = assets.getTexture("up");
 			up_button = new Button(up_button_texture);
 			down_button_texture = assets.getTexture("down");
@@ -120,7 +120,6 @@ package
 		{
 			animation_name = "mapanim"; // typo, I know
 			bg_armature.animation.gotoAndPlayByProgress(animation_name , 0, -1);
-			
 		}
 		private function Update_Armature_Display():void
 		{
@@ -130,7 +129,6 @@ package
 		{
 			// Starts the animation specified by animation_name, using the display controller specified by objects_index
 			objects_armature.animation.fadeIn( animation_name, -1, -1, 0, "" + 2);
-			
 		}
 		
 	}
