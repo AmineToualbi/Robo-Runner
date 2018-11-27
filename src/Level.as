@@ -60,6 +60,7 @@ package
 		private var space_down:Boolean = false;
 		private var can_fire:Boolean = true;
 		private var score_label:TextField;
+		private var projectile_shot:Boolean = false; 
 		
 
 		
@@ -80,11 +81,14 @@ package
 		private var collision_nbr:int; //Testing purposes.
 		
 		private var game_timer:Timer; 
+		private var shoot_timer:Timer; 
+		private var previousShot:int; 
+		private var currentShot:int; 
 		
 		private var obstacle_count:int = 0;
 		private var kill_count: int = 0;
 		
-		public static var credits:int = 55; 
+		public static var credits:int = 0; 
 		public static var start:Boolean = false;
 
 		public static const LEFT_BUTTON_PRESSED:String = "LEFT_BUTTON_PRESSED";
@@ -108,7 +112,8 @@ package
 			map = new Map();
 			hero = new Hero();
 			
-			game_timer = new Timer(1000,0); 
+			game_timer = new Timer(1000, 0); 
+			shoot_timer = new Timer(1000, 0); 
 			
 			//Add the objects to the display.
 			addChild(map);
@@ -159,7 +164,7 @@ package
 			addChild(left_button);
 			addChild(right_button);
 			addChild(shoot_button);
-			
+						
 			/*for (var i: int = 0; i < 3; i++) {
 				newObstacle_Count[i] = false;
 			}*/
@@ -185,7 +190,9 @@ package
 			{
 				game_timer.addEventListener(TimerEvent.TIMER, Update_Obstacle_Number);
 				game_timer.start();
+				shoot_timer.start(); 	
 			}
+			
 		}
 
 		public function Update_Obstacle_Number(e:TimerEvent):void
@@ -338,10 +345,11 @@ package
 			
 			if(hero_rec.intersects(obstacle.bounds))
 			{
+				can_fire = false; 
 				collision_nbr++;
 				over = true;	 
 				map.bg_armature.animation.gotoAndStopByProgress("animtion0", 0);
-				setTimeout(Game_Is_Over, 2000);
+				setTimeout(Game_Is_Over, 1000);
 				
 			}
 				
@@ -360,9 +368,10 @@ package
 			
 			if (hero_rec.intersects(enemy_rec))
 			{
+				can_fire = false; 
 				over = true;
 				map.bg_armature.animation.gotoAndStopByProgress("animtion0", 0);
-				setTimeout(Game_Is_Over, 2000);
+				setTimeout(Game_Is_Over, 1000);
 			}
 		}
 		
@@ -426,7 +435,7 @@ package
 		private function Shoot_Button_Pressed():void
 		{
 			dispatchEventWith(SHOOT_BUTTON_PRESSED, true);
-			shoot_sound = assets.playSound("Fixed Blaster Sound");
+			//shoot_sound = assets.playSound("Fixed Blaster Sound");
 		}
 		
 		//Keyboard functions -- testing
@@ -491,9 +500,15 @@ package
 		private function Shoot_Button_Pressed_Handler():void 
 		{
 			assets = Main.assets;
-			shoot_sound = assets.playSound("Fixed Blaster Sound",0,0);
+			//shoot_sound = assets.playSound("Fixed Blaster Sound",0,0);
 			space_down = true;
 			can_fire = true;
+			
+			if (projectile_shot == true) 
+			{
+				shoot_sound = assets.playSound("Fixed Blaster Sound", 0, 0); 
+				projectile_shot = false; 
+			}
 
 			
 		}
@@ -514,13 +529,20 @@ package
 			{
 				if (can_fire)
 				{
-					projectile = new Projectile(); 
-					bullets.push(projectile);
-					addChild(projectile);
-					//shoot_sound = assets.playSound("Fixed Blaster Sound.mp3");
-					projectile.Move_Projectile(hero.x_pos, hero.y_pos); 	//"x" as placeholder to have the same function with same parameter.
-
+					
+					if (shoot_timer.currentCount >= 1)
+					{
+						projectile = new Projectile(); 
+						bullets.push(projectile);
+						addChild(projectile);
+						//shoot_sound = assets.playSound("Fixed Blaster Sound.mp3");
+						projectile.Move_Projectile(hero.x_pos, hero.y_pos); 	//"x" as placeholder to have the same function with same parameter.
+						shoot_timer.reset();
+						shoot_timer.start();
+						projectile_shot = true;
+					}
 				}
+				
 				can_fire = false;
 			}
 		}

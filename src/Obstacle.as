@@ -52,7 +52,7 @@ package
 		// Reset the obstacle to a randomized position
 		public function Regenerate():void
 		{
-			obstacle.x = Math.random() * (STAGE_WIDTH - obstacle.width);
+			obstacle.x = Math.random() * (STAGE_WIDTH - obstacle.width); 
 			obstacle.y = - obstacle.height;
 			//addChild(obstacle);
 			//right.x = Starling.current.stage.stageWidth/2 + Math.random() * (Starling.current.stage.stageWidth/2-right.width); 
