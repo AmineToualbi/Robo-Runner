@@ -76,9 +76,10 @@ package
 			
 		}
 		
-		override public function Move(input:String):void {
-			enemy_armature.y += speed; 
+		override public function Move(input:String):void 
+		{
 			
+			enemy_armature.y += speed; 
 			x_pos = enemy_armature.x;
 			y_pos = enemy_armature.y;
 

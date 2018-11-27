@@ -58,10 +58,10 @@ package
 			hk_armature.y = 600;
 			x_pos = hk_armature.x;  
 			y_pos = hk_armature.y;
+			
 			hk_armature.animation.gotoAndPlayByProgress("Idle_Shoot", 0, -1);
 			hk_armature.visible = true;
 
-			
 			speed = 15; 
 			
 			hk_armature.width = 200;
@@ -73,23 +73,24 @@ package
 		public function Update():void
 		{
 			
-			
-			
 		}
 		
 		override public function Move(input:String):void 
 		{
 			
+			//Move left. 
 			if (input == "a" && !(hk_armature.x - speed - 0.5 * hk_armature.width <= 0))
 			{
 				hk_armature.x -= speed; 
 			}
+			//Move right. 
 			if (input == "d" && !(hk_armature.x + speed + 0.5 * hk_armature.width > STAGE_WIDTH))
 			{
 				hk_armature.x += speed; 
 			}
 			
 			x_pos = hk_armature.x;
+			
 		}	
 	}
 }
