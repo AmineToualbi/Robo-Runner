@@ -180,8 +180,8 @@ package
 			stage.addEventListener(TouchEvent.TOUCH, Right_Button_Pressed_Handler);
 			stage.addEventListener(SHOOT_BUTTON_PRESSED, Shoot_Button_Pressed_Handler);
 			
-			//start_timer.addEventListener(TimerEvent.TIMER_COMPLETE, Start_Timer_Over); //Countdown timer completed. 
-			//start_timer.addEventListener(TimerEvent.TIMER, Start_Timer_Running);	   //Countdown timer running. 
+			start_timer.addEventListener(TimerEvent.TIMER_COMPLETE, Start_Timer_Over); //Countdown timer completed. 
+			start_timer.addEventListener(TimerEvent.TIMER, Start_Timer_Running);	   //Countdown timer running. 
 			
 		}
 		
@@ -353,11 +353,6 @@ package
 					
 				}
 				
-				if (projectile_shot == true) 
-				{
-					shoot_sound = assets.playSound("Fixed Blaster Sound"); 
-					projectile_shot = false; 
-				}
 
 			}
 		}
