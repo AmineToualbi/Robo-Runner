@@ -33,17 +33,17 @@ package
 		
 		private const factory:StarlingFactory = new StarlingFactory();
 		
-		private const Stage_Width:int = 1024;
-		private const Stage_Height:int = 1024;
+		private const STAGE_WIDTH:int = 1024;
+		private const STAGE_HEIGHT:int = 1024;
 		
 		public function Projectile() 
 		{
 			
 			// The json file has to be exported with DATA VERSION 5.0!
-			projectile_json = Main.Assets.getObject("Runner_ske");
+			projectile_json = Main.assets.getObject("Runner_ske");
 			
-			var tex_obj:Object = Main.Assets.getObject("Runner_tex");
-			var tex:Texture = Main.Assets.getTexture("Runner_tex");
+			var tex_obj:Object = Main.assets.getObject("Runner_tex");
+			var tex:Texture = Main.assets.getTexture("Runner_tex");
 			projectile_atlas_data = factory.parseTextureAtlasData(tex_obj,tex);
 			
 			projectile_data = factory.parseDragonBonesData(projectile_json);
@@ -64,53 +64,36 @@ package
 			objects_armature.armature.getSlot("Cannon_Bullet").displayController = "9";
 			objects_armature.animation.fadeIn( "Flash_Long", -1, -1, 0, "" + 9);
 			
-			addEventListener(Event.ENTER_FRAME, ProjectileMovement);
+			addEventListener(Event.ENTER_FRAME, Projectile_Movement);
 			
 			speed = 40;
 			
-			xPos = objects_armature.x; 
-			yPos = objects_armature.y; 
+			x_pos = objects_armature.x; 
+			y_pos = objects_armature.y; 
 
 			addChild(objects_armature);
 			
 		}
 		
-		public function MoveProjectile(heroX:int, heroY:int):void
+		public function Move_Projectile(heroX:int, heroY:int):void
 		{
 			objects_armature.x = heroX;
 			objects_armature.y = heroY; 
-			xPos = objects_armature.x; 
+			x_pos = objects_armature.x; 
+			y_pos = objects_armature.y;
 			
-			if (objects_armature.y <= 0)
-			{		//Was a while before, we don't need the while.
-				ProjectileMovement(); 
-			}
-			
-			if (objects_armature.y < 0)
-			{
-				DeleteProjectile(); 
-			}
-			
-			yPos = objects_armature.y;
-			
+			Projectile_Movement(); 
 			
 		}
 		
-		public function ProjectileMovement():void {
-
+		public function Projectile_Movement():void {
 				objects_armature.y -= speed;
-				yPos = objects_armature.y; 
-				xPos = objects_armature.x;
-				
-			
+				y_pos = objects_armature.y; 
+				x_pos = objects_armature.x;
 		}
 		
-		public function DeleteProjectile():void {
+		public function Delete_Projectile():void {
 			removeChild(objects_armature);
 		}
-			
-		
-		
 	}
-
 }

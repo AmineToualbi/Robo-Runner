@@ -35,12 +35,12 @@ package
 		private var animation_name:String;
 		private var hk_armature:StarlingArmatureDisplay;
 		private var objects_armature:StarlingArmatureDisplay;
-		private var bg_armature:StarlingArmatureDisplay;
+		public var bg_armature:StarlingArmatureDisplay;
 			
 		private const factory:StarlingFactory = new StarlingFactory();
 		
-		private const Stage_Width:int = 1024;
-		private const Stage_Height:int = 1024;
+		private const STAGE_WIDTH:int = 1024;
+		private const STAGE_HEIGHT:int = 1024;
 		
 		public static const UP_BUTTON_PRESSED:String = "UP_BUTTON_PRESSED";
 		public static const DOWN_BUTTON_PRESSED:String = "DOWN_BUTTON_PRESSED";
@@ -62,10 +62,10 @@ package
 		
 		public function Map()
 		{
-			placeholder_json = Main.Assets.getObject("Runner_ske");
+			placeholder_json = Main.assets.getObject("Runner_ske");
 			//animation_name = "animtion0";
-			var tex_obj:Object = Main.Assets.getObject("Runner_tex");
-			var tex:Texture = Main.Assets.getTexture("Runner_tex");
+			var tex_obj:Object = Main.assets.getObject("Runner_tex");
+			var tex:Texture = Main.assets.getTexture("Runner_tex");
 			
 			placeholder_atlas_data = factory.parseTextureAtlasData(tex_obj,tex);
 			
@@ -74,8 +74,8 @@ package
 			hk_armature = factory.buildArmatureDisplay(placeholder_data.armatureNames[0]);
 			objects_armature = factory.buildArmatureDisplay(placeholder_data.armatureNames[1]);
 			bg_armature = factory.buildArmatureDisplay(placeholder_data.armatureNames[2]);
-			bg_armature.x = Stage_Width / 2;
-			bg_armature.y = Stage_Height / 2;
+			bg_armature.x = STAGE_WIDTH / 2;
+			bg_armature.y = STAGE_HEIGHT / 2;
 			bg_armature.rotation = 3 * Math.PI / 2;
 			bg_armature.animation.gotoAndPlayByProgress("animtion0", 0, -1);
 			bg_armature.visible = true;
@@ -83,7 +83,7 @@ package
 			
 			addChild(bg_armature);
 			//play_button
-			var assets:AssetManager = Main.Assets;
+			var assets:AssetManager = Main.assets;
 			
 			// Initialize the button texture
 			up_button_texture = assets.getTexture("up");
@@ -96,14 +96,6 @@ package
 			right_button = new Button(down_button_texture);
 			shoot_button_texture = assets.getTexture("shoot");
 			shoot_button = new Button(down_button_texture);
-			
-			// Add an event listener for when the button is pressed
-			//up_button.addEventListener(Event.TRIGGERED, UP_Button_Pressed);
-			//down_button.addEventListener(Event.TRIGGERED, DOWN_Button_Pressed);
-			//left_button.addEventListener(Event.TRIGGERED, LEFT_Button_Pressed);
-			//right_button.addEventListener(Event.TRIGGERED, RIGHT_Button_Pressed);
-			//shoot_button.addEventListener(Event.TRIGGERED, SHOOT_Button_Pressed);
-			
 			
 			// Center the button
 			up_button.x = 1920 - up_button.width * 2;
@@ -122,11 +114,6 @@ package
 			addChild(left_button);
 			addChild(right_button);
 			addChild(shoot_button);
-			
-			//Update_Armature_Display();
-			//Update_Animation_Display();
-			//Update_Object_Display();
-			
 		}
 		
 		private function Update_Animation_Display():void

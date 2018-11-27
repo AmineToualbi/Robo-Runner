@@ -35,23 +35,24 @@ package
 		
 		private const factory:StarlingFactory = new StarlingFactory();
 		
-		private const Stage_Width:int = 1024;
-		private const Stage_Height:int = 1024;
+		private const STAGE_WIDTH:int = 1024;
+		private const STAGE_HEIGHT:int = 1024;
 		
 		public function Enemy() 
 		{
 			// The json file has to be exported with DATA VERSION 5.0!
-			enemy_json = Main.Assets.getObject("Runner_ske");
+			enemy_json = Main.assets.getObject("Runner_ske");
 			
-			var tex_obj:Object = Main.Assets.getObject("Runner_tex");
-			var tex:Texture = Main.Assets.getTexture("Runner_tex");
+			var tex_obj:Object = Main.assets.getObject("Runner_tex");
+			var tex:Texture = Main.assets.getTexture("Runner_tex");
 			enemy_atlas_data = factory.parseTextureAtlasData(tex_obj,tex);
 			
 			enemy_data = factory.parseDragonBonesData(enemy_json);
 			
 			enemy_armature = factory.buildArmatureDisplay(enemy_data.armatureNames[1]);
-			enemy_armature.x = 0.5*enemy_armature.width + Math.random() * (Stage_Width - 0.5 * enemy_armature.width);
-			enemy_armature.y = -50;
+			enemy_armature.x = 0.1 * enemy_armature.width + Math.random() * (STAGE_WIDTH - 0.5 * enemy_armature.width);
+
+			enemy_armature.y = - enemy_armature.height / 2;
 			enemy_armature.visible = true;
 			enemy_armature.armature.getSlot("HK_Laser").displayController = "0";
 			enemy_armature.armature.getSlot("Cannon_Bullet_Glow").displayController = "1";
@@ -66,8 +67,6 @@ package
 			
 			enemy_armature.animation.fadeIn( "Flash_Long", -1, -1, 0, "" + 3);
 			
-			//addEventListener(Event.ENTER_FRAME, ProjectileMovement);
-			
 			speed = 5; 
 			
 			enemy_armature.width = 200;
@@ -78,26 +77,11 @@ package
 		}
 		
 		override public function Move(input:String):void {
-			 enemy_armature.y += speed; 
-			if (enemy_armature.y > 1024 + enemy_armature.height)
-			{
-				enemy_armature.y =  - enemy_armature.height;
-				Regenerate();
-			}
-			xPos = enemy_armature.x;
-			yPos = enemy_armature.y;
-		}
-		
-		
-		public function Regenerate():void
-		{
-			enemy_armature.x = 0.5*enemy_armature.width + Math.random() * (Stage_Width - 0.5 * enemy_armature.width);
-			enemy_armature.y = - enemy_armature.height; 
-			xPos = enemy_armature.x;
-			yPos = enemy_armature.y; 
-		}
-		
-		
-	}
+			enemy_armature.y += speed; 
+			
+			x_pos = enemy_armature.x;
+			y_pos = enemy_armature.y;
 
+		}
+	}
 }
