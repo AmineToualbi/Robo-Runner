@@ -62,9 +62,6 @@ package
 		private var score_label:TextField;
 		private var projectile_shot:Boolean = false; 
 		
-
-		
-		
 		//Create rectangles for hit boxes
 		private var hero_rec:Rectangle = new Rectangle(0, 0, 140, 140);
 		private var enemy_rec:Rectangle = new Rectangle(0, 0, 75, 75);
@@ -90,6 +87,8 @@ package
 		
 		public static var credits:int = 0; 
 		public static var start:Boolean = false;
+		private var start_timer_over:Boolean = false; 
+		private var start_timer:Timer;
 
 		public static const LEFT_BUTTON_PRESSED:String = "LEFT_BUTTON_PRESSED";
 		private var left_button:Button;
@@ -100,6 +99,8 @@ package
 		public static const SHOOT_BUTTON_PRESSED:String = "SHOOT_BUTTON_PRESSED";
 		private var shoot_button:Button;
 		private var shoot_button_texture:Texture;
+		
+		private var start_label:TextField; 
 		
 		public function Level() 
 		{
@@ -114,6 +115,7 @@ package
 			
 			game_timer = new Timer(1000, 0); 
 			shoot_timer = new Timer(1000, 0); 
+			start_timer = new Timer(1000, 3); 
 			
 			//Add the objects to the display.
 			addChild(map);
@@ -135,9 +137,16 @@ package
 			score_label.format.color = 0xffffff;
 			score_label.format.size = 30;
 			score_label.format.horizontalAlign = Align.LEFT;
+			
+			start_label = new TextField(1075, 650, "3"); 
+			start_label.format.font = "Arial"; 
+			start_label.format.color = 0xffffff; 
+			start_label.format.size = 40; 
+			start_label.format.horizontalAlign = Align.CENTER; 
 
 			//Add Score label to the display.
 			addChild(score_label);
+			addChild(start_label); 
 			
 			//buttons
 			left_button_texture = assets.getTexture("left");
@@ -181,12 +190,48 @@ package
 			stage.addEventListener(RIGHT_BUTTON_PRESSED, Right_Button_Pressed_Handler);
 			stage.addEventListener(SHOOT_BUTTON_PRESSED, Shoot_Button_Pressed_Handler);
 			
+			start_timer.addEventListener(TimerEvent.TIMER_COMPLETE, Start_Timer_Over); 
+			start_timer.addEventListener(TimerEvent.TIMER, Start_Timer_Running);
+			
 			
 		}
 		
-		public function Start_Game(e:EnterFrameEvent): void
+		public function Start_Timer_Running(e:TimerEvent) 
 		{
-			if (start == true)
+				
+			/*if (start_timer_over != true) 
+			{
+				switch(start_timer.currentCount) 
+				{
+					case 0: 
+						start_label.text = "3"; 
+						break;
+					case 1: 
+						start_label.text = "2"; 
+						break; 
+					case 2: 
+						start_label.text = "1"; 
+				 
+				}
+
+			}*/
+			start_label.text = (3 - start_timer.currentCount) + "";
+		}
+		
+		public function Start_Timer_Over(e:TimerEvent): void
+		{
+			start_timer_over = true; 
+			removeChild(start_label); 
+		}
+		
+		public function Start_Game(e:Event): void
+		{
+				
+			if (start == true && start_timer.running == false) {
+				start_timer.start(); 
+			//	start_label.text = start_timer.currentCount + ""; 
+			}
+			if (start == true && start_timer_over == true)
 			{
 				game_timer.addEventListener(TimerEvent.TIMER, Update_Obstacle_Number);
 				game_timer.start();
@@ -345,7 +390,6 @@ package
 			
 			if(hero_rec.intersects(obstacle.bounds))
 			{
-				can_fire = false; 
 				collision_nbr++;
 				over = true;	 
 				map.bg_armature.animation.gotoAndStopByProgress("animtion0", 0);
@@ -368,7 +412,6 @@ package
 			
 			if (hero_rec.intersects(enemy_rec))
 			{
-				can_fire = false; 
 				over = true;
 				map.bg_armature.animation.gotoAndStopByProgress("animtion0", 0);
 				setTimeout(Game_Is_Over, 1000);
