@@ -247,8 +247,8 @@ package
 				case Keyboard.ENTER:
 					if (game_state == State.MENU_SCREEN) 
 					{
-						Level.credits += 100;
-						("ENTER PRESSED");
+						Level.credits += 50;
+						trace("ENTER PRESSED");
 						menu_screen.credits_label.text = "Credits: " + Level.credits;
 						menu_screen.removeChild(insufficient_label);
 					}

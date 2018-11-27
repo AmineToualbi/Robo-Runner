@@ -44,7 +44,7 @@ package
 			
 			total_credit = Level.score + Level.credits;
 			
-			total_credit_label = new TextField(400, 50, "Total Credit: " + total_credit);
+			total_credit_label = new TextField(400, 50, "Total Credits: " + total_credit);
 			total_credit_label.format.font = "Arial";
 			total_credit_label.format.color = 0xffffff;
 			total_credit_label.format.size = 40;
