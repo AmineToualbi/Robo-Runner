@@ -12,7 +12,7 @@ package
 	import flash.filesystem.File;
 	import flash.geom.Rectangle;
 	import flash.media.SoundMixer;
-
+	import flash.events.MouseEvent;
 	import starling.core.Starling;
 	import starling.display.Button;
 	import starling.display.Sprite;
@@ -191,14 +191,13 @@ package
 			stage.addEventListener(TouchEvent.TOUCH, Left_Button_Pressed_Handler);
 			stage.addEventListener(TouchEvent.TOUCH, Right_Button_Pressed_Handler);
 			stage.addEventListener(SHOOT_BUTTON_PRESSED, Shoot_Button_Pressed_Handler);
-			
+
 			start_timer.addEventListener(TimerEvent.TIMER_COMPLETE, Start_Timer_Over); 
 			start_timer.addEventListener(TimerEvent.TIMER, Start_Timer_Running);
-			
-			
+
 		}
 		
-		public function Start_Timer_Running(e:TimerEvent) 
+		public function Start_Timer_Running(e:TimerEvent):void 
 		{
 				
 			/*if (start_timer_over != true) 
@@ -572,7 +571,7 @@ package
 			space_down = true;
 			can_fire = true;
 			
-			if (projectile_shot == true) 
+			if (projectile_shot == true && over == false) 
 			{
 				shoot_sound = assets.playSound("Fixed Blaster Sound", 0, 0); 
 				projectile_shot = false; 
@@ -598,7 +597,7 @@ package
 				if (can_fire)
 				{
 					
-					if (shoot_timer.currentCount >= 1)
+					if (shoot_timer.currentCount >= 1 && over == false)
 					{
 						projectile = new Projectile(); 
 						bullets.push(projectile);
