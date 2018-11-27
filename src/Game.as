@@ -92,7 +92,7 @@ package
 			addChild(help_screen);
 			addChild(score_screen);
 
-			//Listener to check for "ENTER" key to add 100 credits. 
+			//Listener to check for "ENTER" key to add 50 credits. 
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, On_Key_Down);
 			
 			//Last, set the state to display the menu.
@@ -108,6 +108,7 @@ package
 			removeChild(level);				//Remove the old level screen to put back original content. 
 			removeChild(menu_screen);
 			level = new Level();
+			Level.score = 0;
 			addChild(level);
 
 		}
@@ -140,21 +141,6 @@ package
 					menu_screen.visible = false;
 					game_over_screen.visible = false;
 					
-					if (Level.score > Score.score1)
-					{
-						Score.score3 = Score.score2;
-						Score.score2 = Score.score1;
-						Score.score1 = Level.score;
-					}
-					else if (Level.score > Score.score2 && Level.score < Score.score1)
-					{
-						Score.score3 = Score.score2;
-						Score.score2 = Level.score;
-					}
-					else if (Level.score > Score.score3 && Level.score < Score.score2)
-					{
-						Score.score3 = Level.score;
-					}
 					score_screen.no1_label.text = "1st\t " + Score.score1;
 					score_screen.no2_label.text = "2nd\t " + Score.score2;
 					score_screen.no3_label.text = "3rd\t " + Score.score3;
@@ -175,10 +161,11 @@ package
 					removeChild(level);
 					menu_screen.visible = false;
 					help_screen.visible = false;
+					updateHighScore(); 
 					
 					// refresh credits in gameover
 					GameOver.total_credit = Level.score + Level.credits;
-					game_over_screen.total_credit_label.text = "Total Credit: " + GameOver.total_credit;	
+					game_over_screen.total_credit_label.text = "Total Credits: " + GameOver.total_credit;	
 					game_over_screen.credit_label.text = "Yon won : " + Level.score + " credits";
 					addChild(game_over_screen);
 					game_over_screen.visible = true;
@@ -188,6 +175,26 @@ package
 					break;
 			}
 			
+		}
+		
+		private function updateHighScore(): void
+		{
+			if (Level.score > Score.score1)
+					{
+						Score.score3 = Score.score2;
+						Score.score2 = Score.score1;
+						Score.score1 = Level.score;
+					}
+					else if (Level.score > Score.score2 && Level.score < Score.score1)
+					{
+						Score.score3 = Score.score2;
+						Score.score2 = Level.score;
+					}
+					else if (Level.score > Score.score3 && Level.score < Score.score2)
+					{
+						Score.score3 = Level.score;
+					}
+					
 		}
 		
 		

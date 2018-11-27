@@ -122,13 +122,19 @@ package
 			//Add the objects to the display.
 			addChild(map);
 			addChild(hero);
-			
+			//score = 0;
+
+						
 			//Score Label. 
-			score_label = new TextField(300, 50, "Score: " + score);
+			score_label = new TextField(300, 50, "Score: 0");
 			score_label.format.font = "Arial";
 			score_label.format.color = 0xffffff;
 			score_label.format.size = 30;
 			score_label.format.horizontalAlign = Align.LEFT;
+			//score_label.x = 1075; 
+			//score_label.y = 75;
+			
+	
 			
 			//Countdown timer label. 
 			start_label = new TextField(1075, 650, "3"); 
@@ -553,8 +559,8 @@ package
 			
 			if (projectile_shot == true && over == false) 
 			{
-				shoot_sound = assets.playSound("Fixed Blaster Sound", 0, 0); 
-				projectile_shot = false; 
+			//	projectile_shot = false; 
+			//	shoot_sound = assets.playSound("Fixed Blaster Sound"); 
 			}
 
 			
@@ -577,18 +583,17 @@ package
 				if (can_fire)
 				{
 					
-
 					if (shoot_timer.currentCount >= 1 && over == false)   //If the hero didn't shoot within the last second, he can shoot. 
 
 					{
+						projectile_shot = true;
 						projectile = new Projectile(); 
 						bullets.push(projectile);
 						addChild(projectile);
-						//shoot_sound = assets.playSound("Fixed Blaster Sound.mp3");
+						shoot_sound = assets.playSound("Fixed Blaster Sound");
 						projectile.Move_Projectile(hero.x_pos, hero.y_pos); 	//"x" as placeholder to have the same function with same parameter.
 						shoot_timer.reset();
 						shoot_timer.start();
-						projectile_shot = true;
 					}
 				}
 	
