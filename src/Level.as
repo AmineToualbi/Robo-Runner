@@ -12,7 +12,7 @@ package
 	import flash.filesystem.File;
 	import flash.geom.Rectangle;
 	import flash.media.SoundMixer;
-
+	import flash.events.MouseEvent;
 	import starling.core.Starling;
 	import starling.display.Button;
 	import starling.display.Sprite;
@@ -34,8 +34,10 @@ package
 	import starling.events.Event;
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
-	import flash.events.MouseEvent;
 
+	import starling.events.TouchEvent;
+	import starling.events.TouchPhase;
+	import starling.events.Touch;
 	
 	
 	public class Level extends Sprite
@@ -90,10 +92,10 @@ package
 		private var start_timer_over:Boolean = false; 	//Flag keeping track of the countdown timer. 
 		private var start_timer:Timer;					//Countdown timer to start. 
 
-		public static const LEFT_BUTTON_PRESSED:String = "LEFT_BUTTON_PRESSED";
+		//public static const LEFT_BUTTON_PRESSED:String = "LEFT_BUTTON_PRESSED";
 		private var left_button:Button;
 		private var left_button_texture:Texture;
-		public static const RIGHT_BUTTON_PRESSED:String = "RIGHT_BUTTON_PRESSED";
+		//public static const RIGHT_BUTTON_PRESSED:String = "RIGHT_BUTTON_PRESSED";
 		private var right_button:Button;
 		private var right_button_texture:Texture;
 		public static const SHOOT_BUTTON_PRESSED:String = "SHOOT_BUTTON_PRESSED";
@@ -147,9 +149,10 @@ package
 			shoot_button_texture = assets.getTexture("shoot");
 		    shoot_button = new Button(shoot_button_texture);
 			
-			// Add an event listener for when a control button is pressed.
-			left_button.addEventListener(Event.TRIGGERED, Left_Button_Pressed);
-			right_button.addEventListener(Event.TRIGGERED, Right_Button_Pressed);
+
+			// Add an event listener for when the button is pressed
+			//left_button.addEventListener(Event.TRIGGERED, Left_Button_Pressed);
+			//right_button.addEventListener(Event.TRIGGERED, Right_Button_Pressed);
 			shoot_button.addEventListener(Event.TRIGGERED, Shoot_Button_Pressed);
 			
 			//Set button locations.
@@ -173,18 +176,25 @@ package
 			stage.addEventListener(KeyboardEvent.KEY_UP, On_Key_Up);
 			stage.addEventListener(Event.ENTER_FRAME, eFrame);	//Called every frame.
 			stage.addEventListener(Event.ENTER_FRAME, Start_Game);
-			stage.addEventListener(LEFT_BUTTON_PRESSED, Left_Button_Pressed_Handler);
-			stage.addEventListener(RIGHT_BUTTON_PRESSED, Right_Button_Pressed_Handler);
+			stage.addEventListener(TouchEvent.TOUCH, Left_Button_Pressed_Handler);
+			stage.addEventListener(TouchEvent.TOUCH, Right_Button_Pressed_Handler);
 			stage.addEventListener(SHOOT_BUTTON_PRESSED, Shoot_Button_Pressed_Handler);
 			
-			start_timer.addEventListener(TimerEvent.TIMER_COMPLETE, Start_Timer_Over); //Countdown timer completed. 
-			start_timer.addEventListener(TimerEvent.TIMER, Start_Timer_Running);	   //Countdown timer running. 
+			//start_timer.addEventListener(TimerEvent.TIMER_COMPLETE, Start_Timer_Over); //Countdown timer completed. 
+			//start_timer.addEventListener(TimerEvent.TIMER, Start_Timer_Running);	   //Countdown timer running. 
 			
 		}
 		
 		//Function updating countdown label to show on screen before game starts. 
-		public function Start_Timer_Running(e:TimerEvent) 
-		{
+	//	public function Start_Timer_Running(e:TimerEvent) 
+
+		//	start_timer.addEventListener(TimerEvent.TIMER_COMPLETE, Start_Timer_Over); 
+		//	start_timer.addEventListener(TimerEvent.TIMER, Start_Timer_Running);
+
+//		}
+		
+		public function Start_Timer_Running(e:TimerEvent):void 
+  {
 			start_label.text = (3 - start_timer.currentCount) + "";
 		}
 		
@@ -440,6 +450,7 @@ package
 		
 		
 		//Button functions
+		/*
 		private function Left_Button_Pressed():void
 		{
 			dispatchEventWith(LEFT_BUTTON_PRESSED, true);
@@ -450,7 +461,7 @@ package
 		{
 			dispatchEventWith(RIGHT_BUTTON_PRESSED, true);
 		}
-		
+		*/
 		private function Shoot_Button_Pressed():void
 		{
 			dispatchEventWith(SHOOT_BUTTON_PRESSED, true);
@@ -505,14 +516,36 @@ package
 
 		}
 		
-		private function Left_Button_Pressed_Handler():void 
+		private function Left_Button_Pressed_Handler(e:TouchEvent):void 
 		{
-			user_input = "a";
+			var touch1:Touch = e.getTouch(left_button);
+			if (touch1)
+			{
+				if(touch1.phase == TouchPhase.BEGAN)//on finger down
+				{
+					a_down = true;  
+				}
+				else if(touch1.phase == TouchPhase.ENDED) //on finger up
+				{
+					a_down = false;
+				}
+			}
 		}
 		
-		private function Right_Button_Pressed_Handler():void 
+		private function Right_Button_Pressed_Handler(event:TouchEvent):void 
 		{
-			user_input = "d";
+			var touch2:Touch = event.getTouch(right_button);
+			if (touch2)
+			{
+				if(touch2.phase == TouchPhase.BEGAN)//on finger down
+				{
+					d_down = true;
+				}
+				else if(touch2.phase == TouchPhase.ENDED) //on finger up
+				{
+					d_down = false;
+				}
+			}
 		}
 		
 		private function Shoot_Button_Pressed_Handler():void 
@@ -521,6 +554,15 @@ package
 			//shoot_sound = assets.playSound("Fixed Blaster Sound",0,0);
 			space_down = true;
 			can_fire = true;
+
+			
+			if (projectile_shot == true && over == false) 
+			{
+				shoot_sound = assets.playSound("Fixed Blaster Sound", 0, 0); 
+				projectile_shot = false; 
+			}
+
+			
 		}
 		
 		//Enter frame event, will update continuously, smooths out movement.
@@ -540,7 +582,9 @@ package
 				if (can_fire)
 				{
 					
-					if (shoot_timer.currentCount >= 1)		//If the hero didn't shoot within the last second, he can shoot. 
+
+					if (shoot_timer.currentCount >= 1 && over == false)   //If the hero didn't shoot within the last second, he can shoot. 
+
 					{
 						projectile = new Projectile(); 
 						bullets.push(projectile);
