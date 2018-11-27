@@ -34,8 +34,6 @@ package
 	import starling.events.Event;
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
-
-	
 	
 	public class Level extends Sprite
 	{
@@ -189,11 +187,10 @@ package
 			stage.addEventListener(LEFT_BUTTON_PRESSED, Left_Button_Pressed_Handler);
 			stage.addEventListener(RIGHT_BUTTON_PRESSED, Right_Button_Pressed_Handler);
 			stage.addEventListener(SHOOT_BUTTON_PRESSED, Shoot_Button_Pressed_Handler);
-			
+
 			start_timer.addEventListener(TimerEvent.TIMER_COMPLETE, Start_Timer_Over); 
 			start_timer.addEventListener(TimerEvent.TIMER, Start_Timer_Running);
-			
-			
+
 		}
 		
 		public function Start_Timer_Running(e:TimerEvent):void 
@@ -532,8 +529,7 @@ package
 		
 		private function Left_Button_Pressed_Handler():void 
 		{
-			//user_input = "a";
-			a_down = true;
+			user_input = "a";
 		}
 		
 		private function Right_Button_Pressed_Handler():void 
