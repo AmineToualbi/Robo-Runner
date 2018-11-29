@@ -77,7 +77,7 @@ package
 		private const STAGE_WIDTH:int = 1024;
 		private const STAGE_HEIGHT:int = 1024;
 		
-		public static var over: Boolean = false;		//Flag keeping track of the game running. 
+		public var over: Boolean = false;		//Flag keeping track of the game running. 
 
 		
 		private var hit_nbr:int; //Testing purposes.
@@ -90,7 +90,7 @@ package
 		private var kill_count: int = 0;		//Int keeping track of how many kills were performed. 
 		
 		public static var credits:int = 0; 		
-		public static var start:Boolean = false;		//Flag keeping track of game start. 
+		public var start:Boolean = false;		//Flag keeping track of game start. 
 		private var start_timer_over:Boolean = false; 	//Flag keeping track of the countdown timer. 
 		private var start_timer:Timer;					//Countdown timer to start. 
 
@@ -215,7 +215,7 @@ package
 //		}
 		
 		public function Start_Timer_Running(e:TimerEvent):void 
-  {
+		{
 			start_label.text = (3 - start_timer.currentCount) + "";
 		}
 		
@@ -225,7 +225,10 @@ package
 			start_timer_over = true; 
 			removeChild(start_label); 
 		}
-		
+		public function Get_Score():int
+		{
+			return score;
+		}
 		//Function called to start the game when start flag is true. Also called every frame to update obstacle nbr. 
 		public function Start_Game(e:Event): void
 		{

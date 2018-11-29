@@ -98,21 +98,19 @@ package
 			//Last, set the state to display the menu.
 			game_state = State.MENU_SCREEN;
 		}
-		
-		
+			
 		//Function to restart the game if the user wishes to play again after a game over. 
 		public function Restart():void
 		{
-			
-			Level.over = false;
+			level.dispose();
 			removeChild(level);				//Remove the old level screen to put back original content. 
 			removeChild(menu_screen);
 			level = new Level();
 			Level.score = 0;
-			addChild(level);
+			//addChild(level);
+			//Level.over = false;
 
 		}
-		
 		
 		//Called every frame, this function keeps track of where the user is in the program. 
 		public function Update_Game_State():void
@@ -161,8 +159,7 @@ package
 					break;
 					
 				case State.GAME_OVER:
-
-					removeChild(level);
+					//removeChild(level);
 					menu_screen.visible = false;
 					help_screen.visible = false;
 					score_screen.visible = false;
@@ -228,7 +225,9 @@ package
 				Level.credits -= 50;
 				
 				game_state = State.IN_GAME;
-				Level.start = true;
+				level.start = true;
+				level.over = false;
+				
 				music_channel = assets.playSound("Intriguing Possibilities");	//Play background music. 
 
 			}
