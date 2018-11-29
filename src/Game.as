@@ -107,8 +107,7 @@ package
 			removeChild(menu_screen);
 			level = new Level();
 			Level.score = 0;
-			//addChild(level);
-			//Level.over = false;
+		
 
 		}
 		

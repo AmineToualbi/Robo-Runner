@@ -225,10 +225,7 @@ package
 			start_timer_over = true; 
 			removeChild(start_label); 
 		}
-		public function Get_Score():int
-		{
-			return score;
-		}
+		
 		//Function called to start the game when start flag is true. Also called every frame to update obstacle nbr. 
 		public function Start_Game(e:Event): void
 		{
