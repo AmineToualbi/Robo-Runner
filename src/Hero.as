@@ -70,11 +70,6 @@ package
 			this.addChild(hk_armature);
 		}
 		
-		public function Update():void
-		{
-			
-		}
-		
 		override public function Move(input:String):void 
 		{
 			
@@ -88,8 +83,19 @@ package
 			{
 				hk_armature.x += speed; 
 			}
+			//Move up
+			if (input == "w" && !(hk_armature.y - speed - 0.5 * hk_armature.height <= 0))
+			{
+				hk_armature.y -= speed; 
+			}
+			//Move right. 
+			if (input == "s" && !(hk_armature.y + speed > 600))
+			{
+				hk_armature.y += speed; 
+			}
 			
 			x_pos = hk_armature.x;
+			y_pos = hk_armature.y;
 			
 		}	
 	}

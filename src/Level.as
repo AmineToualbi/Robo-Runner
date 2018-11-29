@@ -60,6 +60,8 @@ package
 		public static var score:int = 0;
 		private var a_down:Boolean = false;
 		private var d_down:Boolean = false;
+		private var w_down:Boolean = false;
+		private var s_down:Boolean = false;
 		private var space_down:Boolean = false;
 		private var can_fire:Boolean = true;
 		private var score_label:TextField;
@@ -92,12 +94,14 @@ package
 		private var start_timer_over:Boolean = false; 	//Flag keeping track of the countdown timer. 
 		private var start_timer:Timer;					//Countdown timer to start. 
 
-		//public static const LEFT_BUTTON_PRESSED:String = "LEFT_BUTTON_PRESSED";
 		private var left_button:Button;
 		private var left_button_texture:Texture;
-		//public static const RIGHT_BUTTON_PRESSED:String = "RIGHT_BUTTON_PRESSED";
 		private var right_button:Button;
 		private var right_button_texture:Texture;
+		private var up_button:Button;
+		private var up_button_texture:Texture;
+		private var down_button:Button;
+		private var down_button_texture:Texture;
 		public static const SHOOT_BUTTON_PRESSED:String = "SHOOT_BUTTON_PRESSED";
 		private var shoot_button:Button;
 		private var shoot_button_texture:Texture;
@@ -148,6 +152,10 @@ package
 			addChild(start_label); 
 			
 			//Controls for the game - buttons. 
+			up_button_texture = assets.getTexture("up");
+			up_button = new Button(up_button_texture);
+			down_button_texture = assets.getTexture("down");
+			down_button = new Button(down_button_texture);
 			left_button_texture = assets.getTexture("left");
 		    left_button = new Button(left_button_texture);
 			right_button_texture = assets.getTexture("right");
@@ -162,14 +170,20 @@ package
 			shoot_button.addEventListener(Event.TRIGGERED, Shoot_Button_Pressed);
 			
 			//Set button locations.
+			up_button.x = 1050 + up_button.width/2;
+			up_button.y = 500;
+			down_button.x = 1050 + down_button.width/2;
+			down_button.y = 600;
 			left_button.x = 1050;
-			left_button.y = 500;
+			left_button.y = 550;
 			right_button.x = 1060 + right_button.width;
-			right_button.y = 500;
+			right_button.y = 550;
 			shoot_button.x = 1050;
-			shoot_button.y = 600;
+			shoot_button.y = 400;
 			
 			//Add buttons to the display
+			addChild(up_button); 
+			addChild(down_button);
 			addChild(left_button);
 			addChild(right_button);
 			addChild(shoot_button);
@@ -182,6 +196,8 @@ package
 			stage.addEventListener(KeyboardEvent.KEY_UP, On_Key_Up);
 			stage.addEventListener(Event.ENTER_FRAME, eFrame);	//Called every frame.
 			stage.addEventListener(Event.ENTER_FRAME, Start_Game);
+			stage.addEventListener(TouchEvent.TOUCH, Up_Button_Pressed_Handler);
+			stage.addEventListener(TouchEvent.TOUCH, Down_Button_Pressed_Handler);
 			stage.addEventListener(TouchEvent.TOUCH, Left_Button_Pressed_Handler);
 			stage.addEventListener(TouchEvent.TOUCH, Right_Button_Pressed_Handler);
 			stage.addEventListener(SHOOT_BUTTON_PRESSED, Shoot_Button_Pressed_Handler);
@@ -294,8 +310,8 @@ package
 						Collision_Enemy(enemies[l]);
 					}
 				}
-				hero.Move(user_input)
 				
+				hero.Move(user_input);
 				user_input = "";
 				
 				var obstacle_length:int = obstacles.length;
@@ -480,8 +496,11 @@ package
 				case Keyboard.D:
 					d_down = true;
 					break;
-				case Keyboard.SPACE:
-					space_down = true;
+				case Keyboard.W:
+					w_down = true;
+					break;
+				case Keyboard.S:
+					s_down = true;
 					break;
 			}
 			
@@ -509,12 +528,46 @@ package
 				case Keyboard.D:
 					d_down = false;
 					break;
-				case Keyboard.SPACE:
-					space_down = false;
-					can_fire = true;
+				case Keyboard.S:
+					s_down = false;
+					break;
+				case Keyboard.W:
+					w_down = false;
 					break;
 			}
 
+		}
+		
+		private function Up_Button_Pressed_Handler(e:TouchEvent):void 
+		{
+			var touch3:Touch = e.getTouch(up_button);
+			if (touch3)
+			{
+				if(touch3.phase == TouchPhase.BEGAN)//on finger down
+				{
+					w_down = true;  
+				}
+				else if(touch3.phase == TouchPhase.ENDED) //on finger up
+				{
+					w_down = false;
+				}
+			}
+		}
+		
+		private function Down_Button_Pressed_Handler(event:TouchEvent):void 
+		{
+			var touch4:Touch = event.getTouch(down_button);
+			if (touch4)
+			{
+				if(touch4.phase == TouchPhase.BEGAN)//on finger down
+				{
+					s_down = true;
+				}
+				else if(touch4.phase == TouchPhase.ENDED) //on finger up
+				{
+					s_down = false;
+				}
+			}
 		}
 		
 		private function Left_Button_Pressed_Handler(e:TouchEvent):void 
@@ -577,6 +630,14 @@ package
 			if (d_down)
 			{
 				user_input = "d";
+			}
+			if (w_down)
+			{
+				user_input = "w";
+			}
+			if (s_down)
+			{
+				user_input = "s";
 			}
 			if (space_down)
 			{

@@ -89,8 +89,8 @@ package
 			game_over_screen = new GameOver();
 			
 			addChild(menu_screen);
-			addChild(help_screen);
-			addChild(score_screen);
+			//addChild(help_screen);
+			//addChild(score_screen);
 
 			//Listener to check for "ENTER" key to add 50 credits. 
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, On_Key_Down);
@@ -126,6 +126,7 @@ package
 				case State.MENU_SCREEN:
 					menu_screen.visible = true;
 					game_over_screen.visible = false;
+					score_screen.visible = false;
 					addChild(menu_screen);
 					break;
 					
@@ -133,6 +134,7 @@ package
 					help_screen.visible = true;
 					menu_screen.visible = false;
 					game_over_screen.visible = false;
+					score_screen.visible = false;
 					addChild(help_screen);
 					break;
 					
@@ -140,6 +142,7 @@ package
 					help_screen.visible = false;
 					menu_screen.visible = false;
 					game_over_screen.visible = false;
+					score_screen.visible = true;
 					
 					score_screen.no1_label.text = "1st\t " + Score.score1;
 					score_screen.no2_label.text = "2nd\t " + Score.score2;
@@ -152,6 +155,7 @@ package
 					menu_screen.visible = false;
 					help_screen.visible = false;
 					game_over_screen.visible = false;
+					score_screen.visible = false;
 					// Make sure first level is updated every frame
 					level.UpdateUI();
 					break;
@@ -161,6 +165,7 @@ package
 					removeChild(level);
 					menu_screen.visible = false;
 					help_screen.visible = false;
+					score_screen.visible = false;
 					updateHighScore(); 
 					
 					// refresh credits in gameover
