@@ -29,8 +29,6 @@ package
 		public var no3_label:TextField;
 		public static var score3:int;
 		
-		public static var total_credit:int;
-		
 		public function Score() 
 		{
 			var assets:AssetManager = Main.assets;
