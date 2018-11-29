@@ -34,7 +34,7 @@ package
 			addChild(game_over_menu);
 			
 			//TextField 'You Won'. 
-			credit_label = new TextField(400, 50, "Yon won : " + Level.score + " credits");
+			credit_label = new TextField(400, 50, "You won : " + Level.score + " credits");
 			credit_label.format.font = "Arial";
 			credit_label.format.color = 0xffffff;
 			credit_label.format.size = 40;
