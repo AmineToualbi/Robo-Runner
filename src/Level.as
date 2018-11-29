@@ -191,8 +191,8 @@ package
 			// Keyboard Events aren't sent to sprites, 
 			// so we have to grab the current stage 
 			// and setup the callback to listen on the stage object
-			//stage.addEventListener(KeyboardEvent.KEY_DOWN, On_Key_Down);
-			//stage.addEventListener(KeyboardEvent.KEY_UP, On_Key_Up);
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, On_Key_Down);
+			stage.addEventListener(KeyboardEvent.KEY_UP, On_Key_Up);
 			stage.addEventListener(Event.ENTER_FRAME, eFrame);	//Called every frame.
 			stage.addEventListener(Event.ENTER_FRAME, Start_Game);
 			stage.addEventListener(TouchEvent.TOUCH, Up_Button_Pressed_Handler);
@@ -469,7 +469,7 @@ package
 		}
 		
 		//Keyboard functions -- testing.
-		/*
+		
 		private function On_Key_Down(event:KeyboardEvent):void
 		{
 			
@@ -490,7 +490,7 @@ package
 			}
 			
 		}
-		*/
+		
 		
 		//Notify Game.as that the game is over. 
 		private function Game_Is_Over():void 
@@ -501,7 +501,7 @@ package
 			dispatchEventWith(GAME_OVER, true);	
 
 		}
-		/*
+		
 		private function On_Key_Up(event:KeyboardEvent):void
 		{
 			
@@ -522,7 +522,7 @@ package
 			}
 
 		}
-		*/
+		
 		private function Up_Button_Pressed_Handler(e:TouchEvent):void 
 		{
 			var touch3:Touch = e.getTouch(up_button);
