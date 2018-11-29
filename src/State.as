@@ -11,8 +11,7 @@ package
 		public static const HELP_SCREEN:int = 2;
 		public static const SCORE_SCREEN:int = 3;
 		public static const IN_GAME:int = 4;
-		public static const GAME_OVER:int = 5;
-		
+		public static const GAME_OVER:int = 5;	
 	}
 
 }

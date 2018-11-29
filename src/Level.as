@@ -65,7 +65,6 @@ package
 		private var space_down:Boolean = false;
 		private var can_fire:Boolean = true;
 		private var score_label:TextField;
-		private var projectile_shot:Boolean = false; 
 		
 		//Create rectangles for hit boxes. 
 		private var hero_rec:Rectangle = new Rectangle(0, 0, 140, 140);
@@ -76,21 +75,21 @@ package
 		public static const GAME_OVER:String = "GAME OVER";
 		private const STAGE_WIDTH:int = 1024;
 		private const STAGE_HEIGHT:int = 1024;
-		
-		public var over: Boolean = false;		//Flag keeping track of the game running. 
-
-		
-		private var hit_nbr:int; //Testing purposes.
-		private var collision_nbr:int; //Testing purposes.
-		
+	
 		private var game_timer:Timer; 		//Timer for score. 
 		private var shoot_timer:Timer; 		//Timer for shooting -> stop spam shooting. 
 		
 		private var obstacle_count:int = 0;		
 		private var kill_count: int = 0;		//Int keeping track of how many kills were performed. 
 		
-		public static var credits:int = 0; 		
+		public static var credits:int = 0;
+		
+		//We do not want those variables static -> caused lagging problem + multiple sound being heard. 
+		//When we created first Level: over = false. First level ends & game over: over = true. 
+		//New level created: over = true. Because it is true, the first Level runs again because it isn't technically deleted. 
 		public var start:Boolean = false;		//Flag keeping track of game start. 
+		public var over: Boolean = false;		//Flag keeping track of the game running. 
+
 		private var start_timer_over:Boolean = false; 	//Flag keeping track of the countdown timer. 
 		private var start_timer:Timer;					//Countdown timer to start. 
 
@@ -125,8 +124,6 @@ package
 			//Add the objects to the display.
 			addChild(map);
 			addChild(hero);
-			//score = 0;
-
 						
 			//Score Label. 
 			score_label = new TextField(300, 50, "Score: 0");
@@ -134,10 +131,7 @@ package
 			score_label.format.color = 0xffffff;
 			score_label.format.size = 30;
 			score_label.format.horizontalAlign = Align.LEFT;
-			//score_label.x = 1075; 
-			//score_label.y = 75;
-			
-	
+			score_label.x = 1075; 
 			
 			//Countdown timer label. 
 			start_label = new TextField(1075, 650, "3"); 
@@ -162,10 +156,7 @@ package
 			shoot_button_texture = assets.getTexture("shoot");
 		    shoot_button = new Button(shoot_button_texture);
 			
-
 			// Add an event listener for when the button is pressed
-			//left_button.addEventListener(Event.TRIGGERED, Left_Button_Pressed);
-			//right_button.addEventListener(Event.TRIGGERED, Right_Button_Pressed);
 			shoot_button.addEventListener(Event.TRIGGERED, Shoot_Button_Pressed);
 			
 			//Set button locations.
@@ -205,14 +196,6 @@ package
 			start_timer.addEventListener(TimerEvent.TIMER, Start_Timer_Running);	   //Countdown timer running. 
 			
 		}
-		
-		//Function updating countdown label to show on screen before game starts. 
-	//	public function Start_Timer_Running(e:TimerEvent) 
-
-		//	start_timer.addEventListener(TimerEvent.TIMER_COMPLETE, Start_Timer_Over); 
-		//	start_timer.addEventListener(TimerEvent.TIMER, Start_Timer_Running);
-
-//		}
 		
 		public function Start_Timer_Running(e:TimerEvent):void 
 		{
@@ -256,14 +239,13 @@ package
 				if(obstacle_count == 0){
 					obstacle_to_appear.speed = 10 + 0.5 * game_timer.currentCount; //assume acceleration is 0.5.
 				}
-				else if (obstacle_count == 1) {
+				else if (obstacle_count % 2 == 0) {
 
 					obstacle_to_appear.speed = 6 + 0.5 * game_timer.currentCount;
 				}
-				else if (obstacle_count == 2) {
+				else if (obstacle_count % 3 == 0) {
 					obstacle_to_appear.speed = 7 + 0.5 * game_timer.currentCount;
 				}
-				//We don't want more than 3 obstacles.
 				
 				obstacles.push(obstacle_to_appear);
 				obstacle_count += 1;
@@ -389,7 +371,6 @@ package
 		
 			if(hero_rec.intersects(obstacle.bounds))		//If collision:
 			{
-				collision_nbr++;
 				over = true;	 	//Set flag to over to stop the timer & the movements. 
 				map.bg_armature.animation.gotoAndStopByProgress("animtion0", 0);	//Stop the scrolling map. 
 				setTimeout(Game_Is_Over, 1000);		//Wait 1s before showing GameOver screen. 
@@ -469,7 +450,6 @@ package
 		}
 		
 		//Keyboard functions -- testing.
-		
 		private function On_Key_Down(event:KeyboardEvent):void
 		{
 			
@@ -489,17 +469,6 @@ package
 					break;
 			}
 			
-		}
-		
-		
-		//Notify Game.as that the game is over. 
-		private function Game_Is_Over():void 
-		{
-			game_timer.stop();		
-			game_timer.reset(); 
-			kill_count = 0;
-			dispatchEventWith(GAME_OVER, true);	
-
 		}
 		
 		private function On_Key_Up(event:KeyboardEvent):void
@@ -522,6 +491,17 @@ package
 			}
 
 		}
+		
+		//Notify Game.as that the game is over. 
+		private function Game_Is_Over():void 
+		{
+			game_timer.stop();		
+			game_timer.reset(); 
+			kill_count = 0;
+			dispatchEventWith(GAME_OVER, true);	
+
+		}
+		
 		
 		private function Up_Button_Pressed_Handler(e:TouchEvent):void 
 		{
@@ -625,7 +605,6 @@ package
 
 					{
 						assets = Main.assets;
-						projectile_shot = true;
 						projectile = new Projectile(); 
 						bullets.push(projectile);
 						addChild(projectile);

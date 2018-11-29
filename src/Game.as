@@ -35,7 +35,6 @@ package
 		private var music_channel:SoundChannel = new SoundChannel();
 		
 
-		
 		public function Game() 
 		{
 			// Grab the asset manager from the MAIN class
@@ -89,8 +88,6 @@ package
 			game_over_screen = new GameOver();
 			
 			addChild(menu_screen);
-			//addChild(help_screen);
-			//addChild(score_screen);
 
 			//Listener to check for "ENTER" key to add 50 credits. 
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, On_Key_Down);
@@ -107,7 +104,6 @@ package
 			removeChild(menu_screen);
 			level = new Level();
 			Level.score = 0;
-		
 
 		}
 		
@@ -158,12 +154,10 @@ package
 					break;
 					
 				case State.GAME_OVER:
-					//removeChild(level);
 					menu_screen.visible = false;
 					help_screen.visible = false;
 					score_screen.visible = false;
 					Update_High_Score();
-				
 					
 					// refresh credits in gameover
 					GameOver.total_credit = Level.score + Level.credits;
@@ -182,21 +176,21 @@ package
 		private function Update_High_Score(): void
 		{
 			if (Level.score > Score.score1)
-					{
-						Score.score3 = Score.score2;
-						Score.score2 = Score.score1;
-						Score.score1 = Level.score;
-					}
-					else if (Level.score > Score.score2 && Level.score < Score.score1)
-					{
-						Score.score3 = Score.score2;
-						Score.score2 = Level.score;
-					}
-					else if (Level.score > Score.score3 && Level.score < Score.score2)
-					{
-						Score.score3 = Level.score;
-					}
-					
+				{
+					Score.score3 = Score.score2;
+					Score.score2 = Score.score1;
+					Score.score1 = Level.score;
+				}
+				else if (Level.score > Score.score2 && Level.score < Score.score1)
+				{
+					Score.score3 = Score.score2;
+					Score.score2 = Level.score;
+				}
+				else if (Level.score > Score.score3 && Level.score < Score.score2)
+				{
+					Score.score3 = Level.score;
+				}
+							
 		}
 		
 		
