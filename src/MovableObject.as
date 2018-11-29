@@ -6,6 +6,7 @@ package
 	 * @author Amine Toualbi
 	 * Class that will be be inherited from the other objects: hero, enemy, obstacle. 
 	 */
+	
 	public class MovableObject extends Sprite
 	{
 		

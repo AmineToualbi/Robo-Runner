@@ -45,7 +45,6 @@ package
 		public function Map()
 		{
 			placeholder_json = Main.assets.getObject("Runner_ske");
-			//animation_name = "animtion0";
 			var tex_obj:Object = Main.assets.getObject("Runner_tex");
 			var tex:Texture = Main.assets.getTexture("Runner_tex");
 			

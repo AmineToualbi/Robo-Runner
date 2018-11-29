@@ -1,7 +1,6 @@
 package
 {
-	//import flash.events.Event;
-	//import flash.text.TextField;
+	
 	import flash.display.Sprite;
 	import starling.assets.AssetManager;
 	import starling.core.Starling;
@@ -13,7 +12,6 @@ package
 	{
 		public static var assets:AssetManager;
 		private var starling:Starling;
-		private var menu_screen:Menu;
 		
 		public function Main() 
 		{
