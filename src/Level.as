@@ -112,7 +112,6 @@ package
 		{
 			var stage:starling.display.Stage = Starling.current.stage;
 			var assets:AssetManager = Main.assets;
-
 			start_background = new Image(assets.getTexture("start"));
 			
 			//Create the objects.
@@ -192,8 +191,8 @@ package
 			// Keyboard Events aren't sent to sprites, 
 			// so we have to grab the current stage 
 			// and setup the callback to listen on the stage object
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, On_Key_Down);
-			stage.addEventListener(KeyboardEvent.KEY_UP, On_Key_Up);
+			//stage.addEventListener(KeyboardEvent.KEY_DOWN, On_Key_Down);
+			//stage.addEventListener(KeyboardEvent.KEY_UP, On_Key_Up);
 			stage.addEventListener(Event.ENTER_FRAME, eFrame);	//Called every frame.
 			stage.addEventListener(Event.ENTER_FRAME, Start_Game);
 			stage.addEventListener(TouchEvent.TOUCH, Up_Button_Pressed_Handler);
@@ -437,7 +436,7 @@ package
 		
 			if (bullets[pnum] != null && proj_rec.intersects(enemy_rec))	//If there's a collision: 
 			{
-				assets = Main.assets;
+				
 				explosion_sound = assets.playSound("Explosion");		//Play explosion sound. 
 				removeChild(enemy);										//Delete enemy. 
 				removeChild(proj);										//Delete projectile. 
@@ -464,27 +463,13 @@ package
 				bullets.splice(pnum, 1);
 			}
 		}
-		
-		
-		//Button functions
-		/*
-		private function Left_Button_Pressed():void
-		{
-			dispatchEventWith(LEFT_BUTTON_PRESSED, true);
-		}
-		
-		
-		private function Right_Button_Pressed():void
-		{
-			dispatchEventWith(RIGHT_BUTTON_PRESSED, true);
-		}
-		*/
 		private function Shoot_Button_Pressed():void
 		{
 			dispatchEventWith(SHOOT_BUTTON_PRESSED, true);
 		}
 		
 		//Keyboard functions -- testing.
+		/*
 		private function On_Key_Down(event:KeyboardEvent):void
 		{
 			
@@ -505,7 +490,7 @@ package
 			}
 			
 		}
-		
+		*/
 		
 		//Notify Game.as that the game is over. 
 		private function Game_Is_Over():void 
@@ -516,7 +501,7 @@ package
 			dispatchEventWith(GAME_OVER, true);	
 
 		}
-		
+		/*
 		private function On_Key_Up(event:KeyboardEvent):void
 		{
 			
@@ -537,7 +522,7 @@ package
 			}
 
 		}
-		
+		*/
 		private function Up_Button_Pressed_Handler(e:TouchEvent):void 
 		{
 			var touch3:Touch = e.getTouch(up_button);
@@ -604,19 +589,11 @@ package
 		
 		private function Shoot_Button_Pressed_Handler():void 
 		{
-			assets = Main.assets;
-			//shoot_sound = assets.playSound("Fixed Blaster Sound",0,0);
-			space_down = true;
-			can_fire = true;
-
-			
-			if (projectile_shot == true && over == false) 
+			if (over == false)
 			{
-			//	projectile_shot = false; 
-			//	shoot_sound = assets.playSound("Fixed Blaster Sound"); 
+				space_down = true;
+				can_fire = true;
 			}
-
-			
 		}
 		
 		//Enter frame event, will update continuously, smooths out movement.
@@ -647,19 +624,19 @@ package
 					if (shoot_timer.currentCount >= 1 && over == false)   //If the hero didn't shoot within the last second, he can shoot. 
 
 					{
+						assets = Main.assets;
 						projectile_shot = true;
 						projectile = new Projectile(); 
 						bullets.push(projectile);
 						addChild(projectile);
 						shoot_sound = assets.playSound("Fixed Blaster Sound");
+						
 						projectile.Move_Projectile(hero.x_pos, hero.y_pos); 	//"x" as placeholder to have the same function with same parameter.
 						shoot_timer.reset();
 						shoot_timer.start();
 					}
 				}
-	
 				can_fire = false;
-				
 			}
 		}
 	}

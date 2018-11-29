@@ -166,7 +166,8 @@ package
 					menu_screen.visible = false;
 					help_screen.visible = false;
 					score_screen.visible = false;
-					updateHighScore(); 
+					Update_High_Score();
+				
 					
 					// refresh credits in gameover
 					GameOver.total_credit = Level.score + Level.credits;
@@ -182,7 +183,7 @@ package
 			
 		}
 		
-		private function updateHighScore(): void
+		private function Update_High_Score(): void
 		{
 			if (Level.score > Score.score1)
 					{
