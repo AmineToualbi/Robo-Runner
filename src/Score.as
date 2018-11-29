@@ -22,7 +22,6 @@ package
 		public static const BACK_BUTTON_PRESSED:String = "BACK_BUTTON_PRESSED";
 		private var back_button:Button;
 		private var back_button_texture:Texture;
-		private var scores:Array = new Array();
 		public var no1_label:TextField;
 		public static var score1:int;
 		public var no2_label:TextField;
@@ -48,9 +47,7 @@ package
 			
 			addChild(back_button);
 			
-			
-			
-			//text
+			//High score labels. 
 			no1_label = new TextField(400, 50, "1. " + score1);
 			no1_label.format.font = "Arial";
 			no1_label.format.color = 0xffffff;
@@ -74,6 +71,7 @@ package
 			no3_label.x = 450;
 			no3_label.y = 400;
 			addChild(no3_label);
+			
 		}
 		// Dispatch a new event that bubbles up to the GAME class to notify we have pressed the play button
 		private function Back_Button_Pressed():void

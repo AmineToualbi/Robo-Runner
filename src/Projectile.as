@@ -75,6 +75,7 @@ package
 			
 		}
 		
+		//Projectile has its own movement functions. 
 		public function Move_Projectile(heroX:int, heroY:int):void
 		{
 			objects_armature.x = heroX;
@@ -87,9 +88,9 @@ package
 		}
 		
 		public function Projectile_Movement():void {
-				objects_armature.y -= speed;
-				y_pos = objects_armature.y; 
-				x_pos = objects_armature.x;
+			objects_armature.y -= speed;
+			y_pos = objects_armature.y; 
+			x_pos = objects_armature.x;
 		}
 		
 		public function Delete_Projectile():void {

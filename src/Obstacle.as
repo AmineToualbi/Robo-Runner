@@ -32,17 +32,16 @@ package
 
 			obstacle.y = -obstacle.height /2;
 
-			// Add the obstacles to the display
+			// Add the obstacle to the display
 			addChild(obstacle);
 		}
 		
 		override public function Move(input:String):void
 		{
 			obstacle.y += speed;
-			if (obstacle.y > 1024 + 0.5 * 100)
+			if (obstacle.y > 1024 + 0.5 * 100)		//If object is out of the screen:
 			{
 				obstacle.y = -  obstacle.height /2;
-	
 				Regenerate();
 			}
 			x_pos = obstacle.x; 
@@ -54,8 +53,6 @@ package
 		{
 			obstacle.x = Math.random() * (STAGE_WIDTH - obstacle.width); 
 			obstacle.y = - obstacle.height;
-			//addChild(obstacle);
-			//right.x = Starling.current.stage.stageWidth/2 + Math.random() * (Starling.current.stage.stageWidth/2-right.width); 
 		}
 	}
 
