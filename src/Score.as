@@ -22,7 +22,6 @@ package
 		public static const BACK_BUTTON_PRESSED:String = "BACK_BUTTON_PRESSED";
 		private var back_button:Button;
 		private var back_button_texture:Texture;
-		private var scores:Array = new Array();
 		public var no1_label:TextField;
 		public static var score1:int;
 		public var no2_label:TextField;
