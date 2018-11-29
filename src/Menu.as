@@ -8,7 +8,7 @@ package
 	import starling.events.Event;
 	import starling.display.Button;
 	import starling.events.KeyboardEvent;
-		import flash.ui.Keyboard;
+	import flash.ui.Keyboard;
 
 	
 	public class Menu extends Sprite
@@ -50,18 +50,17 @@ package
 			help_button.addEventListener(Event.TRIGGERED, Help_Button_Pressed);
 			score_button.addEventListener(Event.TRIGGERED, Score_Button_Pressed);
 
-			
 			play_button.width = 300;
 			help_button.width = 300;
-			score_button.width = 300;
-			// Center the button
-			play_button.x = 150;
-			play_button.y = 500;
-			help_button.x = 500;
-			help_button.y = 500;
-			score_button.x = 900;
-			score_button.y = 500;
+			score_button.width = 275;
 			
+			play_button.x = 500;
+			play_button.y = 500;
+			help_button.x = 150;
+			help_button.y = 500;
+			score_button.x = 850;
+			score_button.y = 497;
+	
 			credits_label.x = 525; 
 			credits_label.y = 325; 
 			
