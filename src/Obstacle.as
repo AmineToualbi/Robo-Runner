@@ -27,7 +27,7 @@ package
 			obstacle.height = 100;
 			
 			// Initialize to a random position
-			obstacle.x = Math.random() * (STAGE_WIDTH - obstacle.width);
+			obstacle.x = 35 + Math.random() * (STAGE_WIDTH - obstacle.width - 70); 
 
 			obstacle.y = -obstacle.height /2;
 
@@ -53,7 +53,7 @@ package
 		// Reset the obstacle to a randomized position
 		public function Regenerate():void
 		{
-			obstacle.x = Math.random() * (STAGE_WIDTH - obstacle.width); 
+			obstacle.x = 35 + Math.random() * (STAGE_WIDTH - obstacle.width - 70); 
 			obstacle.y = - obstacle.height;
 		}
 	}
