@@ -1,9 +1,5 @@
 package 
 {
-	/**
-	 * ...
-	 * @author Su
-	 */
 	
 	import starling.assets.AssetManager;
 	import starling.display.Image;
@@ -16,8 +12,10 @@ package
 	import starling.text.TextFieldAutoSize;
 	import starling.utils.Align;
 	
+	
 	public class Score extends Sprite
 	{
+		
 		private var score_list:Image;
 		public static const BACK_BUTTON_PRESSED:String = "BACK_BUTTON_PRESSED";
 		private var back_button:Button;
@@ -31,6 +29,7 @@ package
 		
 		public function Score() 
 		{
+			
 			var assets:AssetManager = Main.assets;
 			score_list = new Image(assets.getTexture("highest_scores"));
 			addChild(score_list);
@@ -71,11 +70,14 @@ package
 			addChild(no3_label);
 			
 		}
+		
 		// Dispatch a new event that bubbles up to the GAME class to notify we have pressed the play button
 		private function Back_Button_Pressed():void
 		{
 			dispatchEventWith(BACK_BUTTON_PRESSED, true);
 		}
+		
 	}
 
+	
 }

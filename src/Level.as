@@ -1,12 +1,5 @@
-
-/**
- * ...
- * @author Rich
- */
-
 package 
 {
-
 	import dragonBones.events.EventObject;
 	import flash.display3D.textures.RectangleTexture;
 	import flash.filesystem.File;
@@ -34,7 +27,6 @@ package
 	import starling.events.Event;
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
-
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.events.Touch;
@@ -44,9 +36,9 @@ package
 	{
 
 		private var hero:Hero;
-		private var bullets:Array = new Array();
-		private var enemies:Array = new Array();
-		private var obstacles:Array = new Array();
+		private var Bullets:Array = new Array();
+		private var Enemies:Array = new Array();
+		private var Obstacles:Array = new Array();
 
 		private var map:Map;
 		private var projectile:Projectile;
@@ -65,7 +57,6 @@ package
 		private var space_down:Boolean = false;
 		private var can_fire:Boolean = true;
 		private var score_label:TextField;
-		private var projectile_shot:Boolean = false; 
 		
 		//Create rectangles for hit boxes. 
 		private var hero_rec:Rectangle = new Rectangle(0, 0, 140, 140);
@@ -76,21 +67,21 @@ package
 		public static const GAME_OVER:String = "GAME OVER";
 		private const STAGE_WIDTH:int = 1024;
 		private const STAGE_HEIGHT:int = 1024;
-		
-		public static var over: Boolean = false;		//Flag keeping track of the game running. 
-
-		
-		private var hit_nbr:int; //Testing purposes.
-		private var collision_nbr:int; //Testing purposes.
-		
+	
 		private var game_timer:Timer; 		//Timer for score. 
 		private var shoot_timer:Timer; 		//Timer for shooting -> stop spam shooting. 
 		
 		private var obstacle_count:int = 0;		
 		private var kill_count: int = 0;		//Int keeping track of how many kills were performed. 
 		
-		public static var credits:int = 0; 		
-		public static var start:Boolean = false;		//Flag keeping track of game start. 
+		public static var credits:int = 0;
+		
+		//We do not want those variables static -> caused multiple instances of Level to stack up & cause lags. 
+		//When we created first Level: over = false. First level ends & game over: over = true. 
+		//New level created: over = true. Because it is static & true, the first Level runs again because it isn't deleted from memory.
+		public var start:Boolean = false;		//Flag keeping track of game start. 
+		public var over: Boolean = false;		//Flag keeping track of the game running. 
+
 		private var start_timer_over:Boolean = false; 	//Flag keeping track of the countdown timer. 
 		private var start_timer:Timer;					//Countdown timer to start. 
 
@@ -110,6 +101,7 @@ package
 		
 		public function Level() 
 		{
+			
 			var stage:starling.display.Stage = Starling.current.stage;
 			var assets:AssetManager = Main.assets;
 			start_background = new Image(assets.getTexture("start"));
@@ -125,8 +117,6 @@ package
 			//Add the objects to the display.
 			addChild(map);
 			addChild(hero);
-			//score = 0;
-
 						
 			//Score Label. 
 			score_label = new TextField(300, 50, "Score: 0");
@@ -134,10 +124,7 @@ package
 			score_label.format.color = 0xffffff;
 			score_label.format.size = 30;
 			score_label.format.horizontalAlign = Align.LEFT;
-			//score_label.x = 1075; 
-			//score_label.y = 75;
-			
-	
+			score_label.x = 1075; 
 			
 			//Countdown timer label. 
 			start_label = new TextField(1075, 650, "3"); 
@@ -162,10 +149,7 @@ package
 			shoot_button_texture = assets.getTexture("shoot");
 		    shoot_button = new Button(shoot_button_texture);
 			
-
 			// Add an event listener for when the button is pressed
-			//left_button.addEventListener(Event.TRIGGERED, Left_Button_Pressed);
-			//right_button.addEventListener(Event.TRIGGERED, Right_Button_Pressed);
 			shoot_button.addEventListener(Event.TRIGGERED, Shoot_Button_Pressed);
 			
 			//Set button locations.
@@ -191,8 +175,8 @@ package
 			// Keyboard Events aren't sent to sprites, 
 			// so we have to grab the current stage 
 			// and setup the callback to listen on the stage object
-			//stage.addEventListener(KeyboardEvent.KEY_DOWN, On_Key_Down);
-			//stage.addEventListener(KeyboardEvent.KEY_UP, On_Key_Up);
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, On_Key_Down);
+			stage.addEventListener(KeyboardEvent.KEY_UP, On_Key_Up);
 			stage.addEventListener(Event.ENTER_FRAME, eFrame);	//Called every frame.
 			stage.addEventListener(Event.ENTER_FRAME, Start_Game);
 			stage.addEventListener(TouchEvent.TOUCH, Up_Button_Pressed_Handler);
@@ -206,16 +190,8 @@ package
 			
 		}
 		
-		//Function updating countdown label to show on screen before game starts. 
-	//	public function Start_Timer_Running(e:TimerEvent) 
-
-		//	start_timer.addEventListener(TimerEvent.TIMER_COMPLETE, Start_Timer_Over); 
-		//	start_timer.addEventListener(TimerEvent.TIMER, Start_Timer_Running);
-
-//		}
-		
 		public function Start_Timer_Running(e:TimerEvent):void 
-  {
+		{
 			start_label.text = (3 - start_timer.currentCount) + "";
 		}
 		
@@ -229,8 +205,9 @@ package
 		//Function called to start the game when start flag is true. Also called every frame to update obstacle nbr. 
 		public function Start_Game(e:Event): void
 		{
-				
-			if (start == true && start_timer.running == false) {		//Start countdown before game starts. 
+			
+			if (start == true && start_timer.running == false) 		//Start countdown before game starts. 
+			{	
 				start_timer.start(); 
 			}
 			if (start == true && start_timer_over == true)				//Start timers & start the game. 
@@ -245,28 +222,31 @@ package
 		//Function to create more obstacles & enemies as game goes. 
 		public function Update_Obstacle_Number(e:TimerEvent):void
 		{
+			
 			if (game_timer.currentCount % 3 == 0 && game_timer.currentCount != 0 && over == false)
 			{
-				
+			
 				var obstacle_to_appear:Obstacle = new Obstacle();
 				obstacle_to_appear.y = - obstacle_to_appear.height; 
 	  
 				addChild(obstacle_to_appear);
 				
-				if(obstacle_count == 0){
+				if (obstacle_count == 0)
+				{
 					obstacle_to_appear.speed = 10 + 0.5 * game_timer.currentCount; //assume acceleration is 0.5.
 				}
-				else if (obstacle_count == 1) {
-
+				else if (obstacle_count % 2 == 0)
+				{
 					obstacle_to_appear.speed = 6 + 0.5 * game_timer.currentCount;
 				}
-				else if (obstacle_count == 2) {
+				else if (obstacle_count % 3 == 0)
+				{
 					obstacle_to_appear.speed = 7 + 0.5 * game_timer.currentCount;
 				}
-				//We don't want more than 3 obstacles.
 				
-				obstacles.push(obstacle_to_appear);
+				Obstacles.push(obstacle_to_appear);
 				obstacle_count += 1;
+				
 			}
 				
 			if (game_timer.currentCount % 2 == 0 && game_timer.currentCount != 0 && over == false)
@@ -275,7 +255,7 @@ package
 				var enemy_appears:Enemy = new Enemy();
 				enemy_appears.speed = 5 + 0.5 * game_timer.currentCount;
 				addChild(enemy_appears);
-				enemies.push(enemy_appears);
+				Enemies.push(enemy_appears);
 
 			}
 			
@@ -291,94 +271,94 @@ package
 				score = game_timer.currentCount + kill_count;	//Update score based on nbr of kills. 
 				score_label.text = "Score:" + " " + score;
 				
-				var obs_length:int = obstacles.length;
-				
+				var obs_length:int = Obstacles.length;
 				for (var i:int = 0; i < obs_length; i++)	//Go through the obstacles & check there is no collision w/ hero. 
 				{
-					if (obstacles[i] != null)		
+					if (Obstacles[i] != null)		
 					{
-						Collision_Obstacle(obstacles[i]);
+						Collision_Obstacle(Obstacles[i]);
 					}
 				}
 				
-				var enemy_length:int = enemies.length;
-				for (var l:int = 0; l < enemy_length; l++)	//Go through the enemies & check there is no colision w/ hero. 
+				var enemy_length:int = Enemies.length;
+				for (var l:int = 0; l < enemy_length; l++)	//Go through the Enemies & check there is no colision w/ hero. 
 				{
-					if (enemies[l] != null)
+					if (Enemies[l] != null)
 					{
-						Collision_Enemy(enemies[l]);
+						Collision_Enemy(Enemies[l]);
 					}
 				}
 				
 				hero.Move(user_input);
 				user_input = "";
 				
-				var obstacle_length:int = obstacles.length;
+				var obstacle_length:int = Obstacles.length;
 				for (var j:int = 0; j < obstacle_length; j++)	//Go through the obstacles & move them. 
 				{
-					obstacles[j].Move(user_input);		
-
+					Obstacles[j].Move(user_input);		
 				}
 				
-				
-				var enem_length:int = enemies.length;
+				var enem_length:int = Enemies.length;
 				for (var k:int = 0; k < enem_length; k++)		//Go through the enemies & move them. 
 				{
-					if (enemies[k] != null)
+					if (Enemies[k] != null)
 					{
-						if (enemies[k].y_pos > STAGE_HEIGHT)	//If enemy is leaving screen, delete it. 
+						if (Enemies[k].y_pos > STAGE_HEIGHT)	//If enemy is leaving screen, delete it. 
 						{
-							removeChild(enemies[k]);
-							enemies[k] = null;
-							enemies.splice(k, 1);
+							removeChild(Enemies[k]);
+							Enemies[k] = null;
+							Enemies.splice(k, 1);
 						}
-						if (enemies.length == 0)
+						if (Enemies.length == 0)
 						{
 							return;
 						}
-						enemies[k].Move(user_input);	
+						Enemies[k].Move(user_input);	
 					}	
 				}
 				
-				
-				var bullet_length:int = bullets.length;
-				for (var proj_dist:int = 0; proj_dist < bullets.length; proj_dist++)	//Check if projectile is out of screen.
+				var bullet_length:int = Bullets.length;
+				for (var proj_dist:int = 0; proj_dist < bullet_length; proj_dist++)	//Check if projectile is out of screen.
 				{
-					if (bullets[proj_dist] < 0)
+					if (Bullets[proj_dist] < 0)
 					{
-						removeChild(bullets[proj_dist]);
-						bullets[proj_dist] = null;
-						bullets.splice(proj_dist, 1);
+						removeChild(Bullets[proj_dist]);
+						Bullets[proj_dist] = null;
+						Bullets.splice(proj_dist, 1);
 					}
 				}
 				
 				for (var n:int = 0; n < bullet_length; n++)		//Go through every projectile & check if it hit something.  
 				{
-					var enemies_length:int = enemies.length;
+					
+					var enemies_length:int = Enemies.length;
 					for (var m:int = 0; m < enemies_length; m++)
 					{
-						if (enemies[m] != null && bullets[n] != null)
+						
+						if (Enemies[m] != null && Bullets[n] != null)
 						{
-							Shoot_Enemy(enemies[m], m, bullets[n], n);
+							Shoot_Enemy(Enemies[m], m, Bullets[n], n);
 						}
+						
 					}
-					var obstacles_length:int = obstacles.length;
+					
+					var obstacles_length:int = Obstacles.length;
 					for (var o:int = 0; o < obstacles_length; o++)
 					{
-						if (obstacles[o] != null && bullets[n] != null)
+						
+						if (Obstacles[o] != null && Bullets[n] != null)
 						{
-							Check_Obstacle(obstacles[o], bullets[n], n);
+							Check_Obstacle(Obstacles[o], Bullets[n], n);
 						}
 
 					}
 					
 				}
-				
 
 			}
+			
 		}
 			
-		
 		//Function to check if there's a collision between the hero & an obstacle. 
 		private function Collision_Obstacle(obstacle:Obstacle):void
 		{
@@ -389,7 +369,6 @@ package
 		
 			if(hero_rec.intersects(obstacle.bounds))		//If collision:
 			{
-				collision_nbr++;
 				over = true;	 	//Set flag to over to stop the timer & the movements. 
 				map.bg_armature.animation.gotoAndStopByProgress("animtion0", 0);	//Stop the scrolling map. 
 				setTimeout(Game_Is_Over, 1000);		//Wait 1s before showing GameOver screen. 
@@ -397,10 +376,10 @@ package
 				
 		}
 		
-		
 		//Function to check if there's a collision between the hero & an enemy.
 		private function Collision_Enemy(enemy:Enemy):void
 		{
+			
 			hero_rec.x = hero.x_pos;
 			hero_rec.y = hero.y_pos;
 			hero_rec.offset( -70, -70);
@@ -415,12 +394,13 @@ package
 				map.bg_armature.animation.gotoAndStopByProgress("animtion0", 0);		//Stop the scrolling map. 
 				setTimeout(Game_Is_Over, 1000);		//Wait 1s before showing GameOver screen. 
 			}
+			
 		}
-		
 		
 		//Function to check if there's a collision between a projectile & an enemy.
 		private function Shoot_Enemy(enemy:Enemy, num:int, proj:Projectile, pnum:int):void
 		{
+			
 			enemy_rec.x = enemy.x_pos;
 			enemy_rec.y = enemy.y_pos;
 			enemy_rec.offset( -37, -37);
@@ -434,42 +414,43 @@ package
 			proj_rec.y = proj.y_pos;
 			proj_rec.offset( -5, -5);
 		
-			if (bullets[pnum] != null && proj_rec.intersects(enemy_rec))	//If there's a collision: 
+			if (Bullets[pnum] != null && proj_rec.intersects(enemy_rec))	//If there's a collision: 
 			{
-				
 				explosion_sound = assets.playSound("Explosion");		//Play explosion sound. 
 				removeChild(enemy);										//Delete enemy. 
 				removeChild(proj);										//Delete projectile. 
-				enemies.removeAt(num);
-				bullets[pnum] = null;
-				bullets.splice(pnum, 1);								//Update array. 
+				Enemies.removeAt(num);
+				Bullets[pnum] = null;
+				Bullets.splice(pnum, 1);								//Update array. 
 				
 				kill_count += 3;										//+3 points. 
 			}
+			
 		}
-		
 		
 		//Function to check if there's a collision between a projectile & an obstacle. 
 		private function Check_Obstacle(obstacle:Obstacle, proj:Projectile, pnum:int):void
-		{	
+		{
+			
 			proj_rec.x = proj.x_pos;
 			proj_rec.y = proj.y_pos;
 			proj_rec.offset( -5, -5);
 			
-			if (bullets[pnum] != null && proj_rec.intersects(obstacle.bounds))		//If collision:
+			if (Bullets[pnum] != null && proj_rec.intersects(obstacle.bounds))		//If collision:
 			{
 				removeChild(proj);					//Delete projectile & leave the obstacle. 
-				bullets[pnum] = null;
-				bullets.splice(pnum, 1);
+				Bullets[pnum] = null;
+				Bullets.splice(pnum, 1);
 			}
+			
 		}
+		
 		private function Shoot_Button_Pressed():void
 		{
 			dispatchEventWith(SHOOT_BUTTON_PRESSED, true);
 		}
 		
 		//Keyboard functions -- testing.
-		/*
 		private function On_Key_Down(event:KeyboardEvent):void
 		{
 			
@@ -490,18 +471,7 @@ package
 			}
 			
 		}
-		*/
 		
-		//Notify Game.as that the game is over. 
-		private function Game_Is_Over():void 
-		{
-			game_timer.stop();		
-			game_timer.reset(); 
-			kill_count = 0;
-			dispatchEventWith(GAME_OVER, true);	
-
-		}
-		/*
 		private function On_Key_Up(event:KeyboardEvent):void
 		{
 			
@@ -522,9 +492,20 @@ package
 			}
 
 		}
-		*/
+		
+		//Notify Game.as that the game is over. 
+		private function Game_Is_Over():void 
+		{
+			game_timer.stop();		
+			game_timer.reset(); 
+			kill_count = 0;
+			dispatchEventWith(GAME_OVER, true);	
+		}
+		
+		
 		private function Up_Button_Pressed_Handler(e:TouchEvent):void 
 		{
+			
 			var touch3:Touch = e.getTouch(up_button);
 			if (touch3)
 			{
@@ -537,10 +518,12 @@ package
 					w_down = false;
 				}
 			}
+			
 		}
 		
 		private function Down_Button_Pressed_Handler(event:TouchEvent):void 
 		{
+			
 			var touch4:Touch = event.getTouch(down_button);
 			if (touch4)
 			{
@@ -553,10 +536,12 @@ package
 					s_down = false;
 				}
 			}
+			
 		}
 		
 		private function Left_Button_Pressed_Handler(e:TouchEvent):void 
 		{
+			
 			var touch1:Touch = e.getTouch(left_button);
 			if (touch1)
 			{
@@ -569,10 +554,12 @@ package
 					a_down = false;
 				}
 			}
+			
 		}
 		
 		private function Right_Button_Pressed_Handler(event:TouchEvent):void 
 		{
+			
 			var touch2:Touch = event.getTouch(right_button);
 			if (touch2)
 			{
@@ -585,6 +572,7 @@ package
 					d_down = false;
 				}
 			}
+			
 		}
 		
 		private function Shoot_Button_Pressed_Handler():void 
@@ -622,24 +610,26 @@ package
 				{
 					
 					if (shoot_timer.currentCount >= 1 && over == false)   //If the hero didn't shoot within the last second, he can shoot. 
-
 					{
 						assets = Main.assets;
-						projectile_shot = true;
 						projectile = new Projectile(); 
-						bullets.push(projectile);
+						Bullets.push(projectile);
 						addChild(projectile);
 						shoot_sound = assets.playSound("Fixed Blaster Sound");
-						
 						projectile.Move_Projectile(hero.x_pos, hero.y_pos); 	//"x" as placeholder to have the same function with same parameter.
 						shoot_timer.reset();
 						shoot_timer.start();
 					}
+					
 				}
 				can_fire = false;
 			}
+			
 		}
+		
 	}
+	
+	
 }
 
 

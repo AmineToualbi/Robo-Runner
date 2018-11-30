@@ -10,12 +10,11 @@ package
 	import starling.text.TextFormat;
 	import starling.text.TextFieldAutoSize;
 	import starling.utils.Align;
-	/**
-	 * ...
-	 * @author Amine Toualbi
-	 */
+	
+	
 	public class GameOver extends Sprite
 	{
+		
 		private var game_over_menu:Image;
 		public static const EXIT_BUTTON_PRESSED:String = "EXIT_BUTTON_PRESSED";
 		private var exit_button:Button;
@@ -26,7 +25,7 @@ package
 		
 		public function GameOver() 
 		{
-			
+
 			var assets:AssetManager = Main.assets;
 			
 			//Background image. 
@@ -34,7 +33,7 @@ package
 			addChild(game_over_menu);
 			
 			//TextField 'You Won'. 
-			credit_label = new TextField(400, 50, "Yon won : " + Level.score + " credits");
+			credit_label = new TextField(400, 50, "You won : " + Level.score + " credits");
 			credit_label.format.font = "Arial";
 			credit_label.format.color = 0xffffff;
 			credit_label.format.size = 40;
@@ -62,7 +61,8 @@ package
 			exit_button.x = 500;
 			exit_button.y = 430;
 		
-			addChild(exit_button);			
+			addChild(exit_button);
+			
 		}
 		
 		//Sends our EXIT_BUTTON_PRESSED back to Game class. 
@@ -71,8 +71,7 @@ package
 			dispatchEventWith(EXIT_BUTTON_PRESSED, true);
 		}
 		
-		
-		
 	}
 
+	
 }

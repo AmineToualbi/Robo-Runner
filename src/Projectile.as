@@ -1,9 +1,6 @@
 package 
 {
-	/**
-	 * ...
-	 * @author Su
-	 */
+
 	import dragonBones.animation.AnimationState;
 	import dragonBones.objects.AnimationConfig;
 	import dragonBones.objects.DragonBonesData;
@@ -25,6 +22,7 @@ package
 
 	public class Projectile extends MovableObject
 	{
+		
 		private var projectile_json:Object;
 		private var projectile_data:DragonBonesData;
 		private var projectile_atlas_data:TextureAtlasData;
@@ -64,7 +62,7 @@ package
 			objects_armature.armature.getSlot("Cannon_Bullet").displayController = "9";
 			objects_armature.animation.fadeIn( "Flash_Long", -1, -1, 0, "" + 9);
 			
-			addEventListener(Event.ENTER_FRAME, Projectile_Movement);
+			addEventListener(Event.ENTER_FRAME, Move);
 			
 			speed = 40;
 			
@@ -83,18 +81,22 @@ package
 			x_pos = objects_armature.x; 
 			y_pos = objects_armature.y;
 			
-			Projectile_Movement(); 
-			
+			Move("a"); 		//a is a placehodler to comply with parameter of function. 
 		}
 		
-		public function Projectile_Movement():void {
+		override public function Move(input:String):void
+		{
 			objects_armature.y -= speed;
 			y_pos = objects_armature.y; 
 			x_pos = objects_armature.x;
 		}
 		
-		public function Delete_Projectile():void {
+		public function Delete_Projectile():void
+		{
 			removeChild(objects_armature);
 		}
+		
 	}
+	
+	
 }
