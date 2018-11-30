@@ -1,8 +1,3 @@
-/**
- * ...
- * @author Rich
- */
-
 package 
 {
 	import dragonBones.animation.AnimationState;
@@ -22,8 +17,10 @@ package
 	import starling.textures.Texture;
 	import flash.ui.Keyboard;
 	
+	
 	public class Hero extends MovableObject
 	{
+		
 		private var placeholder_json:Object;
 		private var placeholder_data:DragonBonesData;
 		private var placeholder_atlas_data:TextureAtlasData;
@@ -40,6 +37,7 @@ package
 		
 		public function Hero() 
 		{
+			
 			// The json file has to be exported with DATA VERSION 5.0!
 			placeholder_json = Main.assets.getObject("Runner_ske");
 			
@@ -54,7 +52,7 @@ package
 			objects_armature = factory.buildArmatureDisplay(placeholder_data.armatureNames[1]);
 			bg_armature = factory.buildArmatureDisplay(placeholder_data.armatureNames[2]);
 			
-			hk_armature.x = 600;
+			hk_armature.x = 530;
 			hk_armature.y = 600;
 			x_pos = hk_armature.x;  
 			y_pos = hk_armature.y;
@@ -68,6 +66,7 @@ package
 			hk_armature.height = 200;
 
 			this.addChild(hk_armature);
+			
 		}
 		
 		override public function Move(input:String):void 
@@ -97,6 +96,9 @@ package
 			x_pos = hk_armature.x;
 			y_pos = hk_armature.y;
 			
-		}	
+		}
+		
 	}
+	
+	
 }

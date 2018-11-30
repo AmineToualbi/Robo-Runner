@@ -1,8 +1,3 @@
-/**
- * ...
- * @author Rich
- */
-
 package 
 {
 	import dragonBones.animation.AnimationState;
@@ -26,8 +21,10 @@ package
 	import starling.events.Event;
 	import starling.display.Button;
 	
+	
 	public class Map extends Sprite
 	{
+		
 		private var placeholder_json:Object;
 		private var placeholder_data:DragonBonesData;
 		private var placeholder_atlas_data:TextureAtlasData;
@@ -44,6 +41,7 @@ package
 		
 		public function Map()
 		{
+			
 			placeholder_json = Main.assets.getObject("Runner_ske");
 			var tex_obj:Object = Main.assets.getObject("Runner_tex");
 			var tex:Texture = Main.assets.getTexture("Runner_tex");
@@ -64,6 +62,7 @@ package
 			
 			addChild(bg_armature);
 			var assets:AssetManager = Main.assets;
+			
 		}
 		
 		private function Update_Animation_Display():void
@@ -71,10 +70,12 @@ package
 			animation_name = "mapanim"; // typo, I know
 			bg_armature.animation.gotoAndPlayByProgress(animation_name , 0, -1);
 		}
+		
 		private function Update_Armature_Display():void
 		{
 			bg_armature.visible = true;
 		}
+		
 		private function Update_Object_Display():void
 		{
 			// Starts the animation specified by animation_name, using the display controller specified by objects_index
@@ -82,5 +83,6 @@ package
 		}
 		
 	}
+	
 	
 }

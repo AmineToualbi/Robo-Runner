@@ -1,23 +1,22 @@
 package 
 {
-	/**
-	 * ...
-	 * @author Su
-	 */
 	
 	import starling.assets.AssetManager;
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.core.Starling;
 	
+	
 	public class Obstacle extends MovableObject
 	{
+		
 		private var obstacle:Image; 
 		private const STAGE_WIDTH:int = 1024;
 		private const STAGE_HEIGHT:int = 1024;
 		
 		public function Obstacle() 
 		{
+			
 			// Get the asset manager from the MAIN class so images can be loaded
 			var assets:AssetManager = Main.assets;
 		
@@ -34,10 +33,12 @@ package
 
 			// Add the obstacle to the display
 			addChild(obstacle);
+			
 		}
 		
 		override public function Move(input:String):void
 		{
+			
 			obstacle.y += speed;
 			if (obstacle.y > 1024 + 0.5 * 100)		//If object is out of the screen:
 			{
@@ -46,6 +47,7 @@ package
 			}
 			x_pos = obstacle.x; 
 			y_pos = obstacle.y; 
+			
 		}
 			
 		// Reset the obstacle to a randomized position

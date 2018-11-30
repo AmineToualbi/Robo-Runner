@@ -10,12 +10,11 @@ package
 	import starling.text.TextFormat;
 	import starling.text.TextFieldAutoSize;
 	import starling.utils.Align;
-	/**
-	 * ...
-	 * @author Amine Toualbi
-	 */
+	
+	
 	public class GameOver extends Sprite
 	{
+		
 		private var game_over_menu:Image;
 		public static const EXIT_BUTTON_PRESSED:String = "EXIT_BUTTON_PRESSED";
 		private var exit_button:Button;
@@ -26,7 +25,7 @@ package
 		
 		public function GameOver() 
 		{
-			
+
 			var assets:AssetManager = Main.assets;
 			
 			//Background image. 
@@ -62,7 +61,8 @@ package
 			exit_button.x = 500;
 			exit_button.y = 430;
 		
-			addChild(exit_button);			
+			addChild(exit_button);
+			
 		}
 		
 		//Sends our EXIT_BUTTON_PRESSED back to Game class. 
@@ -71,8 +71,7 @@ package
 			dispatchEventWith(EXIT_BUTTON_PRESSED, true);
 		}
 		
-		
-		
 	}
 
+	
 }

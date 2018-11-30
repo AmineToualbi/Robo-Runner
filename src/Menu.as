@@ -13,6 +13,7 @@ package
 	
 	public class Menu extends Sprite
 	{
+		
 		private var menu_background:Image;
 		public static const PLAY_BUTTON_PRESSED:String = "MENU_PLAY_BUTTON_PRESSED";
 		public static const HELP_BUTTON_PRESSED:String = "MENU_HELP_BUTTON_PRESSED";
@@ -27,6 +28,7 @@ package
 		
 		public function Menu() 
 		{
+			
 			// Get the asset manager from the MAIN class so images can be loaded
 			var assets:AssetManager = Main.assets;
 			menu_background = new Image(assets.getTexture("bk"));
@@ -61,7 +63,7 @@ package
 			score_button.x = 850;
 			score_button.y = 497;
 	
-			credits_label.x = 525; 
+			credits_label.x = 545; 
 			credits_label.y = 325; 
 			
 			addChild(play_button);
@@ -69,6 +71,7 @@ package
 			addChild(score_button);
 			
 			addChild(credits_label);
+			
 		}
 		
 		// Dispatch a new event that bubbles up to the GAME class to notify we have pressed the play button
@@ -85,10 +88,9 @@ package
 		private function Score_Button_Pressed():void
 		{
 			dispatchEventWith(SCORE_BUTTON_PRESSED, true);
-		}
-
-		
+		}	
 		
 	}
 
+	
 }

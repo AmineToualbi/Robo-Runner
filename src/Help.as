@@ -7,8 +7,10 @@ package
 	import starling.events.Event;
 	import starling.display.Button;
 	
+	
 	public class Help extends Sprite
 	{
+		
 		private var help_menu:Image;
 		public static const BACK_BUTTON_PRESSED:String = "MENU_BACK_BUTTON_PRESSED";
 		private var back_button:Button;
@@ -16,7 +18,9 @@ package
 		
 		public function Help() 
 		{
+			
 			var assets:AssetManager = Main.assets;
+			
 			help_menu = new Image(assets.getTexture("help_screen_final"));
 			addChild(help_menu);
 			
@@ -31,6 +35,7 @@ package
 			back_button.y = 600;
 			
 			addChild(back_button);
+			
 		}
 		
 		// Dispatch a new event that bubbles up to the GAME class to notify we have pressed the play button
@@ -38,5 +43,8 @@ package
 		{
 			dispatchEventWith(BACK_BUTTON_PRESSED, true);
 		}
+		
 	}
+	
+	
 }
