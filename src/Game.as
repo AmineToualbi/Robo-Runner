@@ -4,7 +4,6 @@ package
 	import flash.filesystem.File;
 	import flash.media.Sound;
 	import flash.net.URLRequest;
-
 	import starling.assets.AssetManager;
 	import starling.display.Sprite;
 	import flash.events.Event;
@@ -14,13 +13,11 @@ package
 	import flash.ui.Keyboard;
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
-	//import flash.net.URLRequest;
-
-
 	
 	
 	public class Game extends Sprite
 	{
+		
 		public static var game_state:int = State.LOADING;
 		private var assets:AssetManager;
 		private var menu_screen:Menu;
@@ -34,9 +31,9 @@ package
 		private var music:Sound = new Sound();
 		private var music_channel:SoundChannel = new SoundChannel();
 		
-
 		public function Game() 
 		{
+			
 			// Grab the asset manager from the MAIN class
 			assets = Main.assets;
 			
@@ -46,7 +43,6 @@ package
 			// Enque the assets folder for loading
 			assets.enqueue(appDir.resolvePath("Assets"));
 			assets.enqueue(appDir.resolvePath("/bin/Assets"));
-			
 			
 			// Start loading the assets and setup the event handlers
 			assets.loadQueue(On_Assets_Loaded, On_Assets_Load_Error, On_Assets_Load_Progress);
@@ -63,6 +59,7 @@ package
 			addEventListener(Score.BACK_BUTTON_PRESSED, Back_Button_Pressed_Handler);
 			addEventListener(GameOver.EXIT_BUTTON_PRESSED, Exit_Button_Pressed_Handler);
 			addEventListener(Level.GAME_OVER, Game_Over_Handler);
+			
 		}
 		
 		public function On_Assets_Load_Error(error:String):void 
@@ -104,7 +101,6 @@ package
 			removeChild(menu_screen);
 			level = new Level();
 			Level.score = 0;
-
 		}
 		
 		//Called every frame, this function keeps track of where the user is in the program. 
@@ -149,7 +145,7 @@ package
 					help_screen.visible = false;
 					game_over_screen.visible = false;
 					score_screen.visible = false;
-					// Make sure first level is updated every frame
+					//Make sure first level is updated every frame.
 					level.UpdateUI();
 					break;
 					
@@ -159,7 +155,7 @@ package
 					score_screen.visible = false;
 					Update_High_Score();
 					
-					// refresh credits in gameover
+					//Refresh credits in game over. 
 					GameOver.total_credit = Level.score + Level.credits;
 					game_over_screen.total_credit_label.text = "Total Credits: " + GameOver.total_credit;	
 					game_over_screen.credit_label.text = "Yon won : " + Level.score + " credits";
@@ -170,48 +166,44 @@ package
 				default:
 					break;
 			}
-			
 		}
 		
 		private function Update_High_Score(): void
 		{
 			if (Level.score > Score.score1)
-				{
+			{
 					Score.score3 = Score.score2;
 					Score.score2 = Score.score1;
 					Score.score1 = Level.score;
-				}
-				else if (Level.score > Score.score2 && Level.score < Score.score1)
-				{
-					Score.score3 = Score.score2;
-					Score.score2 = Level.score;
-				}
-				else if (Level.score > Score.score3 && Level.score < Score.score2)
-				{
-					Score.score3 = Level.score;
-				}
-							
+			}
+			
+			else if (Level.score > Score.score2 && Level.score < Score.score1)
+			{
+				Score.score3 = Score.score2;
+				Score.score2 = Level.score;
+			}
+			
+			else if (Level.score > Score.score3 && Level.score < Score.score2)
+			{
+				Score.score3 = Level.score;
+			}				
 		}
-		
 		
 		// Change the game state when the play button is pressed
 		private function Play_Button_Pressed_Handler():void
 		{
 			if (Level.credits < 50)					//Display "Insufficient Credits". 
 			{
-				
 				insufficient_label.format.font = "Arial";
 				insufficient_label.format.color = 0xff0000;
 				insufficient_label.format.size = 30;
-				insufficient_label.x = 475;
+				insufficient_label.x = 500;
 				insufficient_label.y = 375;
 				menu_screen.addChild(insufficient_label);
-				
 			}
 			
 			else									//Start game & take 50 credits. 
 			{
-				
 				level = new Level();
 				addChild(level);
 				level.visible = true;
@@ -221,8 +213,7 @@ package
 				level.start = true;
 				level.over = false;
 				
-				music_channel = assets.playSound("Intriguing Possibilities");	//Play background music. 
-
+				music_channel = assets.playSound("Intriguing Possibilities");	//Play background music.
 			}
 		}
 		
@@ -255,24 +246,23 @@ package
 			game_state = State.GAME_OVER;
 			music_channel.stop();			//Stop the music when the player dies.
 		}
-		
 				
 		//Function to add 50 credits if the user presses "ENTER". 
 		private function On_Key_Down(event:KeyboardEvent):void
 		{
-	
 			if (event.keyCode == Keyboard.ENTER)
 			{
 				if (game_state == State.MENU_SCREEN) 
-					{
+				{
 						Level.credits += 50;
 						trace("ENTER PRESSED");
 						menu_screen.credits_label.text = "Credits: " + Level.credits;
 						menu_screen.removeChild(insufficient_label);
-					}
-			}
-			
+				}
+			}		
 		}
 		
 	}
+	
+	
 }

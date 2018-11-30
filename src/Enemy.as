@@ -1,9 +1,5 @@
 package 
 {
-	/**
-	 * ...
-	 * @author Su
-	 */
 	
 	import dragonBones.animation.AnimationState;
 	import dragonBones.objects.AnimationConfig;
@@ -26,13 +22,13 @@ package
 	
 	public class Enemy extends MovableObject
 	{
+		
 		private var enemy_json:Object;
 		private var enemy_data:DragonBonesData;
 		private var enemy_atlas_data:TextureAtlasData;
 		private var placeholder_atlas:TextureData;
 		private var enemy_armature:StarlingArmatureDisplay;
 
-		
 		private const factory:StarlingFactory = new StarlingFactory();
 		
 		private const STAGE_WIDTH:int = 1024;
@@ -40,6 +36,7 @@ package
 		
 		public function Enemy() 
 		{
+			
 			// The json file has to be exported with DATA VERSION 5.0!
 			enemy_json = Main.assets.getObject("Runner_ske");
 			
@@ -65,7 +62,7 @@ package
 			enemy_armature.armature.getSlot("Cannon_Glow").displayController = "8";
 			enemy_armature.armature.getSlot("Cannon_Bullet").displayController = "9";
 			
-			enemy_armature.animation.fadeIn( "Flash_Long", -1, -1, 0, "" + 3);
+			enemy_armature.animation.fadeIn( "Flash_Long", -1, -1, 0, "" + 3);	//+3 to choose "Spike". 
 			
 			speed = 5; 
 			
@@ -84,5 +81,8 @@ package
 			y_pos = enemy_armature.y;
 
 		}
+		
 	}
+	
+	
 }

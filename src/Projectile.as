@@ -1,9 +1,6 @@
 package 
 {
-	/**
-	 * ...
-	 * @author Su
-	 */
+
 	import dragonBones.animation.AnimationState;
 	import dragonBones.objects.AnimationConfig;
 	import dragonBones.objects.DragonBonesData;
@@ -25,6 +22,7 @@ package
 
 	public class Projectile extends MovableObject
 	{
+		
 		private var projectile_json:Object;
 		private var projectile_data:DragonBonesData;
 		private var projectile_atlas_data:TextureAtlasData;
@@ -84,17 +82,21 @@ package
 			y_pos = objects_armature.y;
 			
 			Move("a"); 		//a is a placehodler to comply with parameter of function. 
-			
 		}
 		
-		override public function Move(input:String):void {
+		override public function Move(input:String):void
+		{
 			objects_armature.y -= speed;
 			y_pos = objects_armature.y; 
 			x_pos = objects_armature.x;
 		}
 		
-		public function Delete_Projectile():void {
+		public function Delete_Projectile():void
+		{
 			removeChild(objects_armature);
 		}
+		
 	}
+	
+	
 }
