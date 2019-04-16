@@ -10,7 +10,7 @@ Robo-Runner is a 2D endless runner game in which the Hero dodges obstacles and s
 
 Robo-Runner was developed in a team of three in an agile environment. Among this team, Amine Toualbi was the team leader, Rich Mallek the development manager, and Leilin Su the testing manager. 
 
-Robo-Runner was created using ActionScript 3, DragonBones, and Starling 2.4. 
+Robo-Runner was created using ActionScript 3, DragonBones, and Starling 2.4. The development environment was the latest version of Flash Develop. 
 
 
 
